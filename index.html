@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The AI Job Displacement — U.S. Tech Workforce 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ── Reset + Root ──────────────────────────────────────────────────── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg:        #0a0a0f;
+  --surface:   #0e0e1c;
+  --surface2:  #13132a;
+  --border:    rgba(255,255,255,.07);
+  --border2:   rgba(255,255,255,.12);
+  --cyan:      #00d4ff;
+  --purple:    #7c3aed;
+  --red:       #ff4757;
+  --orange:    #ffa502;
+  --green:     #2ed573;
+  --pink:      #ff6b9d;
+  --teal:      #00b4d8;
+  --muted:     #a8dadc;
+  --text:      #f0f0ff;
+  --text2:     #8888aa;
+  --text3:     #44446a;
+}
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+
+/* ── Layered background ───────────────────────────────────────────── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 90% 50% at 50% -10%, rgba(0,212,255,.05) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 40% at 80% 100%, rgba(124,58,237,.04) 0%, transparent 60%),
+    linear-gradient(rgba(255,255,255,.014) 1px, transparent 1px) 0 0 / 64px 64px,
+    linear-gradient(90deg, rgba(255,255,255,.014) 1px, transparent 1px) 0 0 / 64px 64px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Layout ───────────────────────────────────────────────────────── */
+.wrap {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 28px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Section spacing ──────────────────────────────────────────────── */
+.section { padding-bottom: 56px; }
+
+/* ── Typography utilities ─────────────────────────────────────────── */
+.eyebrow {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--cyan);
+  background: rgba(0,212,255,.08);
+  border: 1px solid rgba(0,212,255,.22);
+  padding: 5px 14px;
+  border-radius: 100px;
+}
+.section-title {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -.03em;
+  margin-bottom: 6px;
+}
+.section-desc { font-size: 14px; color: var(--text2); line-height: 1.6; }
+
+/* ── Hero ─────────────────────────────────────────────────────────── */
+.hero {
+  padding: 96px 0 72px;
+  text-align: center;
+}
+.hero .eyebrow { margin-bottom: 30px; }
+.hero h1 {
+  font-size: clamp(42px, 8vw, 88px);
+  font-weight: 900;
+  letter-spacing: -.04em;
+  line-height: 1.0;
+  background: linear-gradient(160deg, #ffffff 0%, #c4c4ff 38%, #00d4ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 26px;
+}
+.hero-sub {
+  font-size: clamp(15px, 2.2vw, 19px);
+  color: var(--text2);
+  max-width: 540px;
+  margin: 0 auto 40px;
+  line-height: 1.65;
+  font-weight: 400;
+}
+.hero-badges {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.badge-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--red);
+  background: rgba(255,71,87,.1);
+  border: 1px solid rgba(255,71,87,.28);
+  padding: 7px 16px;
+  border-radius: 8px;
+}
+.badge-total {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--cyan);
+  background: rgba(0,212,255,.08);
+  border: 1px solid rgba(0,212,255,.22);
+  padding: 7px 16px;
+  border-radius: 8px;
+  font-family: 'JetBrains Mono', monospace;
+}
+.pulse-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--red);
+  flex-shrink: 0;
+  animation: blink 1.8s ease-in-out infinite;
+}
+@keyframes blink {
+  0%,100% { opacity:1; box-shadow: 0 0 0 0 rgba(255,71,87,.4); }
+  50% { opacity:.5; box-shadow: 0 0 0 6px rgba(255,71,87,0); }
+}
+
+/* ── Divider ──────────────────────────────────────────────────────── */
+.vdiv {
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, var(--border2) 30%, var(--border2) 70%, transparent 100%);
+  margin-bottom: 56px;
+}
+
+/* ── Slider section ───────────────────────────────────────────────── */
+.slider-card {
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: 22px;
+  padding: 48px 56px 40px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.slider-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(255,71,87,.04) 0%, transparent 70%);
+  pointer-events: none;
+}
+.slider-pct-label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin-bottom: 8px;
+}
+.pct-display {
+  font-size: clamp(72px, 13vw, 120px);
+  font-weight: 900;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: -.04em;
+  line-height: 1;
+  background: linear-gradient(135deg, #ff4757 30%, #ffa502 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 8px;
+  transition: all .08s;
+}
+.pct-hint {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 36px;
+}
+.range-wrap { padding: 4px 0 22px; }
+input[type=range] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 5px;
+  border-radius: 3px;
+  outline: none;
+  cursor: pointer;
+  transition: background .05s;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 38% 34%, #ff7480, #ff4757);
+  cursor: pointer;
+  box-shadow: 0 2px 24px rgba(255,71,87,.65), 0 0 0 5px rgba(255,71,87,.18);
+  transition: box-shadow .2s, transform .15s;
+}
+input[type=range]::-webkit-slider-thumb:hover {
+  box-shadow: 0 4px 36px rgba(255,71,87,.9), 0 0 0 10px rgba(255,71,87,.14);
+  transform: scale(1.1);
+}
+input[type=range]::-moz-range-thumb {
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 50%;
+  background: radial-gradient(circle at 38% 34%, #ff7480, #ff4757);
+  cursor: pointer;
+  box-shadow: 0 2px 24px rgba(255,71,87,.65);
+}
+.tick-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+  font-size: 11px;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--text3);
+}
+.tick-row span:nth-child(5) { color: var(--orange); font-weight: 700; }
+
+/* ── Counter card ─────────────────────────────────────────────────── */
+.counter-card {
+  background: var(--surface);
+  border: 1px solid rgba(255,71,87,.2);
+  border-radius: 22px;
+  padding: 56px 48px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.counter-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 100% 70% at 50% 110%, rgba(255,71,87,.08) 0%, transparent 65%);
+  pointer-events: none;
+}
+.counter-eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.counter-num {
+  font-size: clamp(52px, 10vw, 108px);
+  font-weight: 900;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: -.04em;
+  color: var(--red);
+  text-shadow:
+    0 0 60px rgba(255,71,87,.45),
+    0 0 120px rgba(255,71,87,.2),
+    0 0 200px rgba(255,71,87,.1);
+  line-height: 1;
+  margin-bottom: 18px;
+  position: relative;
+  z-index: 1;
+}
+.counter-body {
+  font-size: clamp(16px, 2vw, 20px);
+  color: var(--text2);
+  margin-bottom: 12px;
+  position: relative;
+  z-index: 1;
+}
+.counter-note {
+  font-size: 13px;
+  color: var(--text3);
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Categories ───────────────────────────────────────────────────── */
+.cat-list { display: flex; flex-direction: column; gap: 12px; }
+.cat-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px 24px;
+  transition: border-color .25s, background .25s;
+}
+.cat-item:hover {
+  border-color: rgba(255,255,255,.14);
+  background: var(--surface2);
+}
+.cat-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 13px;
+}
+.cat-name-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  flex: 1;
+}
+.cat-icon { font-size: 18px; flex-shrink: 0; }
+.cat-name { font-size: 14px; font-weight: 600; }
+.cat-total { font-size: 11px; color: var(--text3); margin-top: 2px; font-family: 'JetBrains Mono', monospace; }
+.cat-nums {
+  display: flex;
+  gap: 20px;
+  flex-shrink: 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  align-items: flex-start;
+}
+.cat-nums span { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+.cat-nums .lbl { font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: var(--text3); font-weight: 600; }
+.num-r { color: var(--cyan); }
+.num-l { color: var(--red); }
+.bar-track {
+  height: 10px;
+  background: rgba(255,255,255,.04);
+  border-radius: 5px;
+  overflow: hidden;
+  position: relative;
+}
+.bar-r {
+  position: absolute;
+  inset: 0 auto 0 0;
+  height: 100%;
+  border-radius: 5px 0 0 5px;
+  transition: width .55s cubic-bezier(.4,0,.2,1);
+}
+.bar-l {
+  position: absolute;
+  inset: 0 0 0 auto;
+  height: 100%;
+  background: linear-gradient(90deg, rgba(255,71,87,.65) 0%, rgba(255,71,87,.25) 100%);
+  border-radius: 0 5px 5px 0;
+  transition: width .55s cubic-bezier(.4,0,.2,1);
+}
+.cat-total-row {
+  background: linear-gradient(90deg, rgba(255,71,87,.06), transparent);
+  border: 1px solid rgba(255,71,87,.15);
+  border-radius: 10px;
+  padding: 12px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 4px;
+}
+.cat-total-label { font-size: 13px; font-weight: 700; color: var(--text2); }
+.cat-total-nums {
+  display: flex;
+  gap: 20px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* ── Comparison bars ──────────────────────────────────────────────── */
+.comp-card {
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: 22px;
+  padding: 40px 44px;
+}
+.comp-row {
+  display: grid;
+  grid-template-columns: 216px 1fr 96px;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 20px;
+}
+.comp-row:last-child { margin-bottom: 0; }
+.comp-label { font-size: 13px; color: var(--text2); line-height: 1.35; }
+.comp-label strong { color: var(--text); font-weight: 600; }
+.comp-bar-outer {
+  height: 24px;
+  background: rgba(255,255,255,.04);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.comp-bar-inner {
+  height: 100%;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 10px;
+  font-size: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  color: rgba(255,255,255,.88);
+  transition: width .7s cubic-bezier(.4,0,.2,1);
+  white-space: nowrap;
+  overflow: hidden;
+  min-width: 0;
+}
+.comp-value {
+  font-size: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--text2);
+  text-align: right;
+  font-weight: 600;
+}
+.comp-sep {
+  height: 1px;
+  background: var(--border);
+  margin: 22px 0;
+  grid-column: 1 / -1;
+}
+.comp-highlight .comp-label { color: var(--text); }
+.comp-highlight .comp-value { color: var(--red); }
+
+/* ── Context cards ────────────────────────────────────────────────── */
+.ctx-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 16px;
+  margin-top: 28px;
+}
+.ctx-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 26px;
+  transition: border-color .2s, transform .2s;
+}
+.ctx-card:hover { border-color: var(--border2); transform: translateY(-2px); }
+.ctx-lbl {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin-bottom: 12px;
+}
+.ctx-val {
+  font-size: 34px;
+  font-weight: 900;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: -.03em;
+  margin-bottom: 12px;
+  line-height: 1;
+}
+.ctx-mini-track {
+  height: 3px;
+  background: rgba(255,255,255,.06);
+  border-radius: 2px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+.ctx-mini-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width .7s ease;
+}
+.ctx-desc { font-size: 13px; color: var(--text2); line-height: 1.6; }
+
+/* ── Quote ────────────────────────────────────────────────────────── */
+.quote-card {
+  background: linear-gradient(135deg, rgba(124,58,237,.09), rgba(0,212,255,.04));
+  border: 1px solid rgba(124,58,237,.28);
+  border-radius: 22px;
+  padding: 56px 64px;
+  position: relative;
+  overflow: hidden;
+}
+.quote-card::before {
+  content: '\201C';
+  position: absolute;
+  top: 12px;
+  left: 36px;
+  font-size: 140px;
+  line-height: 1;
+  font-family: Georgia, 'Times New Roman', serif;
+  color: rgba(124,58,237,.18);
+  pointer-events: none;
+  user-select: none;
+}
+.quote-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 100% 100%, rgba(0,212,255,.03) 0%, transparent 60%);
+  pointer-events: none;
+}
+.quote-text {
+  font-size: clamp(18px, 2.8vw, 24px);
+  font-weight: 500;
+  line-height: 1.55;
+  color: var(--text);
+  margin-bottom: 30px;
+  position: relative;
+  z-index: 1;
+  padding-top: 20px;
+  font-style: italic;
+}
+.quote-attr {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  position: relative;
+  z-index: 1;
+}
+.quote-avatar {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1d9bf0, #7c3aed);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 900;
+  flex-shrink: 0;
+  letter-spacing: -.02em;
+}
+.quote-name { font-size: 15px; font-weight: 700; margin-bottom: 3px; }
+.quote-role { font-size: 12px; color: var(--text3); line-height: 1.4; }
+
+/* ── Block highlight ──────────────────────────────────────────────── */
+.block-callout {
+  background: linear-gradient(90deg, rgba(255,71,87,.07), rgba(255,165,2,.04));
+  border: 1px solid rgba(255,71,87,.18);
+  border-radius: 12px;
+  padding: 18px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+.block-callout-icon { font-size: 24px; flex-shrink: 0; }
+.block-callout-text { font-size: 14px; color: var(--text2); line-height: 1.5; }
+.block-callout-text strong { color: var(--text); }
+.block-callout-stat {
+  margin-left: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--red);
+  flex-shrink: 0;
+}
+
+/* ── Footer ───────────────────────────────────────────────────────── */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 36px 0 60px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--text3);
+  line-height: 1.9;
+}
+footer a { color: var(--cyan); text-decoration: none; }
+footer a:hover { text-decoration: underline; }
+
+/* ── Scroll animations ────────────────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+.anim-pending { opacity: 0; }
+.anim-done { animation: fadeUp .7s cubic-bezier(.4,0,.2,1) forwards; }
+
+/* ── Responsive ───────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .wrap { padding: 0 18px; }
+  .slider-card, .counter-card { padding: 32px 22px; }
+  .comp-card { padding: 24px 20px; }
+  .comp-row { grid-template-columns: 130px 1fr 60px; gap: 10px; }
+  .comp-label { font-size: 11px; }
+  .comp-value { font-size: 11px; }
+  .quote-card { padding: 36px 26px; }
+  .quote-card::before { display: none; }
+  .quote-text { padding-top: 0; font-size: 17px; }
+  .cat-nums { flex-direction: column; gap: 6px; }
+  .cat-name { font-size: 13px; }
+  .block-callout-stat { margin-left: 0; }
+}
+@media (max-width: 480px) {
+  .comp-row { grid-template-columns: 110px 1fr; }
+  .comp-value { display: none; }
+  .hero h1 { letter-spacing: -.03em; }
+  .ctx-grid { grid-template-columns: 1fr 1fr; }
+  .cat-total-row { flex-direction: column; gap: 8px; align-items: flex-start; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+
+  <!-- ── HERO ─────────────────────────────────────────────────────── -->
+  <header class="hero anim-pending" data-delay="0">
+    <div class="eyebrow">U.S. Tech Workforce · 2026 Analysis</div>
+    <h1>The AI<br>Job Displacement</h1>
+    <p class="hero-sub">
+      14.3 million tech-adjacent workers stand at the edge of history's fastest
+      labor market disruption. Adjust the slider to model the impact.
+    </p>
+    <div class="hero-badges">
+      <div class="badge-live">
+        <span class="pulse-dot"></span>
+        Block / Square cut 40% — Feb 26, 2026
+      </div>
+      <div class="badge-total">14.3M workers in scope</div>
+    </div>
+  </header>
+
+  <!-- ── SLIDER ────────────────────────────────────────────────────── -->
+  <section class="section anim-pending" data-delay="100">
+    <div class="slider-card">
+      <div class="slider-pct-label">AI-Driven Workforce Reduction Rate</div>
+      <div class="pct-display" id="pctDisplay">40%</div>
+      <div class="pct-hint">← Drag to explore scenarios from 0% to 60% →</div>
+      <div class="range-wrap">
+        <input type="range" id="slider" min="0" max="60" value="40" step="1" aria-label="Reduction percentage">
+        <div class="tick-row">
+          <span>0%</span><span>10%</span><span>20%</span><span>30%</span><span>40%</span><span>50%</span><span>60%</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── COUNTER ────────────────────────────────────────────────────── -->
+  <section class="section anim-pending" data-delay="180">
+    <div class="counter-card">
+      <div class="counter-eyebrow">
+        <span style="font-size:14px">⚠</span> Projected Jobs at Risk
+      </div>
+      <div class="counter-num" id="counterNum">5,720,000</div>
+      <div class="counter-body">workers displaced across tech-adjacent roles</div>
+      <div class="counter-note" id="counterNote">At 40% reduction rate · of 14.3M total tech-adjacent workers</div>
+    </div>
+  </section>
+
+  <!-- ── CATEGORIES ────────────────────────────────────────────────── -->
+  <section class="section anim-pending" data-delay="80">
+    <div class="section-title" style="margin-bottom:6px">Breakdown by Occupation</div>
+    <div class="section-desc" style="margin-bottom:20px">
+      Remaining <span style="color:var(--cyan)">■</span>&nbsp;vs. displaced&nbsp;<span style="color:var(--red)">■</span>
+      — live as you drag the slider above
+    </div>
+    <div class="cat-list" id="catList"></div>
+    <div class="cat-total-row" style="margin-top:12px" id="catTotalRow">
+      <span class="cat-total-label">Total Tech-Adjacent Workforce</span>
+      <div class="cat-total-nums">
+        <span class="num-r" id="totalRem">8,580,000</span>
+        <span class="num-l" id="totalLost">−5,720,000</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="vdiv"></div>
+
+  <!-- ── COMPARISON ────────────────────────────────────────────────── -->
+  <section class="section anim-pending" data-delay="60">
+    <div class="section-title" style="margin-bottom:6px">Putting It in Scale</div>
+    <div class="section-desc" style="margin-bottom:24px">
+      How the projected displacement compares to historical and demographic benchmarks
+    </div>
+
+    <div class="block-callout">
+      <span class="block-callout-icon">🏢</span>
+      <div class="block-callout-text">
+        <strong>Block (Square · Cash App)</strong> — Feb 26, 2026<br>
+        Cut 40% of staff. CEO Jack Dorsey said this is just the beginning.
+      </div>
+      <div class="block-callout-stat">4,000 jobs</div>
+    </div>
+
+    <div class="comp-card">
+      <div id="compRows"></div>
+    </div>
+  </section>
+
+  <!-- ── CONTEXT CARDS ──────────────────────────────────────────────── -->
+  <section class="section anim-pending" data-delay="80">
+    <div class="section-title" style="margin-bottom:6px">What This Means</div>
+    <div class="section-desc">Contextual perspective on the projected displacement</div>
+    <div class="ctx-grid" id="ctxGrid"></div>
+  </section>
+
+  <div class="vdiv"></div>
+
+  <!-- ── QUOTE ──────────────────────────────────────────────────────── -->
+  <section class="section anim-pending" data-delay="60">
+    <div class="quote-card">
+      <p class="quote-text">
+        "Within the next year, I believe the majority of companies will reach the same conclusion."
+      </p>
+      <div class="quote-attr">
+        <div class="quote-avatar">J</div>
+        <div>
+          <div class="quote-name">Jack Dorsey</div>
+          <div class="quote-role">
+            CEO, Block Inc. (Square · Cash App)<br>
+            On cutting 40% of company headcount — February 26, 2026
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div><!-- /wrap -->
+
+<footer>
+  <div class="wrap">
+    <p>
+      Data: U.S. Bureau of Labor Statistics, Occupational Employment &amp; Wage Statistics (2023, adjusted to 2026 projections) ·
+      Block Inc. workforce announcement, February 26, 2026
+    </p>
+    <p>
+      Categories shown as non-overlapping illustrative estimates. "Computer &amp; Mathematical"
+      excludes Software Developers counted separately. All figures are scenario projections for educational modeling.
+    </p>
+  </div>
+</footer>
+
+<script>
+'use strict';
+
+/* ── DATA ──────────────────────────────────────────────────────────── */
+const JOBS = [
+  { name:'Computer & Mathematical (All IT)',   total:6_500_000, icon:'💻', color:'#00d4ff' },
+  { name:'Software Developers & Engineers',    total:4_400_000, icon:'⌨️',  color:'#7c3aed' },
+  { name:'IT Support & Sysadmin',              total:1_000_000, icon:'🔧', color:'#2ed573' },
+  { name:'Product Managers (Tech-Adjacent)',   total:  900_000, icon:'📊', color:'#ffa502' },
+  { name:'Data Analysts & Business Intel.',   total:  800_000, icon:'📈', color:'#ff6b9d' },
+  { name:'UX / UI Designers',                  total:  500_000, icon:'🎨', color:'#00b4d8' },
+  { name:'Technical Writers & Dev Advocates', total:  200_000, icon:'✍️',  color:'#a8dadc' },
+];
+
+const TOTAL_TECH    = 14_300_000;
+const US_WORKFORCE  = 165_000_000;
+const MANUFACTURING =  13_000_000;
+const RECESSION     =   8_700_000;
+const NYC_POP       =   8_300_000;
+
+/* ── FORMATTING ────────────────────────────────────────────────────── */
+function fmt(n) {
+  if (n === 0) return '0';
+  const abs = Math.abs(n);
+  if (abs >= 1_000_000) {
+    const m = n / 1_000_000;
+    return (Number.isInteger(m) ? m.toFixed(0) : m.toFixed(1)) + 'M';
+  }
+  if (abs >= 1_000) return Math.round(n / 1_000) + 'K';
+  return n.toLocaleString();
+}
+function fmtFull(n) { return Math.round(n).toLocaleString(); }
+
+/* ── ANIMATION ENGINE ──────────────────────────────────────────────── */
+const _anims = {};
+function animateTo(id, target, formatter) {
+  formatter = formatter || fmtFull;
+  const el = document.getElementById(id);
+  if (!el) return;
+  if (!_anims[id]) _anims[id] = { val: 0, raf: null };
+  const a = _anims[id];
+  if (a.raf) { cancelAnimationFrame(a.raf); a.raf = null; }
+  const from = a.val;
+  const diff = target - from;
+  const t0 = performance.now();
+  const dur = 480;
+  (function tick(now) {
+    const p = Math.min((now - t0) / dur, 1);
+    const e = 1 - Math.pow(1 - p, 3); // ease-out-cubic
+    a.val = from + diff * e;
+    el.textContent = formatter(Math.round(a.val));
+    if (p < 1) a.raf = requestAnimationFrame(tick);
+    else { a.val = target; a.raf = null; }
+  })(t0);
+}
+
+/* ── SLIDER TRACK ──────────────────────────────────────────────────── */
+const slider = document.getElementById('slider');
+function updateTrack(v) {
+  const p = (v / 60) * 100;
+  slider.style.background =
+    `linear-gradient(to right, #ff4757 0%, #ffa502 ${p}%, rgba(255,255,255,.1) ${p}%)`;
+}
+
+/* ── RENDER: CATEGORIES (one-time) ─────────────────────────────────── */
+function renderCats() {
+  const list = document.getElementById('catList');
+  JOBS.forEach((j, i) => {
+    const el = document.createElement('div');
+    el.className = 'cat-item';
+    el.innerHTML = `
+      <div class="cat-row">
+        <div class="cat-name-wrap">
+          <span class="cat-icon">${j.icon}</span>
+          <div>
+            <div class="cat-name">${j.name}</div>
+            <div class="cat-total">${fmt(j.total)} total workers</div>
+          </div>
+        </div>
+        <div class="cat-nums">
+          <span>
+            <span class="lbl">Remaining</span>
+            <span class="num-r" id="nr${i}">${fmt(j.total)}</span>
+          </span>
+          <span>
+            <span class="lbl">Displaced</span>
+            <span class="num-l" id="nl${i}">−0</span>
+          </span>
+        </div>
+      </div>
+      <div class="bar-track">
+        <div class="bar-r" id="br${i}"
+             style="background:linear-gradient(90deg,${j.color}99,${j.color}44); width:100%"></div>
+        <div class="bar-l" id="bl${i}" style="width:0%"></div>
+      </div>`;
+    list.appendChild(el);
+  });
+}
+
+/* ── RENDER: COMPARISON BARS (one-time) ──────────────────────────── */
+const COMP_STATIC = [
+  { id:'c1', label:'<strong>Great Recession</strong> job losses (2008–09)', color:'#ffa502', value: RECESSION  },
+  { id:'c2', label:'<strong>NYC</strong> total population',                 color:'#7c3aed', value: NYC_POP    },
+  { id:'c3', label:'<strong>Manufacturing</strong> workforce (U.S.)',        color:'#2ed573', value: MANUFACTURING },
+  { id:'c4', label:'Total <strong>tech-adjacent</strong> workers in scope', color:'#00d4ff', value: TOTAL_TECH },
+];
+
+function renderComps() {
+  const rows = document.getElementById('compRows');
+
+  // Dynamic row first
+  const dynRow = document.createElement('div');
+  dynRow.className = 'comp-row comp-highlight';
+  dynRow.innerHTML = `
+    <div class="comp-label"><strong>Jobs displaced</strong><br><span style="font-size:11px;color:var(--text3)">this scenario</span></div>
+    <div class="comp-bar-outer">
+      <div class="comp-bar-inner" id="c0-bar"
+           style="width:0%;background:linear-gradient(90deg,#ff475799,#ff475744)">
+        <span id="c0-bartxt"></span>
+      </div>
+    </div>
+    <div class="comp-value" id="c0-val">—</div>`;
+  rows.appendChild(dynRow);
+
+  // Separator
+  const sep = document.createElement('div');
+  sep.style.cssText = 'height:1px;background:var(--border);margin:20px 0;grid-column:1/-1';
+  rows.appendChild(sep);
+
+  // Static rows
+  COMP_STATIC.forEach(c => {
+    const row = document.createElement('div');
+    row.className = 'comp-row';
+    row.innerHTML = `
+      <div class="comp-label">${c.label}</div>
+      <div class="comp-bar-outer">
+        <div class="comp-bar-inner" id="${c.id}-bar"
+             style="width:0%;background:linear-gradient(90deg,${c.color}cc,${c.color}44)">
+          <span id="${c.id}-bartxt"></span>
+        </div>
+      </div>
+      <div class="comp-value">${fmt(c.value)}</div>`;
+    rows.appendChild(row);
+  });
+
+  // Animate static bars after a brief delay
+  setTimeout(() => {
+    COMP_STATIC.forEach(c => {
+      const pct = Math.min((c.value / TOTAL_TECH) * 100, 100);
+      const bar = document.getElementById(`${c.id}-bar`);
+      const txt = document.getElementById(`${c.id}-bartxt`);
+      if (bar) bar.style.width = pct + '%';
+      if (txt) txt.textContent = fmt(c.value);
+    });
+  }, 600);
+}
+
+/* ── RENDER: CONTEXT CARDS (one-time) ────────────────────────────── */
+const CTX_META = [
+  { id:'ctx0', lbl:'Share of All U.S. Jobs',  color:'#ff4757' },
+  { id:'ctx1', lbl:'vs. Great Recession',      color:'#ffa502' },
+  { id:'ctx2', lbl:'vs. Manufacturing',        color:'#2ed573' },
+  { id:'ctx3', lbl:'vs. NYC Population',       color:'#7c3aed' },
+];
+
+function renderCtx() {
+  const grid = document.getElementById('ctxGrid');
+  CTX_META.forEach(c => {
+    const el = document.createElement('div');
+    el.className = 'ctx-card';
+    el.innerHTML = `
+      <div class="ctx-lbl">${c.lbl}</div>
+      <div class="ctx-val" id="${c.id}-val" style="color:${c.color}">—</div>
+      <div class="ctx-mini-track">
+        <div class="ctx-mini-fill" id="${c.id}-bar" style="background:${c.color};width:0%"></div>
+      </div>
+      <div class="ctx-desc" id="${c.id}-desc"></div>`;
+    grid.appendChild(el);
+  });
+}
+
+/* ── UPDATE (reactive on slider) ─────────────────────────────────── */
+function setW(id, pct) {
+  const el = document.getElementById(id);
+  if (el) el.style.width = Math.max(0, Math.min(pct, 100)) + '%';
+}
+function setText(id, val) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = val;
+}
+
+function update(pct) {
+  const r    = pct / 100;
+  const lost = Math.round(TOTAL_TECH * r);
+  const rem  = TOTAL_TECH - lost;
+
+  /* Slider label */
+  document.getElementById('pctDisplay').textContent = pct + '%';
+  document.getElementById('counterNote').textContent =
+    `At ${pct}% reduction rate · of ${fmt(TOTAL_TECH)} total tech-adjacent workers`;
+
+  /* Counter */
+  animateTo('counterNum', lost);
+
+  /* Category bars */
+  JOBS.forEach((j, i) => {
+    const jLost = Math.round(j.total * r);
+    const jRem  = j.total - jLost;
+    setW(`br${i}`, (jRem  / j.total) * 100);
+    setW(`bl${i}`, (jLost / j.total) * 100);
+    setText(`nr${i}`, fmt(jRem));
+    setText(`nl${i}`, jLost === 0 ? '−0' : `−${fmt(jLost)}`);
+  });
+
+  /* Total row */
+  setText('totalRem',  fmt(rem));
+  setText('totalLost', `−${fmt(lost)}`);
+
+  /* Dynamic comparison bar */
+  const dynPct = (lost / TOTAL_TECH) * 100;
+  setW('c0-bar', dynPct);
+  setText('c0-bartxt', lost ? fmt(lost) : '');
+  setText('c0-val', lost ? fmt(lost) : '—');
+
+  /* Context cards ───────────────────────────────────────────────── */
+  const techPct = ((lost / US_WORKFORCE) * 100);
+  const vsRec   = lost / RECESSION;
+  const vsManuf = (lost / MANUFACTURING) * 100;
+  const vsNYC   = lost / NYC_POP;
+
+  // ctx0 – share of US workforce
+  setText('ctx0-val', techPct.toFixed(2) + '%');
+  setW('ctx0-bar', Math.min(techPct * 8, 100));
+  setText('ctx0-desc',
+    lost
+      ? `${fmtFull(lost)} displaced workers = ${techPct.toFixed(2)}% of America's entire 165M-person workforce.`
+      : 'Move the slider to see the impact.'
+  );
+
+  // ctx1 – vs recession
+  const recPct = Math.round(vsRec * 100);
+  setText('ctx1-val', vsRec >= 1 ? vsRec.toFixed(2) + '×' : recPct + '%');
+  setW('ctx1-bar', Math.min(vsRec * 80, 100));
+  if (lost === 0) {
+    setText('ctx1-desc', 'The 2008 recession erased 8.7M jobs over two years.');
+  } else if (vsRec < 1) {
+    setText('ctx1-desc',
+      `The 2008 recession erased 8.7M jobs over two years. This scenario = ${recPct}% of that total — but concentrated in one sector, potentially in months.`
+    );
+  } else {
+    setText('ctx1-desc',
+      `This scenario EXCEEDS the Great Recession. ${fmtFull(lost)} jobs vs. 8.7M lost over two years — ${vsRec.toFixed(2)}× that crisis, hitting a single sector.`
+    );
+  }
+
+  // ctx2 – vs manufacturing
+  setText('ctx2-val', Math.round(vsManuf) + '%');
+  setW('ctx2-bar', Math.min(vsManuf, 100));
+  setText('ctx2-desc',
+    lost
+      ? `The U.S. employs 13M in manufacturing. This displacement = ${Math.round(vsManuf)}% of the entire manufacturing workforce.`
+      : 'The U.S. employs 13M manufacturing workers.'
+  );
+
+  // ctx3 – vs NYC
+  const nycMult = vsNYC.toFixed(2);
+  setText('ctx3-val', nycMult + '×');
+  setW('ctx3-bar', Math.min(vsNYC * 60, 100));
+  setText('ctx3-desc',
+    lost
+      ? `NYC has ~8.3M residents. The projected displacement = ${nycMult}× the entire population of America's largest city.`
+      : `New York City has ~8.3M residents, for scale.`
+  );
+}
+
+/* ── SCROLL ANIMATION ─────────────────────────────────────────────── */
+function initScrollAnims() {
+  const els = document.querySelectorAll('.anim-pending');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        const delay = el.dataset.delay || 0;
+        setTimeout(() => {
+          el.classList.remove('anim-pending');
+          el.classList.add('anim-done');
+        }, parseInt(delay, 10));
+        observer.unobserve(el);
+      }
+    });
+  }, { threshold: 0.08 });
+  els.forEach(el => observer.observe(el));
+}
+
+/* ── INIT ─────────────────────────────────────────────────────────── */
+renderCats();
+renderComps();
+renderCtx();
+updateTrack(40);
+
+// Kick off the initial state after one frame so transitions look intentional
+requestAnimationFrame(() => {
+  update(40);
+  // Init anim state for counter so it starts from 0 and counts up
+  _anims['counterNum'] = { val: 0, raf: null };
+  update(40);
+  initScrollAnims();
+});
+
+/* Slider interaction */
+slider.addEventListener('input', e => {
+  const v = parseInt(e.target.value, 10);
+  updateTrack(v);
+  update(v);
+});
+</script>
+
+</body>
+</html>

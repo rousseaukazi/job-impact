@@ -1,0 +1,20 @@
+The infographic is built at `/tmp/job-impact/index.html`. Here's what's in it:
+
+**Sections:**
+1. **Hero** — gradient headline, live badge with Block/Square news, total worker count badge
+2. **Slider** — massive glowing percentage display, custom-styled range input with 0–60% range (default 40%), color-coded tick marks
+3. **Counter** — giant red glowing number that animates up/down as you drag the slider
+4. **Breakdown by Occupation** — 7 color-coded horizontal bars per job category, each showing remaining (colored) vs. displaced (red) workers with live number updates. A totals row at the bottom.
+5. **Scale Comparison** — horizontal comparison bars benchmarking the displacement against the Great Recession (8.7M), NYC population (8.3M), manufacturing workforce (13M), and total tech scope (14.3M) — with the dynamic "this scenario" bar updating live
+6. **Context Cards** — 2×2 grid with adaptive descriptions: share of US workforce, vs. Great Recession (switches language when it exceeds recession levels), vs. manufacturing %, vs. NYC population multiplier
+7. **Dorsey Quote** — styled blockquote with attribution
+8. **Footer** — BLS data sources
+
+**Technical:**
+- Zero frameworks, pure vanilla HTML/CSS/JS
+- Google Fonts CDN (Inter + JetBrains Mono)
+- `IntersectionObserver` scroll-triggered fade-up animations
+- Smooth `requestAnimationFrame` number counters with ease-out-cubic easing
+- Custom CSS slider with gradient track that follows the thumb
+- All CSS transitions on bars (0.55s cubic-bezier)
+- Fully responsive down to 480px mobile
