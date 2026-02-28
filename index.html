@@ -259,11 +259,34 @@ section:nth-child(even) { background: var(--surface2); }
   padding: 24px 24px 44px;
   position: relative;
 }
-/* Info button: always bottom-right of its card */
-.card > .info-btn, .card-sm > .info-btn {
+/* Big stat hero cards also need relative + padding for info btn */
+.big-stat-hero {
+  position: relative;
+  padding-bottom: 52px !important;
+}
+/* Quote + slider cards */
+.quote-card, .slider-section {
+  position: relative;
+  padding-bottom: 52px;
+}
+/* Info button: bottom-right, hidden by default, visible on hover */
+.card > .info-btn,
+.card-sm > .info-btn,
+.big-stat-hero > .info-btn,
+.quote-card > .info-btn,
+.slider-section > .info-btn {
   position: absolute;
   bottom: 14px;
   right: 14px;
+  opacity: 0;
+  transition: opacity 0.18s ease, border-color 0.18s, color 0.18s;
+}
+.card:hover > .info-btn,
+.card-sm:hover > .info-btn,
+.big-stat-hero:hover > .info-btn,
+.quote-card:hover > .info-btn,
+.slider-section:hover > .info-btn {
+  opacity: 1;
 }
 
 /* ── Grid Layouts ── */
@@ -1136,6 +1159,7 @@ footer {
       <div class="big-stat-hero">
         <div class="big-stat-num" data-countup="845" data-prefix="$" data-suffix="B">$845B</div>
         <div class="big-stat-desc">In Annual Wages Across the Sector</div>
+        <button class="info-btn" data-modal="workforce-sources" aria-label="Data sources">ⓘ</button>
       </div>
     </div>
 
@@ -1147,10 +1171,12 @@ footer {
       <div class="card-sm">
         <div class="hero-stat-num" data-countup="130000" data-prefix="$" data-suffix="K" data-divisor="1000">$130K</div>
         <div class="hero-stat-label">Median SWE Salary (BLS 2024)</div>
+        <button class="info-btn" data-modal="salary-sources" aria-label="Data sources">ⓘ</button>
       </div>
       <div class="card-sm">
         <div class="hero-stat-num" data-countup="100000" data-prefix="" data-suffix="K" data-divisor="1000">100K</div>
         <div class="hero-stat-label">CS/CE Grads Entering Each Year</div>
+        <button class="info-btn" data-modal="grads-sources" aria-label="Data sources">ⓘ</button>
       </div>
     </div>
 
@@ -1287,6 +1313,7 @@ footer {
     <div class="quote-card reveal reveal-delay-1">
       <div class="quote-text">"Within the next year, I believe the majority of companies will reach the same conclusion."</div>
       <div class="quote-attr">— Jack Dorsey, CEO of Block Inc., April 2025 · Following announcement of significant AI-driven headcount reduction</div>
+      <button class="info-btn" data-modal="dorsey-sources" aria-label="Data sources">ⓘ</button>
     </div>
 
     <!-- Slider -->
@@ -1306,6 +1333,7 @@ footer {
         <span style="display:inline-block; width:10px; height:10px; border-radius:50%; background:var(--accent); margin-right:6px;"></span>Employed
         <span style="display:inline-block; width:10px; height:10px; border-radius:50%; background:var(--red); margin-right:6px; margin-left:16px;"></span>Displaced
       </div>
+      <button class="info-btn" data-modal="workforce-sources" aria-label="Data sources">ⓘ</button>
     </div>
 
     <!-- Company impacts + Historical comparison -->
@@ -1382,6 +1410,7 @@ footer {
     <div class="big-stat-hero reveal reveal-delay-1" style="margin-bottom:32px;">
       <div class="big-stat-num" data-countup="340" data-prefix="$" data-suffix="B">$340B</div>
       <div class="big-stat-desc">Estimated total economic impact from 2.6M displaced tech workers</div>
+      <button class="info-btn" data-modal="economic-sources" aria-label="Data sources">ⓘ</button>
     </div>
 
     <!-- Donut + breakdown -->
@@ -2177,6 +2206,29 @@ const sourceData = {
       { name: 'World Economic Forum — Future of Jobs Report 2025', url: 'https://www.weforum.org/reports/the-future-of-jobs-report-2025/' },
       { name: 'McKinsey Global Institute — The Future of Work After COVID-19', url: 'https://www.mckinsey.com/featured-insights/future-of-work/the-future-of-work-after-covid-19' },
       { name: 'LinkedIn Economic Graph — Emerging Jobs Report', url: 'https://economicgraph.linkedin.com/research/future-of-work' },
+    ]
+  },
+  'workforce-sources': {
+    title: 'US Tech Workforce Size & Wages',
+    sources: [
+      { name: 'BLS Occupational Employment Statistics — All Computer Occupations', url: 'https://www.bls.gov/oes/current/oes_nat.htm#15-0000' },
+      { name: 'CompTIA State of the Tech Workforce 2024', url: 'https://www.comptia.org/content/research/state-of-the-tech-workforce' },
+      { name: 'BLS — Quarterly Census of Employment & Wages (QCEW)', url: 'https://www.bls.gov/cew/' },
+    ]
+  },
+  'grads-sources': {
+    title: 'CS/CE Graduate Pipeline',
+    sources: [
+      { name: 'NCES Digest of Education Statistics — CS Bachelor's Degrees', url: 'https://nces.ed.gov/programs/digest/d23/tables/dt23_325.35.asp' },
+      { name: 'Computing Research Association — Taulbee Survey', url: 'https://cra.org/resources/taulbee-survey/' },
+      { name: 'NSF — Science & Engineering Degrees: 1966–2020', url: 'https://ncses.nsf.gov/pubs/nsf22321/' },
+    ]
+  },
+  'dorsey-sources': {
+    title: 'Jack Dorsey / Block AI Displacement Quote',
+    sources: [
+      { name: 'Block Inc. — Dorsey announcement on AI-driven headcount reduction', url: 'https://x.com/jack/status/1909660839386624028' },
+      { name: 'Reuters — Block cuts 40% of staff citing AI productivity gains', url: 'https://www.reuters.com/technology/jack-dorsey-says-block-cutting-more-employees-2025-04-08/' },
     ]
   },
   'retraining-sources': {
