@@ -39,7 +39,7 @@
 }
 
 /* ── Base ── */
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
 body {
   font-family: var(--font);
   background: var(--bg);
@@ -893,10 +893,50 @@ footer {
   transform: translateY(0);
   will-change: auto;
 }
-/* Off-screen sections skipped by rendering engine */
-#s2, #s3, #s4 {
-  content-visibility: auto;
-  contain-intrinsic-size: 0 900px;
+
+/* GPU-composite each section so scroll is handled on compositor thread */
+section, footer {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* ── Loading Screen ── */
+#loader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  transition: opacity 0.5s ease;
+}
+#loader.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+.loader-logo {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text2);
+}
+.loader-bar-track {
+  width: 200px;
+  height: 3px;
+  background: var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.loader-bar-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--accent);
+  border-radius: 3px;
+  transition: width 0.15s ease;
 }
 .reveal-delay-1 { transition-delay: 0.1s; }
 .reveal-delay-2 { transition-delay: 0.2s; }
@@ -973,6 +1013,12 @@ footer {
 </style>
 </head>
 <body>
+
+<!-- Loading screen -->
+<div id="loader">
+  <div class="loader-logo">AI Displacement Report</div>
+  <div class="loader-bar-track"><div class="loader-bar-fill" id="loader-fill"></div></div>
+</div>
 
 <!-- Progress bar -->
 <div id="progress"></div>
@@ -1940,19 +1986,65 @@ if (s4) destObserver.observe(s4);
 const tickPositions = [0, 37, 75, 100]; // approximate positions
 
 /* ══════════════════════════════════════════════════
-   INITIAL ANIMATION CHECK (elements already in view)
+   LOADING SCREEN + INIT
+   Pre-renders all sections so scroll is paint-free
 ══════════════════════════════════════════════════ */
-window.addEventListener('load', () => {
+const loader = document.getElementById('loader');
+const loaderFill = document.getElementById('loader-fill');
+
+function setLoaderProgress(pct) {
+  if (loaderFill) loaderFill.style.width = pct + '%';
+}
+
+function dismissLoader() {
+  loader.classList.add('fade-out');
+  setTimeout(() => { loader.style.display = 'none'; }, 520);
+}
+
+function initAll() {
+  setLoaderProgress(30);
+
+  // 1. Run slider init (section 2)
+  updateSlider(40);
+  setLoaderProgress(50);
+
+  // 2. Draw donut (section 3)
+  drawDonut();
+  setLoaderProgress(65);
+
+  // 3. Animate all hist bars
+  document.querySelectorAll('.hist-bar').forEach(bar => {
+    const maxH = parseFloat(bar.dataset.maxheight || 160);
+    const pctH = parseFloat(bar.dataset.heightPct || 50);
+    bar.style.height = (maxH * pctH / 100) + 'px';
+  });
+  setLoaderProgress(80);
+
+  // 4. Force layout of all sections so browser pre-paints them
+  document.querySelectorAll('section').forEach(s => {
+    void s.offsetHeight; // force reflow
+  });
+  setLoaderProgress(95);
+
+  // 5. Reveal above-fold elements
   document.querySelectorAll('.reveal').forEach(el => {
     const rect = el.getBoundingClientRect();
-    if (rect.top < window.innerHeight * 0.95) {
+    if (rect.top < window.innerHeight * 1.1) {
       el.classList.add('visible');
       el.querySelectorAll('.metro-fill').forEach(f => f.style.width = f.dataset.width + '%');
       el.querySelectorAll('.age-bar').forEach(b => b.style.height = b.dataset.height + 'px');
+      el.querySelectorAll('[data-countup]').forEach(triggerCountUp);
     }
   });
-  drawDonut();
-  updateSlider(40);
+  setLoaderProgress(100);
+
+  // 6. Dismiss after a beat
+  setTimeout(dismissLoader, 200);
+}
+
+window.addEventListener('load', () => {
+  // Small delay so browser finishes first paint before we force all the reflows
+  setTimeout(initAll, 150);
 });
 </script>
 </body>
