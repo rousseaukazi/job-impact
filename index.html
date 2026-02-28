@@ -1,1070 +1,1843 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The AI Job Displacement — U.S. Tech Workforce 2026</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<title>The AI Displacement — America's Tech Workforce</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400&display=swap" rel="stylesheet">
 <style>
-/* ── Reset + Root ──────────────────────────────────────────────────── */
+/* ── Reset ── */
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+/* ── Design Tokens ── */
 :root {
-  --bg:        #0a0a0f;
-  --surface:   #0e0e1c;
-  --surface2:  #13132a;
-  --border:    rgba(255,255,255,.07);
-  --border2:   rgba(255,255,255,.12);
-  --cyan:      #00d4ff;
-  --purple:    #7c3aed;
-  --red:       #ff4757;
-  --orange:    #ffa502;
-  --green:     #2ed573;
-  --pink:      #ff6b9d;
-  --teal:      #00b4d8;
-  --muted:     #a8dadc;
-  --text:      #f0f0ff;
-  --text2:     #8888aa;
-  --text3:     #44446a;
+  --bg:        #f5f5f7;
+  --surface:   #ffffff;
+  --surface2:  #f0f0f5;
+  --text:      #1d1d1f;
+  --text2:     #6e6e73;
+  --border:    rgba(0,0,0,0.08);
+  --accent:    #0071e3;
+  --red:       #ff3b30;
+  --orange:    #ff9500;
+  --green:     #34c759;
+  --font:      'Inter', -apple-system, 'SF Pro Display', sans-serif;
+  --transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  --radius:    18px;
+  --radius-sm: 10px;
 }
+[data-theme="dark"] {
+  --bg:        #000000;
+  --surface:   #1c1c1e;
+  --surface2:  #2c2c2e;
+  --text:      #f5f5f7;
+  --text2:     #98989d;
+  --border:    rgba(255,255,255,0.1);
+  --accent:    #2997ff;
+}
+
+/* ── Base ── */
 html { scroll-behavior: smooth; }
 body {
+  font-family: var(--font);
   background: var(--bg);
   color: var(--text);
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  transition: background var(--transition), color var(--transition);
+  -webkit-font-smoothing: antialiased;
   line-height: 1.5;
   overflow-x: hidden;
 }
 
-/* ── Layered background ───────────────────────────────────────────── */
-body::before {
-  content: '';
+/* ── Theme Toggle ── */
+#theme-toggle {
   position: fixed;
-  inset: 0;
-  background:
-    radial-gradient(ellipse 90% 50% at 50% -10%, rgba(0,212,255,.05) 0%, transparent 70%),
-    radial-gradient(ellipse 60% 40% at 80% 100%, rgba(124,58,237,.04) 0%, transparent 60%),
-    linear-gradient(rgba(255,255,255,.014) 1px, transparent 1px) 0 0 / 64px 64px,
-    linear-gradient(90deg, rgba(255,255,255,.014) 1px, transparent 1px) 0 0 / 64px 64px;
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* ── Layout ───────────────────────────────────────────────────────── */
-.wrap {
-  max-width: 1080px;
-  margin: 0 auto;
-  padding: 0 28px;
-  position: relative;
-  z-index: 1;
-}
-
-/* ── Section spacing ──────────────────────────────────────────────── */
-.section { padding-bottom: 56px; }
-
-/* ── Typography utilities ─────────────────────────────────────────── */
-.eyebrow {
-  display: inline-block;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: .2em;
-  text-transform: uppercase;
-  color: var(--cyan);
-  background: rgba(0,212,255,.08);
-  border: 1px solid rgba(0,212,255,.22);
-  padding: 5px 14px;
-  border-radius: 100px;
-}
-.section-title {
-  font-size: 22px;
-  font-weight: 800;
-  letter-spacing: -.03em;
-  margin-bottom: 6px;
-}
-.section-desc { font-size: 14px; color: var(--text2); line-height: 1.6; }
-
-/* ── Hero ─────────────────────────────────────────────────────────── */
-.hero {
-  padding: 96px 0 72px;
-  text-align: center;
-}
-.hero .eyebrow { margin-bottom: 30px; }
-.hero h1 {
-  font-size: clamp(42px, 8vw, 88px);
-  font-weight: 900;
-  letter-spacing: -.04em;
-  line-height: 1.0;
-  background: linear-gradient(160deg, #ffffff 0%, #c4c4ff 38%, #00d4ff 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  margin-bottom: 26px;
-}
-.hero-sub {
-  font-size: clamp(15px, 2.2vw, 19px);
-  color: var(--text2);
-  max-width: 540px;
-  margin: 0 auto 40px;
-  line-height: 1.65;
-  font-weight: 400;
-}
-.hero-badges {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-.badge-live {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--red);
-  background: rgba(255,71,87,.1);
-  border: 1px solid rgba(255,71,87,.28);
-  padding: 7px 16px;
-  border-radius: 8px;
-}
-.badge-total {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--cyan);
-  background: rgba(0,212,255,.08);
-  border: 1px solid rgba(0,212,255,.22);
-  padding: 7px 16px;
-  border-radius: 8px;
-  font-family: 'JetBrains Mono', monospace;
-}
-.pulse-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--red);
-  flex-shrink: 0;
-  animation: blink 1.8s ease-in-out infinite;
-}
-@keyframes blink {
-  0%,100% { opacity:1; box-shadow: 0 0 0 0 rgba(255,71,87,.4); }
-  50% { opacity:.5; box-shadow: 0 0 0 6px rgba(255,71,87,0); }
-}
-
-/* ── Divider ──────────────────────────────────────────────────────── */
-.vdiv {
-  height: 1px;
-  background: linear-gradient(90deg, transparent 0%, var(--border2) 30%, var(--border2) 70%, transparent 100%);
-  margin-bottom: 56px;
-}
-
-/* ── Slider section ───────────────────────────────────────────────── */
-.slider-card {
-  background: var(--surface);
-  border: 1px solid var(--border2);
-  border-radius: 22px;
-  padding: 48px 56px 40px;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-}
-.slider-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(255,71,87,.04) 0%, transparent 70%);
-  pointer-events: none;
-}
-.slider-pct-label {
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: .2em;
-  text-transform: uppercase;
-  color: var(--text3);
-  margin-bottom: 8px;
-}
-.pct-display {
-  font-size: clamp(72px, 13vw, 120px);
-  font-weight: 900;
-  font-family: 'JetBrains Mono', monospace;
-  letter-spacing: -.04em;
-  line-height: 1;
-  background: linear-gradient(135deg, #ff4757 30%, #ffa502 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  margin-bottom: 8px;
-  transition: all .08s;
-}
-.pct-hint {
-  font-size: 13px;
-  color: var(--text3);
-  margin-bottom: 36px;
-}
-.range-wrap { padding: 4px 0 22px; }
-input[type=range] {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 100%;
-  height: 5px;
-  border-radius: 3px;
-  outline: none;
-  cursor: pointer;
-  transition: background .05s;
-}
-input[type=range]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 38% 34%, #ff7480, #ff4757);
-  cursor: pointer;
-  box-shadow: 0 2px 24px rgba(255,71,87,.65), 0 0 0 5px rgba(255,71,87,.18);
-  transition: box-shadow .2s, transform .15s;
-}
-input[type=range]::-webkit-slider-thumb:hover {
-  box-shadow: 0 4px 36px rgba(255,71,87,.9), 0 0 0 10px rgba(255,71,87,.14);
-  transform: scale(1.1);
-}
-input[type=range]::-moz-range-thumb {
-  width: 34px;
-  height: 34px;
-  border: none;
-  border-radius: 50%;
-  background: radial-gradient(circle at 38% 34%, #ff7480, #ff4757);
-  cursor: pointer;
-  box-shadow: 0 2px 24px rgba(255,71,87,.65);
-}
-.tick-row {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 16px;
-  font-size: 11px;
-  font-family: 'JetBrains Mono', monospace;
-  color: var(--text3);
-}
-.tick-row span:nth-child(5) { color: var(--orange); font-weight: 700; }
-
-/* ── Counter card ─────────────────────────────────────────────────── */
-.counter-card {
-  background: var(--surface);
-  border: 1px solid rgba(255,71,87,.2);
-  border-radius: 22px;
-  padding: 56px 48px;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-}
-.counter-card::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse 100% 70% at 50% 110%, rgba(255,71,87,.08) 0%, transparent 65%);
-  pointer-events: none;
-}
-.counter-eyebrow {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: .2em;
-  text-transform: uppercase;
-  color: var(--red);
-  margin-bottom: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-.counter-num {
-  font-size: clamp(52px, 10vw, 108px);
-  font-weight: 900;
-  font-family: 'JetBrains Mono', monospace;
-  letter-spacing: -.04em;
-  color: var(--red);
-  text-shadow:
-    0 0 60px rgba(255,71,87,.45),
-    0 0 120px rgba(255,71,87,.2),
-    0 0 200px rgba(255,71,87,.1);
-  line-height: 1;
-  margin-bottom: 18px;
-  position: relative;
-  z-index: 1;
-}
-.counter-body {
-  font-size: clamp(16px, 2vw, 20px);
-  color: var(--text2);
-  margin-bottom: 12px;
-  position: relative;
-  z-index: 1;
-}
-.counter-note {
-  font-size: 13px;
-  color: var(--text3);
-  position: relative;
-  z-index: 1;
-}
-
-/* ── Categories ───────────────────────────────────────────────────── */
-.cat-list { display: flex; flex-direction: column; gap: 12px; }
-.cat-item {
+  top: 20px;
+  right: 24px;
+  z-index: 1000;
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 18px 24px;
-  transition: border-color .25s, background .25s;
-}
-.cat-item:hover {
-  border-color: rgba(255,255,255,.14);
-  background: var(--surface2);
-}
-.cat-row {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 13px;
-}
-.cat-name-wrap {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  min-width: 0;
-  flex: 1;
-}
-.cat-icon { font-size: 18px; flex-shrink: 0; }
-.cat-name { font-size: 14px; font-weight: 600; }
-.cat-total { font-size: 11px; color: var(--text3); margin-top: 2px; font-family: 'JetBrains Mono', monospace; }
-.cat-nums {
-  display: flex;
-  gap: 20px;
-  flex-shrink: 0;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 13px;
-  align-items: flex-start;
-}
-.cat-nums span { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
-.cat-nums .lbl { font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: var(--text3); font-weight: 600; }
-.num-r { color: var(--cyan); }
-.num-l { color: var(--red); }
-.bar-track {
-  height: 10px;
-  background: rgba(255,255,255,.04);
-  border-radius: 5px;
-  overflow: hidden;
-  position: relative;
-}
-.bar-r {
-  position: absolute;
-  inset: 0 auto 0 0;
-  height: 100%;
-  border-radius: 5px 0 0 5px;
-  transition: width .55s cubic-bezier(.4,0,.2,1);
-}
-.bar-l {
-  position: absolute;
-  inset: 0 0 0 auto;
-  height: 100%;
-  background: linear-gradient(90deg, rgba(255,71,87,.65) 0%, rgba(255,71,87,.25) 100%);
-  border-radius: 0 5px 5px 0;
-  transition: width .55s cubic-bezier(.4,0,.2,1);
-}
-.cat-total-row {
-  background: linear-gradient(90deg, rgba(255,71,87,.06), transparent);
-  border: 1px solid rgba(255,71,87,.15);
-  border-radius: 10px;
-  padding: 12px 24px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 4px;
-}
-.cat-total-label { font-size: 13px; font-weight: 700; color: var(--text2); }
-.cat-total-nums {
-  display: flex;
-  gap: 20px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 13px;
-  font-weight: 700;
-}
-
-/* ── Comparison bars ──────────────────────────────────────────────── */
-.comp-card {
-  background: var(--surface);
-  border: 1px solid var(--border2);
-  border-radius: 22px;
-  padding: 40px 44px;
-}
-.comp-row {
-  display: grid;
-  grid-template-columns: 216px 1fr 96px;
-  align-items: center;
-  gap: 18px;
-  margin-bottom: 20px;
-}
-.comp-row:last-child { margin-bottom: 0; }
-.comp-label { font-size: 13px; color: var(--text2); line-height: 1.35; }
-.comp-label strong { color: var(--text); font-weight: 600; }
-.comp-bar-outer {
-  height: 24px;
-  background: rgba(255,255,255,.04);
-  border-radius: 4px;
-  overflow: hidden;
-}
-.comp-bar-inner {
-  height: 100%;
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  padding-right: 10px;
-  font-size: 10px;
-  font-family: 'JetBrains Mono', monospace;
-  font-weight: 700;
-  color: rgba(255,255,255,.88);
-  transition: width .7s cubic-bezier(.4,0,.2,1);
-  white-space: nowrap;
-  overflow: hidden;
-  min-width: 0;
-}
-.comp-value {
-  font-size: 12px;
-  font-family: 'JetBrains Mono', monospace;
-  color: var(--text2);
-  text-align: right;
-  font-weight: 600;
-}
-.comp-sep {
-  height: 1px;
-  background: var(--border);
-  margin: 22px 0;
-  grid-column: 1 / -1;
-}
-.comp-highlight .comp-label { color: var(--text); }
-.comp-highlight .comp-value { color: var(--red); }
-
-/* ── Context cards ────────────────────────────────────────────────── */
-.ctx-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-  gap: 16px;
-  margin-top: 28px;
-}
-.ctx-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 26px;
-  transition: border-color .2s, transform .2s;
-}
-.ctx-card:hover { border-color: var(--border2); transform: translateY(-2px); }
-.ctx-lbl {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: .16em;
-  text-transform: uppercase;
-  color: var(--text3);
-  margin-bottom: 12px;
-}
-.ctx-val {
-  font-size: 34px;
-  font-weight: 900;
-  font-family: 'JetBrains Mono', monospace;
-  letter-spacing: -.03em;
-  margin-bottom: 12px;
-  line-height: 1;
-}
-.ctx-mini-track {
-  height: 3px;
-  background: rgba(255,255,255,.06);
-  border-radius: 2px;
-  margin-bottom: 12px;
-  overflow: hidden;
-}
-.ctx-mini-fill {
-  height: 100%;
-  border-radius: 2px;
-  transition: width .7s ease;
-}
-.ctx-desc { font-size: 13px; color: var(--text2); line-height: 1.6; }
-
-/* ── Quote ────────────────────────────────────────────────────────── */
-.quote-card {
-  background: linear-gradient(135deg, rgba(124,58,237,.09), rgba(0,212,255,.04));
-  border: 1px solid rgba(124,58,237,.28);
-  border-radius: 22px;
-  padding: 56px 64px;
-  position: relative;
-  overflow: hidden;
-}
-.quote-card::before {
-  content: '\201C';
-  position: absolute;
-  top: 12px;
-  left: 36px;
-  font-size: 140px;
-  line-height: 1;
-  font-family: Georgia, 'Times New Roman', serif;
-  color: rgba(124,58,237,.18);
-  pointer-events: none;
-  user-select: none;
-}
-.quote-card::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse 80% 60% at 100% 100%, rgba(0,212,255,.03) 0%, transparent 60%);
-  pointer-events: none;
-}
-.quote-text {
-  font-size: clamp(18px, 2.8vw, 24px);
-  font-weight: 500;
-  line-height: 1.55;
-  color: var(--text);
-  margin-bottom: 30px;
-  position: relative;
-  z-index: 1;
-  padding-top: 20px;
-  font-style: italic;
-}
-.quote-attr {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  position: relative;
-  z-index: 1;
-}
-.quote-avatar {
-  width: 46px;
-  height: 46px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #1d9bf0, #7c3aed);
+  border-radius: 50px;
+  width: 48px;
+  height: 48px;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 20px;
-  font-weight: 900;
-  flex-shrink: 0;
-  letter-spacing: -.02em;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.12);
 }
-.quote-name { font-size: 15px; font-weight: 700; margin-bottom: 3px; }
-.quote-role { font-size: 12px; color: var(--text3); line-height: 1.4; }
+#theme-toggle:hover { transform: scale(1.1); }
 
-/* ── Block highlight ──────────────────────────────────────────────── */
-.block-callout {
-  background: linear-gradient(90deg, rgba(255,71,87,.07), rgba(255,165,2,.04));
-  border: 1px solid rgba(255,71,87,.18);
-  border-radius: 12px;
-  padding: 18px 24px;
+/* ── Progress Bar ── */
+#progress {
+  position: fixed;
+  top: 0; left: 0;
+  height: 3px;
+  background: var(--accent);
+  z-index: 999;
+  transition: width 0.1s linear;
+  width: 0%;
+}
+
+/* ── Section Nav Dots ── */
+#section-nav {
+  position: fixed;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 900;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.nav-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--text2);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  opacity: 0.4;
+}
+.nav-dot.active {
+  opacity: 1;
+  background: var(--accent);
+  transform: scale(1.4);
+}
+
+/* ── Container ── */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+/* ── Sections ── */
+section {
+  padding: 120px 0;
+  position: relative;
+}
+section:nth-child(odd) { background: var(--bg); }
+section:nth-child(even) { background: var(--surface2); }
+
+/* ── Hero ── */
+#hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  background: var(--bg);
+  padding: 80px 0;
+}
+.hero-label {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 24px;
+}
+.hero-title {
+  font-size: clamp(48px, 7vw, 96px);
+  font-weight: 800;
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  color: var(--text);
+  margin-bottom: 32px;
+}
+.hero-subtitle {
+  font-size: clamp(18px, 2.5vw, 24px);
+  color: var(--text2);
+  font-weight: 400;
+  max-width: 600px;
+  line-height: 1.6;
+  margin-bottom: 60px;
+}
+.hero-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 24px;
+  margin-top: 60px;
+}
+.hero-stat {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
+}
+.hero-stat-num {
+  font-size: clamp(32px, 4vw, 48px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--text);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.hero-stat-label {
+  font-size: 14px;
+  color: var(--text2);
+  font-weight: 500;
+}
+.hero-big-stat {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 40px;
+  text-align: center;
+  margin-bottom: 24px;
+}
+.hero-big-stat-num {
+  font-size: clamp(40px, 6vw, 72px);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  color: var(--text);
+  line-height: 1;
+}
+.hero-big-stat-sub {
+  font-size: 16px;
+  color: var(--text2);
+  margin-top: 12px;
+}
+
+/* ── Section Headers ── */
+.section-label {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 20px;
+}
+.section-title {
+  font-size: clamp(36px, 5vw, 64px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  color: var(--text);
+  margin-bottom: 24px;
+}
+.section-desc {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 700px;
+  line-height: 1.7;
+  margin-bottom: 64px;
+}
+
+/* ── Cards ── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 36px;
+  transition: background var(--transition), border-color var(--transition);
+}
+.card-sm {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 24px;
+}
+
+/* ── Grid Layouts ── */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.grid-auto { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+
+/* ── Charts ── */
+.chart-title {
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text2);
+  margin-bottom: 20px;
+}
+
+/* Metro Bar Chart */
+.metro-bar {
   display: flex;
   align-items: center;
   gap: 16px;
-  margin-bottom: 28px;
-  flex-wrap: wrap;
+  margin-bottom: 14px;
 }
-.block-callout-icon { font-size: 24px; flex-shrink: 0; }
-.block-callout-text { font-size: 14px; color: var(--text2); line-height: 1.5; }
-.block-callout-text strong { color: var(--text); }
-.block-callout-stat {
-  margin-left: auto;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 26px;
+.metro-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  min-width: 110px;
+  text-align: right;
+}
+.metro-track {
+  flex: 1;
+  height: 36px;
+  background: var(--surface2);
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+}
+.metro-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), #5ac8fa);
+  border-radius: 6px;
+  width: 0%;
+  transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 12px;
+}
+.metro-fill span {
+  font-size: 13px;
   font-weight: 700;
+  color: white;
+  white-space: nowrap;
+}
+
+/* Salary Gradient */
+.salary-track {
+  position: relative;
+  height: 24px;
+  border-radius: 12px;
+  background: linear-gradient(90deg, #34c759 0%, #0071e3 40%, #5856d6 75%, #ff2d55 100%);
+  margin: 40px 0 50px;
+}
+.salary-markers {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+}
+.salary-marker {
+  text-align: center;
+  flex: 1;
+}
+.salary-marker-val {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text);
+}
+.salary-marker-lbl {
+  font-size: 11px;
+  color: var(--text2);
+  margin-top: 4px;
+}
+.salary-tick {
+  position: absolute;
+  top: -38px;
+  width: 2px;
+  height: 20px;
+  background: rgba(0,0,0,0.2);
+  left: 50%;
+  transform: translateX(-50%);
+}
+[data-theme="dark"] .salary-tick { background: rgba(255,255,255,0.2); }
+
+/* Age Distribution */
+.age-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  height: 120px;
+}
+.age-bar-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+}
+.age-bar {
+  width: 100%;
+  background: var(--accent);
+  border-radius: 6px 6px 0 0;
+  margin-top: auto;
+  opacity: 0.85;
+  transition: height 1s cubic-bezier(0.4,0,0.2,1);
+}
+.age-label {
+  font-size: 11px;
+  color: var(--text2);
+  margin-top: 8px;
+  text-align: center;
+}
+.age-val {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+/* ── Section 2: Slider ── */
+.quote-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius-sm);
+  padding: 28px 32px;
+  margin-bottom: 48px;
+}
+.quote-text {
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+  margin-bottom: 12px;
+}
+.quote-attr {
+  font-size: 13px;
+  color: var(--text2);
+  font-weight: 600;
+}
+
+.slider-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 48px;
+  margin-bottom: 32px;
+}
+.slider-label {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text2);
+  margin-bottom: 16px;
+}
+.slider-display {
+  font-size: clamp(48px, 7vw, 80px);
+  font-weight: 900;
+  letter-spacing: -0.04em;
   color: var(--red);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.slider-sub {
+  font-size: 16px;
+  color: var(--text2);
+  margin-bottom: 32px;
+}
+#cut-slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--surface2);
+  outline: none;
+  margin-bottom: 12px;
+  cursor: pointer;
+  position: relative;
+}
+#cut-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,113,227,0.4);
+  transition: transform 0.15s;
+}
+#cut-slider::-webkit-slider-thumb:hover { transform: scale(1.15); }
+.slider-range {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--text2);
+}
+
+/* Job Grid */
+.job-grid {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 6px;
+  margin-top: 24px;
+}
+.job-dot {
+  width: 100%;
+  padding-bottom: 100%;
+  border-radius: 50%;
+  background: var(--accent);
+  transition: background 0.4s ease;
+}
+.job-dot.displaced {
+  background: var(--red);
+}
+
+/* Company bars */
+.company-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.company-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  min-width: 120px;
+}
+.company-track {
+  flex: 1;
+  height: 32px;
+  background: var(--surface2);
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+}
+.company-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--red), #ff6b6b);
+  border-radius: 6px;
+  width: 0%;
+  transition: width 0.8s cubic-bezier(0.4,0,0.2,1);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 10px;
+}
+.company-fill span {
+  font-size: 12px;
+  font-weight: 700;
+  color: white;
+  white-space: nowrap;
+}
+
+/* Historical comparison */
+.hist-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 24px;
+  height: 200px;
+  padding-top: 20px;
+}
+.hist-bar-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+}
+.hist-bar {
+  width: 100%;
+  border-radius: 8px 8px 0 0;
+  margin-top: auto;
+  transition: height 1.2s cubic-bezier(0.4,0,0.2,1);
+}
+.hist-bar-label {
+  font-size: 12px;
+  color: var(--text2);
+  margin-top: 10px;
+  text-align: center;
+  font-weight: 500;
+}
+.hist-bar-val {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+/* ── Section 3: Economic ── */
+.big-stat-hero {
+  text-align: center;
+  padding: 60px 40px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 32px;
+}
+.big-stat-num {
+  font-size: clamp(60px, 10vw, 120px);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  color: var(--text);
+}
+.big-stat-desc {
+  font-size: 18px;
+  color: var(--text2);
+  margin-top: 16px;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Donut chart */
+#donut-canvas {
+  display: block;
+  margin: 0 auto;
+}
+.donut-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+  margin-top: 24px;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text2);
+}
+.legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
   flex-shrink: 0;
 }
 
-/* ── Footer ───────────────────────────────────────────────────────── */
-footer {
-  border-top: 1px solid var(--border);
-  padding: 36px 0 60px;
+/* City heat grid */
+.city-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
+}
+.city-card {
+  border-radius: var(--radius-sm);
+  padding: 20px;
   text-align: center;
+  border: 1px solid var(--border);
+}
+.city-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+.city-drop {
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+.city-label {
   font-size: 12px;
-  color: var(--text3);
-  line-height: 1.9;
+  color: var(--text2);
+  margin-top: 4px;
 }
-footer a { color: var(--cyan); text-decoration: none; }
-footer a:hover { text-decoration: underline; }
 
-/* ── Scroll animations ────────────────────────────────────────────── */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(28px); }
-  to   { opacity: 1; transform: translateY(0);    }
+/* Multiplier timeline */
+.timeline {
+  position: relative;
+  padding-left: 32px;
 }
-.anim-pending { opacity: 0; }
-.anim-done { animation: fadeUp .7s cubic-bezier(.4,0,.2,1) forwards; }
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 8px;
+  top: 0; bottom: 0;
+  width: 2px;
+  background: var(--border);
+}
+.timeline-item {
+  position: relative;
+  margin-bottom: 32px;
+}
+.timeline-dot {
+  position: absolute;
+  left: -28px;
+  top: 4px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.timeline-time {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 6px;
+}
+.timeline-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+.timeline-desc {
+  font-size: 14px;
+  color: var(--text2);
+  line-height: 1.6;
+}
 
-/* ── Responsive ───────────────────────────────────────────────────── */
+/* ── Section 4: Where do they go ── */
+/* Sankey */
+#sankey-canvas {
+  width: 100%;
+  height: 320px;
+  display: block;
+}
+
+.destination-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.dest-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.dest-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  min-width: 220px;
+}
+.dest-track {
+  flex: 1;
+  height: 28px;
+  background: var(--surface2);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.dest-fill {
+  height: 100%;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+  width: 0%;
+  transition: width 1.2s cubic-bezier(0.4,0,0.2,1);
+}
+.dest-fill span {
+  font-size: 12px;
+  font-weight: 700;
+  color: white;
+  white-space: nowrap;
+}
+.dest-pct {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--text);
+  min-width: 40px;
+  text-align: right;
+}
+
+/* Retraining gap */
+.retraining-gap {
+  text-align: center;
+  padding: 60px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+.gap-number {
+  font-size: clamp(80px, 14vw, 160px);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  color: var(--red);
+  line-height: 1;
+}
+.gap-label {
+  font-size: 18px;
+  color: var(--text2);
+  margin-top: 12px;
+}
+
+/* Replacement bar */
+.replacement-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.repl-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.repl-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  display: flex;
+  justify-content: space-between;
+}
+.repl-track {
+  height: 40px;
+  background: var(--surface2);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.repl-fill {
+  height: 100%;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  padding-left: 14px;
+  width: 0%;
+  transition: width 1.4s cubic-bezier(0.4,0,0.2,1);
+}
+.repl-fill span {
+  font-size: 14px;
+  font-weight: 700;
+  color: white;
+}
+
+/* Precedent timeline */
+.prec-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.prec-item {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 24px;
+  padding: 24px 0;
+  border-bottom: 1px solid var(--border);
+}
+.prec-item:last-child { border-bottom: none; }
+.prec-year {
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+.prec-era {
+  font-size: 12px;
+  color: var(--text2);
+  font-weight: 500;
+  margin-top: 4px;
+}
+.prec-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+.prec-desc {
+  font-size: 14px;
+  color: var(--text2);
+  line-height: 1.6;
+}
+.prec-outcome {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 20px;
+  margin-top: 10px;
+}
+
+/* ── Footer ── */
+footer {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  padding: 80px 0 60px;
+}
+.footer-quote {
+  font-size: clamp(16px, 2vw, 20px);
+  font-style: italic;
+  color: var(--text2);
+  max-width: 800px;
+  line-height: 1.7;
+  margin-bottom: 48px;
+  padding-bottom: 48px;
+  border-bottom: 1px solid var(--border);
+}
+.sources-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text2);
+  margin-bottom: 16px;
+}
+.sources-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+}
+.source-item {
+  font-size: 12px;
+  color: var(--text2);
+  opacity: 0.7;
+}
+.source-item::before {
+  content: '↗';
+  margin-right: 4px;
+  font-size: 10px;
+}
+
+/* ── Scroll Animations ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+
+/* ── Responsive ── */
 @media (max-width: 768px) {
-  .wrap { padding: 0 18px; }
-  .slider-card, .counter-card { padding: 32px 22px; }
-  .comp-card { padding: 24px 20px; }
-  .comp-row { grid-template-columns: 130px 1fr 60px; gap: 10px; }
-  .comp-label { font-size: 11px; }
-  .comp-value { font-size: 11px; }
-  .quote-card { padding: 36px 26px; }
-  .quote-card::before { display: none; }
-  .quote-text { padding-top: 0; font-size: 17px; }
-  .cat-nums { flex-direction: column; gap: 6px; }
-  .cat-name { font-size: 13px; }
-  .block-callout-stat { margin-left: 0; }
+  .container { padding: 0 20px; }
+  section { padding: 80px 0; }
+  .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  .slider-section { padding: 28px; }
+  .big-stat-hero { padding: 40px 24px; }
+  .retraining-gap { padding: 40px 24px; }
+  .dest-label { min-width: 140px; font-size: 12px; }
+  .prec-item { grid-template-columns: 1fr; gap: 8px; }
+  .hist-bars { height: 160px; gap: 12px; }
+  #section-nav { display: none; }
+  .metro-name { min-width: 80px; font-size: 12px; }
 }
+
 @media (max-width: 480px) {
-  .comp-row { grid-template-columns: 110px 1fr; }
-  .comp-value { display: none; }
-  .hero h1 { letter-spacing: -.03em; }
-  .ctx-grid { grid-template-columns: 1fr 1fr; }
-  .cat-total-row { flex-direction: column; gap: 8px; align-items: flex-start; }
+  .hero-stats { grid-template-columns: 1fr 1fr; }
+  .job-grid { gap: 4px; }
+}
+
+/* ── Utility ── */
+.mt-8 { margin-top: 8px; }
+.mt-16 { margin-top: 16px; }
+.mt-24 { margin-top: 24px; }
+.mt-32 { margin-top: 32px; }
+.mt-48 { margin-top: 48px; }
+.mb-32 { margin-bottom: 32px; }
+.text-accent { color: var(--accent); }
+.text-red { color: var(--red); }
+.text-center { text-align: center; }
+.fw-900 { font-weight: 900; }
+
+/* New roles comparison */
+.roles-comparison {
+  display: flex;
+  gap: 24px;
+  align-items: stretch;
+  margin-bottom: 32px;
+}
+.role-bar-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.role-bar-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text2);
+  margin-bottom: 12px;
+  text-align: center;
+}
+.role-bar-num {
+  font-size: 22px;
+  font-weight: 900;
+  text-align: center;
+  letter-spacing: -0.02em;
+  margin-bottom: 12px;
+}
+.role-bar {
+  flex: 1;
+  border-radius: 8px;
+  min-height: 20px;
+  transition: height 1.2s cubic-bezier(0.4,0,0.2,1);
+}
+@media (max-width: 600px) {
+  .roles-comparison { flex-direction: column; }
 }
 </style>
 </head>
-
 <body>
 
-<div class="wrap">
+<!-- Progress bar -->
+<div id="progress"></div>
 
-  <!-- ── HERO ─────────────────────────────────────────────────────── -->
-  <header class="hero anim-pending" data-delay="0">
-    <div class="eyebrow">U.S. Tech Workforce · 2026 Analysis</div>
-    <h1>The AI<br>Job Displacement</h1>
-    <p class="hero-sub">
-      14.3 million tech-adjacent workers stand at the edge of history's fastest
-      labor market disruption. Adjust the slider to model the impact.
-    </p>
-    <div class="hero-badges">
-      <div class="badge-live">
-        <span class="pulse-dot"></span>
-        Block / Square cut 40% — Feb 26, 2026
-      </div>
-      <div class="badge-total">14.3M workers in scope</div>
+<!-- Theme toggle -->
+<button id="theme-toggle" aria-label="Toggle dark mode">☀️</button>
+
+<!-- Section nav dots -->
+<nav id="section-nav" aria-label="Section navigation">
+  <div class="nav-dot active" data-section="0" title="The Industry Today"></div>
+  <div class="nav-dot" data-section="1" title="The Block Effect"></div>
+  <div class="nav-dot" data-section="2" title="Economic Aftershock"></div>
+  <div class="nav-dot" data-section="3" title="Where Do They Go"></div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════
+     SECTION 1: THE INDUSTRY TODAY
+═══════════════════════════════════════════════ -->
+<section id="s1" data-section="0">
+  <div class="container">
+
+    <div class="reveal">
+      <div class="section-label">Section 01 — The Industry Today</div>
+      <h1 class="section-title">America's $1.6 Trillion<br>Tech Workforce</h1>
+      <p class="section-desc">The US software industry is the most valuable white-collar sector in American history — 6.5 million workers, $845 billion in annual wages, and a talent pipeline of 100,000 new graduates each year.</p>
     </div>
-  </header>
 
-  <!-- ── SLIDER ────────────────────────────────────────────────────── -->
-  <section class="section anim-pending" data-delay="100">
-    <div class="slider-card">
-      <div class="slider-pct-label">AI-Driven Workforce Reduction Rate</div>
-      <div class="pct-display" id="pctDisplay">40%</div>
-      <div class="pct-hint">← Drag to explore scenarios from 0% to 60% →</div>
-      <div class="range-wrap">
-        <input type="range" id="slider" min="0" max="60" value="40" step="1" aria-label="Reduction percentage">
-        <div class="tick-row">
-          <span>0%</span><span>10%</span><span>20%</span><span>30%</span><span>40%</span><span>50%</span><span>60%</span>
+    <!-- Hero stats -->
+    <div class="grid-2 reveal reveal-delay-1" style="margin-bottom:24px;">
+      <div class="big-stat-hero">
+        <div class="big-stat-num" data-countup="6500000" data-prefix="" data-suffix="M" data-divisor="1000000" data-decimals="1">6.5M</div>
+        <div class="big-stat-desc">Total IT & Computer Workers in the US</div>
+      </div>
+      <div class="big-stat-hero">
+        <div class="big-stat-num" data-countup="845" data-prefix="$" data-suffix="B">$845B</div>
+        <div class="big-stat-desc">In Annual Wages Across the Sector</div>
+      </div>
+    </div>
+
+    <div class="grid-3 reveal reveal-delay-2" style="margin-bottom:48px;">
+      <div class="card-sm">
+        <div class="hero-stat-num" data-countup="4400000" data-prefix="" data-suffix="M" data-divisor="1000000" data-decimals="1">4.4M</div>
+        <div class="hero-stat-label">Software Developers & Engineers</div>
+      </div>
+      <div class="card-sm">
+        <div class="hero-stat-num" data-countup="130000" data-prefix="$" data-suffix="K" data-divisor="1000">$130K</div>
+        <div class="hero-stat-label">Median SWE Salary (BLS 2024)</div>
+      </div>
+      <div class="card-sm">
+        <div class="hero-stat-num" data-countup="100000" data-prefix="" data-suffix="K" data-divisor="1000">100K</div>
+        <div class="hero-stat-label">CS/CE Grads Entering Each Year</div>
+      </div>
+    </div>
+
+    <!-- Metro Chart + Salary -->
+    <div class="grid-2 reveal reveal-delay-2" style="margin-bottom:32px;">
+      <div class="card">
+        <div class="chart-title">Top Tech Metro Areas</div>
+        <div id="metro-chart">
+          <div class="metro-bar">
+            <div class="metro-name">SF Bay Area</div>
+            <div class="metro-track"><div class="metro-fill" data-width="100"><span>350K</span></div></div>
+          </div>
+          <div class="metro-bar">
+            <div class="metro-name">Seattle</div>
+            <div class="metro-track"><div class="metro-fill" data-width="63"><span>220K</span></div></div>
+          </div>
+          <div class="metro-bar">
+            <div class="metro-name">New York</div>
+            <div class="metro-track"><div class="metro-fill" data-width="51"><span>180K</span></div></div>
+          </div>
+          <div class="metro-bar">
+            <div class="metro-name">Austin</div>
+            <div class="metro-track"><div class="metro-fill" data-width="34"><span>120K</span></div></div>
+          </div>
+          <div class="metro-bar">
+            <div class="metro-name">Boston</div>
+            <div class="metro-track"><div class="metro-fill" data-width="29"><span>100K</span></div></div>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
 
-  <!-- ── COUNTER ────────────────────────────────────────────────────── -->
-  <section class="section anim-pending" data-delay="180">
-    <div class="counter-card">
-      <div class="counter-eyebrow">
-        <span style="font-size:14px">⚠</span> Projected Jobs at Risk
-      </div>
-      <div class="counter-num" id="counterNum">5,720,000</div>
-      <div class="counter-body">workers displaced across tech-adjacent roles</div>
-      <div class="counter-note" id="counterNote">At 40% reduction rate · of 14.3M total tech-adjacent workers</div>
-    </div>
-  </section>
-
-  <!-- ── CATEGORIES ────────────────────────────────────────────────── -->
-  <section class="section anim-pending" data-delay="80">
-    <div class="section-title" style="margin-bottom:6px">Breakdown by Occupation</div>
-    <div class="section-desc" style="margin-bottom:20px">
-      Remaining <span style="color:var(--cyan)">■</span>&nbsp;vs. displaced&nbsp;<span style="color:var(--red)">■</span>
-      — live as you drag the slider above
-    </div>
-    <div class="cat-list" id="catList"></div>
-    <div class="cat-total-row" style="margin-top:12px" id="catTotalRow">
-      <span class="cat-total-label">Total Tech-Adjacent Workforce</span>
-      <div class="cat-total-nums">
-        <span class="num-r" id="totalRem">8,580,000</span>
-        <span class="num-l" id="totalLost">−5,720,000</span>
+      <div class="card">
+        <div class="chart-title">Age Distribution of Tech Workers</div>
+        <div class="age-bars" id="age-chart">
+          <div class="age-bar-wrap">
+            <div class="age-val">42%</div>
+            <div class="age-bar" data-height="85" style="background: var(--accent);"></div>
+            <div class="age-label">25–34</div>
+          </div>
+          <div class="age-bar-wrap">
+            <div class="age-val">31%</div>
+            <div class="age-bar" data-height="63" style="background: #5ac8fa;"></div>
+            <div class="age-label">35–44</div>
+          </div>
+          <div class="age-bar-wrap">
+            <div class="age-val">18%</div>
+            <div class="age-bar" data-height="37" style="background: #5856d6;"></div>
+            <div class="age-label">45–54</div>
+          </div>
+          <div class="age-bar-wrap">
+            <div class="age-val">9%</div>
+            <div class="age-bar" data-height="18" style="background: #af52de;"></div>
+            <div class="age-label">55+</div>
+          </div>
+        </div>
+        <div class="mt-24" style="font-size:13px; color:var(--text2);">The tech workforce skews young — 73% under 45.</div>
       </div>
     </div>
-  </section>
 
-  <div class="vdiv"></div>
-
-  <!-- ── COMPARISON ────────────────────────────────────────────────── -->
-  <section class="section anim-pending" data-delay="60">
-    <div class="section-title" style="margin-bottom:6px">Putting It in Scale</div>
-    <div class="section-desc" style="margin-bottom:24px">
-      How the projected displacement compares to historical and demographic benchmarks
-    </div>
-
-    <div class="block-callout">
-      <span class="block-callout-icon">🏢</span>
-      <div class="block-callout-text">
-        <strong>Block (Square · Cash App)</strong> — Feb 26, 2026<br>
-        Cut 40% of staff. CEO Jack Dorsey said this is just the beginning.
+    <!-- Salary bar -->
+    <div class="card reveal reveal-delay-3">
+      <div class="chart-title">Salary Distribution — US Software Engineers</div>
+      <div style="position:relative; margin-top:40px;">
+        <div class="salary-track"></div>
+        <div class="salary-markers">
+          <div class="salary-marker">
+            <div class="salary-marker-val">$85K</div>
+            <div class="salary-marker-lbl">25th Pct.</div>
+          </div>
+          <div class="salary-marker">
+            <div class="salary-marker-val">$130K</div>
+            <div class="salary-marker-lbl">Median</div>
+          </div>
+          <div class="salary-marker">
+            <div class="salary-marker-val">$212K</div>
+            <div class="salary-marker-lbl">FAANG Avg</div>
+          </div>
+          <div class="salary-marker">
+            <div class="salary-marker-val">$350K+</div>
+            <div class="salary-marker-lbl">Top 10%</div>
+          </div>
+        </div>
       </div>
-      <div class="block-callout-stat">4,000 jobs</div>
+      <div class="mt-16" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+        <div style="font-size:13px; color:var(--text2);">+25% industry growth from 2018–2023. The sector expanded nearly every year for a decade.</div>
+        <div style="background: var(--surface2); border-radius: 8px; padding: 8px 16px; font-size: 13px; font-weight: 700; color: var(--green);">+25% ↑ 2018–2023</div>
+      </div>
     </div>
 
-    <div class="comp-card">
-      <div id="compRows"></div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════
+     SECTION 2: THE BLOCK EFFECT
+═══════════════════════════════════════════════ -->
+<section id="s2" data-section="1">
+  <div class="container">
+
+    <div class="reveal">
+      <div class="section-label">Section 02 — The Block Effect</div>
+      <h2 class="section-title">40% Cuts.<br>Industry-Wide.</h2>
+      <p class="section-desc">Block's CEO Jack Dorsey announced sweeping AI-driven workforce reductions in April 2025. If the majority of companies follow, the math is staggering.</p>
     </div>
-  </section>
 
-  <!-- ── CONTEXT CARDS ──────────────────────────────────────────────── -->
-  <section class="section anim-pending" data-delay="80">
-    <div class="section-title" style="margin-bottom:6px">What This Means</div>
-    <div class="section-desc">Contextual perspective on the projected displacement</div>
-    <div class="ctx-grid" id="ctxGrid"></div>
-  </section>
+    <!-- Quote card -->
+    <div class="quote-card reveal reveal-delay-1">
+      <div class="quote-text">"Within the next year, I believe the majority of companies will reach the same conclusion."</div>
+      <div class="quote-attr">— Jack Dorsey, CEO of Block Inc., April 2025 · Following announcement of significant AI-driven headcount reduction</div>
+    </div>
 
-  <div class="vdiv"></div>
+    <!-- Slider -->
+    <div class="slider-section reveal reveal-delay-2">
+      <div class="slider-label">Industry-wide AI headcount reduction scenario</div>
+      <div class="slider-display"><span id="jobs-lost-display">2,600,000</span></div>
+      <div class="slider-sub">jobs lost at <span id="pct-display">40</span>% cuts across 6.5M total tech workers</div>
+      <input type="range" id="cut-slider" min="0" max="60" value="40" step="1">
+      <div class="slider-range">
+        <span>0% (No impact)</span>
+        <span>30%</span>
+        <span>60% (Maximum)</span>
+      </div>
+      <!-- Job dot grid -->
+      <div class="job-grid" id="job-grid" style="margin-top:32px;"></div>
+      <div style="margin-top:12px; font-size:12px; color:var(--text2);">
+        <span style="display:inline-block; width:10px; height:10px; border-radius:50%; background:var(--accent); margin-right:6px;"></span>Employed
+        <span style="display:inline-block; width:10px; height:10px; border-radius:50%; background:var(--red); margin-right:6px; margin-left:16px;"></span>Displaced
+      </div>
+    </div>
 
-  <!-- ── QUOTE ──────────────────────────────────────────────────────── -->
-  <section class="section anim-pending" data-delay="60">
-    <div class="quote-card">
-      <p class="quote-text">
-        "Within the next year, I believe the majority of companies will reach the same conclusion."
-      </p>
-      <div class="quote-attr">
-        <div class="quote-avatar">J</div>
-        <div>
-          <div class="quote-name">Jack Dorsey</div>
-          <div class="quote-role">
-            CEO, Block Inc. (Square · Cash App)<br>
-            On cutting 40% of company headcount — February 26, 2026
+    <!-- Company impacts + Historical comparison -->
+    <div class="grid-2 reveal reveal-delay-3">
+      <div class="card">
+        <div class="chart-title">Major Tech Company Impact at <span id="pct-company">40</span>%</div>
+        <div id="company-chart">
+          <div class="company-row">
+            <div class="company-name">Amazon Tech</div>
+            <div class="company-track"><div class="company-fill" data-base="300000" id="cf-amazon"><span id="cv-amazon">120K</span></div></div>
+          </div>
+          <div class="company-row">
+            <div class="company-name">Microsoft</div>
+            <div class="company-track"><div class="company-fill" data-base="228000" id="cf-msft"><span id="cv-msft">91.2K</span></div></div>
+          </div>
+          <div class="company-row">
+            <div class="company-name">Google</div>
+            <div class="company-track"><div class="company-fill" data-base="182000" id="cf-google"><span id="cv-google">72.8K</span></div></div>
+          </div>
+          <div class="company-row">
+            <div class="company-name">Meta</div>
+            <div class="company-track"><div class="company-fill" data-base="87000" id="cf-meta"><span id="cv-meta">34.8K</span></div></div>
+          </div>
+          <div class="company-row">
+            <div class="company-name">Salesforce</div>
+            <div class="company-track"><div class="company-fill" data-base="73000" id="cf-salesforce"><span id="cv-salesforce">29.2K</span></div></div>
+          </div>
+        </div>
+        <div style="margin-top:20px; font-size:13px; color:var(--text2);">FAANG+ combined: <strong style="color:var(--text)" id="faang-total">~450K cuts</strong> at 40%</div>
+      </div>
+
+      <div class="card">
+        <div class="chart-title">Historical Context: Scale of Displacement</div>
+        <div class="hist-bars" id="hist-chart">
+          <div class="hist-bar-wrap">
+            <div class="hist-bar-val">260K</div>
+            <div class="hist-bar" data-maxheight="160" data-height-pct="10" style="background: var(--accent); opacity:0.6;"></div>
+            <div class="hist-bar-label">2022–23<br>Layoffs</div>
+          </div>
+          <div class="hist-bar-wrap">
+            <div class="hist-bar-val">180K</div>
+            <div class="hist-bar" data-maxheight="160" data-height-pct="7" style="background: var(--orange); opacity:0.7;"></div>
+            <div class="hist-bar-label">2025<br>Layoffs</div>
+          </div>
+          <div class="hist-bar-wrap">
+            <div class="hist-bar-val" id="hist-scenario-val">2.6M</div>
+            <div class="hist-bar" data-maxheight="160" data-height-pct="100" id="hist-scenario-bar" style="background: var(--red);"></div>
+            <div class="hist-bar-label">This<br>Scenario</div>
+          </div>
+        </div>
+        <div style="margin-top:16px; font-size:13px; color:var(--red); font-weight:600;">This would be the largest white-collar displacement in American history — <span id="hist-mult">10×</span> larger than 2022–23 layoffs.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════
+     SECTION 3: ECONOMIC AFTERSHOCK
+═══════════════════════════════════════════════ -->
+<section id="s3" data-section="2">
+  <div class="container">
+
+    <div class="reveal">
+      <div class="section-label">Section 03 — The Economic Aftershock</div>
+      <h2 class="section-title">The $340 Billion<br>Ripple Effect</h2>
+      <p class="section-desc">When 2.6 million high-earning workers stop earning, the economic shock doesn't stay in tech. It cascades through housing, tax revenue, local businesses, and the national unemployment system.</p>
+    </div>
+
+    <!-- Hero stat -->
+    <div class="big-stat-hero reveal reveal-delay-1" style="margin-bottom:32px;">
+      <div class="big-stat-num" data-countup="340" data-prefix="$" data-suffix="B">$340B</div>
+      <div class="big-stat-desc">Estimated total economic impact from 2.6M displaced tech workers</div>
+    </div>
+
+    <!-- Donut + breakdown -->
+    <div class="grid-2 reveal reveal-delay-2" style="margin-bottom:32px;">
+      <div class="card" style="display:flex; flex-direction:column; align-items:center;">
+        <div class="chart-title" style="align-self:flex-start;">Economic Impact Breakdown</div>
+        <canvas id="donut-canvas" width="240" height="240"></canvas>
+        <div class="donut-legend">
+          <div class="legend-item"><div class="legend-dot" style="background:#0071e3;"></div>Consumer Spending $237B</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#ff9500;"></div>Tax Revenue Loss $99B</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#ff3b30;"></div>Housing Impact $180B</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#5856d6;"></div>UI Payouts $34B</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="chart-title">Impact Components</div>
+        <div style="display:flex; flex-direction:column; gap:20px;">
+          <div>
+            <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:8px;">
+              <div style="font-size:14px; font-weight:600; color:var(--text);">Lost Consumer Spending</div>
+              <div style="font-size:22px; font-weight:900; color:#0071e3;">$237B</div>
+            </div>
+            <div style="font-size:13px; color:var(--text2);">2.6M workers × $130K avg spend × 70% consumption rate. Restaurants, retail, services in tech hubs take immediate hits.</div>
+          </div>
+          <div style="height:1px; background:var(--border);"></div>
+          <div>
+            <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:8px;">
+              <div style="font-size:14px; font-weight:600; color:var(--text);">Lost Tax Revenue</div>
+              <div style="font-size:22px; font-weight:900; color:var(--orange);">$98.8B</div>
+            </div>
+            <div style="font-size:13px; color:var(--text2);">2.6M × $38K avg fed+state tax. Federal shortfall alone: ~$50B annually. State budgets in CA, WA, NY severely impacted.</div>
+          </div>
+          <div style="height:1px; background:var(--border);"></div>
+          <div>
+            <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:8px;">
+              <div style="font-size:14px; font-weight:600; color:var(--text);">UI System Strain</div>
+              <div style="font-size:22px; font-weight:900; color:#5856d6;">$33.8B</div>
+            </div>
+            <div style="font-size:13px; color:var(--text2);">$500/wk × 26 weeks for 2.6M claimants. US system designed for ~5M total. This arrives in 6–12 months.</div>
           </div>
         </div>
       </div>
     </div>
-  </section>
 
-</div><!-- /wrap -->
+    <!-- City housing heat -->
+    <div class="card reveal reveal-delay-3" style="margin-bottom:32px;">
+      <div class="chart-title">Housing Price Impact — Top Tech Metros</div>
+      <div class="city-grid">
+        <div class="city-card" style="background: rgba(255,59,48,0.12); border-color: rgba(255,59,48,0.25);">
+          <div class="city-name">San Francisco</div>
+          <div class="city-drop" style="color:var(--red);">−15%</div>
+          <div class="city-label">Median home: $1.2M<br>→ <strong>$1.02M</strong></div>
+        </div>
+        <div class="city-card" style="background: rgba(255,59,48,0.08); border-color: rgba(255,59,48,0.2);">
+          <div class="city-name">Seattle</div>
+          <div class="city-drop" style="color:var(--red);">−13%</div>
+          <div class="city-label">Median: $780K<br>→ <strong>$679K</strong></div>
+        </div>
+        <div class="city-card" style="background: rgba(255,149,0,0.10); border-color: rgba(255,149,0,0.25);">
+          <div class="city-name">Austin</div>
+          <div class="city-drop" style="color:var(--orange);">−11%</div>
+          <div class="city-label">Median: $550K<br>→ <strong>$490K</strong></div>
+        </div>
+        <div class="city-card" style="background: rgba(255,149,0,0.08); border-color: rgba(255,149,0,0.2);">
+          <div class="city-name">Boston</div>
+          <div class="city-drop" style="color:var(--orange);">−10%</div>
+          <div class="city-label">Median: $720K<br>→ <strong>$648K</strong></div>
+        </div>
+        <div class="city-card" style="background: rgba(255,204,0,0.10); border-color: rgba(255,204,0,0.3);">
+          <div class="city-name">New York</div>
+          <div class="city-drop" style="color:#c49000;">−7%</div>
+          <div class="city-label">Broader market<br>partly insulated</div>
+        </div>
+        <div class="city-card" style="background: var(--surface2); border-color: var(--border);">
+          <div class="city-name">National Avg</div>
+          <div class="city-drop" style="color:var(--text2);">−3%</div>
+          <div class="city-label">Housing/mortgage<br>market: −$180B</div>
+        </div>
+      </div>
+    </div>
 
+    <!-- Multiplier timeline -->
+    <div class="card reveal reveal-delay-4">
+      <div class="chart-title">Multiplier Effect — How It Cascades</div>
+      <div class="timeline" style="margin-top:24px;">
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:var(--orange);"></div>
+          <div class="timeline-time">Month 1–3</div>
+          <div class="timeline-title">First Wave: Direct Income Loss</div>
+          <div class="timeline-desc">2.6M workers stop receiving paychecks. Immediate 40% reduction in discretionary spending for affected households. Luxury goods & subscription services see first cancellations. Estimated: −$45B discretionary spending.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:var(--red);"></div>
+          <div class="timeline-time">Month 3–12</div>
+          <div class="timeline-title">Second Wave: Local Economy Shock</div>
+          <div class="timeline-desc">Restaurants, coffee shops, services in tech hubs see −15% revenue. Landlords in SF, Seattle, Austin face rising vacancies. Housing price correction begins. UI system claims spike to 2.6M new registrations — system stress begins. Estimated: −$237B consumer spending annualized.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:#5856d6;"></div>
+          <div class="timeline-time">Month 12–24</div>
+          <div class="timeline-title">Third Wave: Fiscal & Systemic Impact</div>
+          <div class="timeline-desc">State budgets in CA, WA, TX face $20–40B shortfalls. Federal income tax gap materializes: −$50B/yr. City services in tech hubs — schools, transit, public health — begin budget cuts. Housing correction deepens. Total addressable damage: −$340B across the full economic system.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════
+     SECTION 4: WHERE DO THEY GO?
+═══════════════════════════════════════════════ -->
+<section id="s4" data-section="3">
+  <div class="container">
+
+    <div class="reveal">
+      <div class="section-label">Section 04 — The Human Dimension</div>
+      <h2 class="section-title">2.6 Million People.<br>What Happens Next?</h2>
+      <p class="section-desc">History gives us clues. But the scale, speed, and sector-specificity of AI displacement is unlike anything the US workforce has seen before.</p>
+    </div>
+
+    <!-- Destination flow -->
+    <div class="card reveal reveal-delay-1" style="margin-bottom:32px;">
+      <div class="chart-title">Where Displaced Tech Workers Historically Land</div>
+      <div class="destination-bars" style="margin-top:20px;">
+        <div class="dest-row">
+          <div class="dest-label">Stay in Tech (diff. companies)</div>
+          <div class="dest-track"><div class="dest-fill" data-width="35" style="background:var(--accent);"><span>910K</span></div></div>
+          <div class="dest-pct">35%</div>
+        </div>
+        <div class="dest-row">
+          <div class="dest-label">Adjacent (finance, healthIT, gov)</div>
+          <div class="dest-track"><div class="dest-fill" data-width="20" style="background:#5ac8fa;"><span>520K</span></div></div>
+          <div class="dest-pct">20%</div>
+        </div>
+        <div class="dest-row">
+          <div class="dest-label">Entrepreneurship / Freelance</div>
+          <div class="dest-track"><div class="dest-fill" data-width="15" style="background:#34c759;"><span>390K</span></div></div>
+          <div class="dest-pct">15%</div>
+        </div>
+        <div class="dest-row">
+          <div class="dest-label">Teaching / Education</div>
+          <div class="dest-track"><div class="dest-fill" data-width="10" style="background:#ff9500;"><span>260K</span></div></div>
+          <div class="dest-pct">10%</div>
+        </div>
+        <div class="dest-row">
+          <div class="dest-label">Career Change (non-tech)</div>
+          <div class="dest-track"><div class="dest-fill" data-width="10" style="background:#5856d6;"><span>260K</span></div></div>
+          <div class="dest-pct">10%</div>
+        </div>
+        <div class="dest-row">
+          <div class="dest-label">Extended Unemployment (>2yr)</div>
+          <div class="dest-track"><div class="dest-fill" data-width="10" style="background:var(--red);"><span>260K</span></div></div>
+          <div class="dest-pct">10%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- New roles vs displaced -->
+    <div class="grid-2 reveal reveal-delay-2" style="margin-bottom:32px;">
+      <div class="card">
+        <div class="chart-title">New AI Roles vs. Displaced Workers</div>
+        <div style="margin-top:16px; display:flex; align-items:flex-end; gap:24px; height:220px;">
+          <div style="flex:1; display:flex; flex-direction:column; align-items:center; height:100%;">
+            <div style="font-size:22px; font-weight:900; color:var(--accent); margin-bottom:8px;">350K</div>
+            <div style="flex:1; width:100%; display:flex; align-items:flex-end;">
+              <div style="width:100%; background:var(--accent); border-radius:8px 8px 0 0; height:0%; transition: height 1.4s cubic-bezier(0.4,0,0.2,1);" class="animated-height" data-height="13.5"></div>
+            </div>
+            <div style="font-size:12px; color:var(--text2); margin-top:8px; text-align:center;">New AI Roles<br>by 2027</div>
+          </div>
+          <div style="flex:1; display:flex; flex-direction:column; align-items:center; height:100%;">
+            <div style="font-size:22px; font-weight:900; color:var(--red); margin-bottom:8px;">2.6M</div>
+            <div style="flex:1; width:100%; display:flex; align-items:flex-end;">
+              <div style="width:100%; background:var(--red); border-radius:8px 8px 0 0; height:0%; transition: height 1.4s cubic-bezier(0.4,0,0.2,1);" class="animated-height" data-height="100"></div>
+            </div>
+            <div style="font-size:12px; color:var(--text2); margin-top:8px; text-align:center;">Workers<br>Displaced</div>
+          </div>
+        </div>
+        <div style="margin-top:16px; padding:12px 16px; background:rgba(255,59,48,0.08); border-radius:8px; border-left:3px solid var(--red);">
+          <div style="font-size:14px; font-weight:700; color:var(--red);">7.4% replacement rate</div>
+          <div style="font-size:12px; color:var(--text2); margin-top:4px;">For every 14 jobs lost, only 1 new AI role is created. The math is brutal.</div>
+        </div>
+        <div style="margin-top:16px; font-size:13px; color:var(--text2);">
+          Emerging roles: AI trainers (200K), Human-AI workflow designers (100K), AI safety & alignment (50K)
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="chart-title">The Retraining Gap</div>
+        <div class="retraining-gap" style="padding:40px 24px; margin-top:16px;">
+          <div class="gap-number" data-countup="77" data-prefix="$" data-suffix="">$77</div>
+          <div class="gap-label">per displaced worker<br>from CHIPS Act retraining fund</div>
+        </div>
+        <div style="margin-top:16px; font-size:13px; color:var(--text2); line-height:1.7;">
+          CHIPS Act allocated $200M for tech retraining. Divided by 2.6M displaced workers = <strong style="color:var(--red);">$77 per person</strong>.<br><br>
+          Average retraining program costs $5K–$40K and takes 6–18 months. Only ~55% lead to comparable salary.
+        </div>
+      </div>
+    </div>
+
+    <!-- Historical precedents -->
+    <div class="card reveal reveal-delay-3">
+      <div class="chart-title">Historical Precedents</div>
+      <div class="prec-items">
+        <div class="prec-item">
+          <div>
+            <div class="prec-year">2001</div>
+            <div class="prec-era">Dot-com Bust</div>
+          </div>
+          <div>
+            <div class="prec-title">500,000 Tech Jobs Lost</div>
+            <div class="prec-desc">The dot-com crash wiped out ~500K tech jobs. Recovery took 5+ years. ~60% were reabsorbed into finance, consulting, and adjacent tech roles. The internet didn't disappear — it just restructured.</div>
+            <div class="prec-outcome" style="background:rgba(52,199,89,0.1); color:var(--green);">60% reabsorption in 5 years</div>
+          </div>
+        </div>
+        <div class="prec-item">
+          <div>
+            <div class="prec-year">1980s</div>
+            <div class="prec-era">Manufacturing</div>
+          </div>
+          <div>
+            <div class="prec-title">5 Million Jobs Lost (1980–2000)</div>
+            <div class="prec-desc">Manufacturing automation and offshoring displaced 5M workers over two decades. Only ~40% found comparable roles. The communities that depended on these industries — the Rust Belt — never fully recovered. This is the closest historical analogue to what AI may do to tech.</div>
+            <div class="prec-outcome" style="background:rgba(255,149,0,0.1); color:var(--orange);">40% reabsorption — communities hollowed out</div>
+          </div>
+        </div>
+        <div class="prec-item">
+          <div>
+            <div class="prec-year">2025+</div>
+            <div class="prec-era">This Scenario</div>
+          </div>
+          <div>
+            <div class="prec-title">2.6 Million in 1–3 Years</div>
+            <div class="prec-desc">Unlike dot-com (slow) or manufacturing (decades-long), AI displacement could happen in a compressed 12–36 month window. The workforce cannot retrain at that speed. The safety net isn't built for it. And unlike manufacturing, these are high-earning, highly-educated workers in concentrated metros — the fiscal and economic multiplier effects are outsized.</div>
+            <div class="prec-outcome" style="background:rgba(255,59,48,0.1); color:var(--red);">No historical precedent at this speed or scale</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════════════ -->
 <footer>
-  <div class="wrap">
-    <p>
-      Data: U.S. Bureau of Labor Statistics, Occupational Employment &amp; Wage Statistics (2023, adjusted to 2026 projections) ·
-      Block Inc. workforce announcement, February 26, 2026
-    </p>
-    <p>
-      Categories shown as non-overlapping illustrative estimates. "Computer &amp; Mathematical"
-      excludes Software Developers counted separately. All figures are scenario projections for educational modeling.
-    </p>
+  <div class="container">
+    <p class="footer-quote">"The pace of AI adoption is accelerating. Whether this displacement scenario unfolds gradually over a decade or rapidly over 2–3 years will determine whether the workforce can adapt. History suggests it can — but not without friction, cost, and significant human consequence."</p>
+    <div class="sources-title">Sources</div>
+    <div class="sources-list">
+      <div class="source-item">U.S. Bureau of Labor Statistics, 2024</div>
+      <div class="source-item">CompTIA State of the Tech Workforce, 2024</div>
+      <div class="source-item">Layoffs.fyi</div>
+      <div class="source-item">Jack Dorsey / Block Inc., April 2025</div>
+      <div class="source-item">Federal Reserve Economic Data (FRED)</div>
+      <div class="source-item">National Center for Education Statistics</div>
+    </div>
+    <div style="margin-top:40px; font-size:12px; color:var(--text2); opacity:0.5;">
+      This is a data visualization exploring a potential AI displacement scenario. All projections are estimates based on published data and stated corporate plans.
+    </div>
   </div>
 </footer>
 
+
 <script>
-'use strict';
+/* ══════════════════════════════════════════════════
+   THEME TOGGLE
+══════════════════════════════════════════════════ */
+const html = document.documentElement;
+const toggleBtn = document.getElementById('theme-toggle');
 
-/* ── DATA ──────────────────────────────────────────────────────────── */
-const JOBS = [
-  { name:'Computer & Mathematical (All IT)',   total:6_500_000, icon:'💻', color:'#00d4ff' },
-  { name:'Software Developers & Engineers',    total:4_400_000, icon:'⌨️',  color:'#7c3aed' },
-  { name:'IT Support & Sysadmin',              total:1_000_000, icon:'🔧', color:'#2ed573' },
-  { name:'Product Managers (Tech-Adjacent)',   total:  900_000, icon:'📊', color:'#ffa502' },
-  { name:'Data Analysts & Business Intel.',   total:  800_000, icon:'📈', color:'#ff6b9d' },
-  { name:'UX / UI Designers',                  total:  500_000, icon:'🎨', color:'#00b4d8' },
-  { name:'Technical Writers & Dev Advocates', total:  200_000, icon:'✍️',  color:'#a8dadc' },
-];
-
-const TOTAL_TECH    = 14_300_000;
-const US_WORKFORCE  = 165_000_000;
-const MANUFACTURING =  13_000_000;
-const RECESSION     =   8_700_000;
-const NYC_POP       =   8_300_000;
-
-/* ── FORMATTING ────────────────────────────────────────────────────── */
-function fmt(n) {
-  if (n === 0) return '0';
-  const abs = Math.abs(n);
-  if (abs >= 1_000_000) {
-    const m = n / 1_000_000;
-    return (Number.isInteger(m) ? m.toFixed(0) : m.toFixed(1)) + 'M';
-  }
-  if (abs >= 1_000) return Math.round(n / 1_000) + 'K';
-  return n.toLocaleString();
-}
-function fmtFull(n) { return Math.round(n).toLocaleString(); }
-
-/* ── ANIMATION ENGINE ──────────────────────────────────────────────── */
-const _anims = {};
-function animateTo(id, target, formatter) {
-  formatter = formatter || fmtFull;
-  const el = document.getElementById(id);
-  if (!el) return;
-  if (!_anims[id]) _anims[id] = { val: 0, raf: null };
-  const a = _anims[id];
-  if (a.raf) { cancelAnimationFrame(a.raf); a.raf = null; }
-  const from = a.val;
-  const diff = target - from;
-  const t0 = performance.now();
-  const dur = 480;
-  (function tick(now) {
-    const p = Math.min((now - t0) / dur, 1);
-    const e = 1 - Math.pow(1 - p, 3); // ease-out-cubic
-    a.val = from + diff * e;
-    el.textContent = formatter(Math.round(a.val));
-    if (p < 1) a.raf = requestAnimationFrame(tick);
-    else { a.val = target; a.raf = null; }
-  })(t0);
+function getTheme() {
+  const stored = localStorage.getItem('theme');
+  if (stored) return stored;
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 }
 
-/* ── SLIDER TRACK ──────────────────────────────────────────────────── */
-const slider = document.getElementById('slider');
-function updateTrack(v) {
-  const p = (v / 60) * 100;
-  slider.style.background =
-    `linear-gradient(to right, #ff4757 0%, #ffa502 ${p}%, rgba(255,255,255,.1) ${p}%)`;
-}
-
-/* ── RENDER: CATEGORIES (one-time) ─────────────────────────────────── */
-function renderCats() {
-  const list = document.getElementById('catList');
-  JOBS.forEach((j, i) => {
-    const el = document.createElement('div');
-    el.className = 'cat-item';
-    el.innerHTML = `
-      <div class="cat-row">
-        <div class="cat-name-wrap">
-          <span class="cat-icon">${j.icon}</span>
-          <div>
-            <div class="cat-name">${j.name}</div>
-            <div class="cat-total">${fmt(j.total)} total workers</div>
-          </div>
-        </div>
-        <div class="cat-nums">
-          <span>
-            <span class="lbl">Remaining</span>
-            <span class="num-r" id="nr${i}">${fmt(j.total)}</span>
-          </span>
-          <span>
-            <span class="lbl">Displaced</span>
-            <span class="num-l" id="nl${i}">−0</span>
-          </span>
-        </div>
-      </div>
-      <div class="bar-track">
-        <div class="bar-r" id="br${i}"
-             style="background:linear-gradient(90deg,${j.color}99,${j.color}44); width:100%"></div>
-        <div class="bar-l" id="bl${i}" style="width:0%"></div>
-      </div>`;
-    list.appendChild(el);
-  });
-}
-
-/* ── RENDER: COMPARISON BARS (one-time) ──────────────────────────── */
-const COMP_STATIC = [
-  { id:'c1', label:'<strong>Great Recession</strong> job losses (2008–09)', color:'#ffa502', value: RECESSION  },
-  { id:'c2', label:'<strong>NYC</strong> total population',                 color:'#7c3aed', value: NYC_POP    },
-  { id:'c3', label:'<strong>Manufacturing</strong> workforce (U.S.)',        color:'#2ed573', value: MANUFACTURING },
-  { id:'c4', label:'Total <strong>tech-adjacent</strong> workers in scope', color:'#00d4ff', value: TOTAL_TECH },
-];
-
-function renderComps() {
-  const rows = document.getElementById('compRows');
-
-  // Dynamic row first
-  const dynRow = document.createElement('div');
-  dynRow.className = 'comp-row comp-highlight';
-  dynRow.innerHTML = `
-    <div class="comp-label"><strong>Jobs displaced</strong><br><span style="font-size:11px;color:var(--text3)">this scenario</span></div>
-    <div class="comp-bar-outer">
-      <div class="comp-bar-inner" id="c0-bar"
-           style="width:0%;background:linear-gradient(90deg,#ff475799,#ff475744)">
-        <span id="c0-bartxt"></span>
-      </div>
-    </div>
-    <div class="comp-value" id="c0-val">—</div>`;
-  rows.appendChild(dynRow);
-
-  // Separator
-  const sep = document.createElement('div');
-  sep.style.cssText = 'height:1px;background:var(--border);margin:20px 0;grid-column:1/-1';
-  rows.appendChild(sep);
-
-  // Static rows
-  COMP_STATIC.forEach(c => {
-    const row = document.createElement('div');
-    row.className = 'comp-row';
-    row.innerHTML = `
-      <div class="comp-label">${c.label}</div>
-      <div class="comp-bar-outer">
-        <div class="comp-bar-inner" id="${c.id}-bar"
-             style="width:0%;background:linear-gradient(90deg,${c.color}cc,${c.color}44)">
-          <span id="${c.id}-bartxt"></span>
-        </div>
-      </div>
-      <div class="comp-value">${fmt(c.value)}</div>`;
-    rows.appendChild(row);
-  });
-
-  // Animate static bars after a brief delay
+function setTheme(theme) {
+  html.setAttribute('data-theme', theme);
+  toggleBtn.textContent = theme === 'dark' ? '☀️' : '🌙';
+  localStorage.setItem('theme', theme);
+  // Redraw canvas charts when theme changes
   setTimeout(() => {
-    COMP_STATIC.forEach(c => {
-      const pct = Math.min((c.value / TOTAL_TECH) * 100, 100);
-      const bar = document.getElementById(`${c.id}-bar`);
-      const txt = document.getElementById(`${c.id}-bartxt`);
-      if (bar) bar.style.width = pct + '%';
-      if (txt) txt.textContent = fmt(c.value);
-    });
-  }, 600);
+    drawDonut();
+  }, 50);
 }
 
-/* ── RENDER: CONTEXT CARDS (one-time) ────────────────────────────── */
-const CTX_META = [
-  { id:'ctx0', lbl:'Share of All U.S. Jobs',  color:'#ff4757' },
-  { id:'ctx1', lbl:'vs. Great Recession',      color:'#ffa502' },
-  { id:'ctx2', lbl:'vs. Manufacturing',        color:'#2ed573' },
-  { id:'ctx3', lbl:'vs. NYC Population',       color:'#7c3aed' },
-];
+setTheme(getTheme());
 
-function renderCtx() {
-  const grid = document.getElementById('ctxGrid');
-  CTX_META.forEach(c => {
-    const el = document.createElement('div');
-    el.className = 'ctx-card';
-    el.innerHTML = `
-      <div class="ctx-lbl">${c.lbl}</div>
-      <div class="ctx-val" id="${c.id}-val" style="color:${c.color}">—</div>
-      <div class="ctx-mini-track">
-        <div class="ctx-mini-fill" id="${c.id}-bar" style="background:${c.color};width:0%"></div>
-      </div>
-      <div class="ctx-desc" id="${c.id}-desc"></div>`;
-    grid.appendChild(el);
-  });
-}
-
-/* ── UPDATE (reactive on slider) ─────────────────────────────────── */
-function setW(id, pct) {
-  const el = document.getElementById(id);
-  if (el) el.style.width = Math.max(0, Math.min(pct, 100)) + '%';
-}
-function setText(id, val) {
-  const el = document.getElementById(id);
-  if (el) el.textContent = val;
-}
-
-function update(pct) {
-  const r    = pct / 100;
-  const lost = Math.round(TOTAL_TECH * r);
-  const rem  = TOTAL_TECH - lost;
-
-  /* Slider label */
-  document.getElementById('pctDisplay').textContent = pct + '%';
-  document.getElementById('counterNote').textContent =
-    `At ${pct}% reduction rate · of ${fmt(TOTAL_TECH)} total tech-adjacent workers`;
-
-  /* Counter */
-  animateTo('counterNum', lost);
-
-  /* Category bars */
-  JOBS.forEach((j, i) => {
-    const jLost = Math.round(j.total * r);
-    const jRem  = j.total - jLost;
-    setW(`br${i}`, (jRem  / j.total) * 100);
-    setW(`bl${i}`, (jLost / j.total) * 100);
-    setText(`nr${i}`, fmt(jRem));
-    setText(`nl${i}`, jLost === 0 ? '−0' : `−${fmt(jLost)}`);
-  });
-
-  /* Total row */
-  setText('totalRem',  fmt(rem));
-  setText('totalLost', `−${fmt(lost)}`);
-
-  /* Dynamic comparison bar */
-  const dynPct = (lost / TOTAL_TECH) * 100;
-  setW('c0-bar', dynPct);
-  setText('c0-bartxt', lost ? fmt(lost) : '');
-  setText('c0-val', lost ? fmt(lost) : '—');
-
-  /* Context cards ───────────────────────────────────────────────── */
-  const techPct = ((lost / US_WORKFORCE) * 100);
-  const vsRec   = lost / RECESSION;
-  const vsManuf = (lost / MANUFACTURING) * 100;
-  const vsNYC   = lost / NYC_POP;
-
-  // ctx0 – share of US workforce
-  setText('ctx0-val', techPct.toFixed(2) + '%');
-  setW('ctx0-bar', Math.min(techPct * 8, 100));
-  setText('ctx0-desc',
-    lost
-      ? `${fmtFull(lost)} displaced workers = ${techPct.toFixed(2)}% of America's entire 165M-person workforce.`
-      : 'Move the slider to see the impact.'
-  );
-
-  // ctx1 – vs recession
-  const recPct = Math.round(vsRec * 100);
-  setText('ctx1-val', vsRec >= 1 ? vsRec.toFixed(2) + '×' : recPct + '%');
-  setW('ctx1-bar', Math.min(vsRec * 80, 100));
-  if (lost === 0) {
-    setText('ctx1-desc', 'The 2008 recession erased 8.7M jobs over two years.');
-  } else if (vsRec < 1) {
-    setText('ctx1-desc',
-      `The 2008 recession erased 8.7M jobs over two years. This scenario = ${recPct}% of that total — but concentrated in one sector, potentially in months.`
-    );
-  } else {
-    setText('ctx1-desc',
-      `This scenario EXCEEDS the Great Recession. ${fmtFull(lost)} jobs vs. 8.7M lost over two years — ${vsRec.toFixed(2)}× that crisis, hitting a single sector.`
-    );
-  }
-
-  // ctx2 – vs manufacturing
-  setText('ctx2-val', Math.round(vsManuf) + '%');
-  setW('ctx2-bar', Math.min(vsManuf, 100));
-  setText('ctx2-desc',
-    lost
-      ? `The U.S. employs 13M in manufacturing. This displacement = ${Math.round(vsManuf)}% of the entire manufacturing workforce.`
-      : 'The U.S. employs 13M manufacturing workers.'
-  );
-
-  // ctx3 – vs NYC
-  const nycMult = vsNYC.toFixed(2);
-  setText('ctx3-val', nycMult + '×');
-  setW('ctx3-bar', Math.min(vsNYC * 60, 100));
-  setText('ctx3-desc',
-    lost
-      ? `NYC has ~8.3M residents. The projected displacement = ${nycMult}× the entire population of America's largest city.`
-      : `New York City has ~8.3M residents, for scale.`
-  );
-}
-
-/* ── SCROLL ANIMATION ─────────────────────────────────────────────── */
-function initScrollAnims() {
-  const els = document.querySelectorAll('.anim-pending');
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const el = entry.target;
-        const delay = el.dataset.delay || 0;
-        setTimeout(() => {
-          el.classList.remove('anim-pending');
-          el.classList.add('anim-done');
-        }, parseInt(delay, 10));
-        observer.unobserve(el);
-      }
-    });
-  }, { threshold: 0.08 });
-  els.forEach(el => observer.observe(el));
-}
-
-/* ── INIT ─────────────────────────────────────────────────────────── */
-renderCats();
-renderComps();
-renderCtx();
-updateTrack(40);
-
-// Kick off the initial state after one frame so transitions look intentional
-requestAnimationFrame(() => {
-  update(40);
-  // Init anim state for counter so it starts from 0 and counts up
-  _anims['counterNum'] = { val: 0, raf: null };
-  update(40);
-  initScrollAnims();
+toggleBtn.addEventListener('click', () => {
+  const current = html.getAttribute('data-theme');
+  setTheme(current === 'dark' ? 'light' : 'dark');
 });
 
-/* Slider interaction */
-slider.addEventListener('input', e => {
-  const v = parseInt(e.target.value, 10);
-  updateTrack(v);
-  update(v);
+/* ══════════════════════════════════════════════════
+   PROGRESS BAR
+══════════════════════════════════════════════════ */
+const progressBar = document.getElementById('progress');
+window.addEventListener('scroll', () => {
+  const scrollTop = document.documentElement.scrollTop;
+  const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+  const pct = (scrollTop / scrollHeight) * 100;
+  progressBar.style.width = pct + '%';
+});
+
+/* ══════════════════════════════════════════════════
+   SECTION NAV DOTS
+══════════════════════════════════════════════════ */
+const sections = document.querySelectorAll('section[data-section]');
+const dots = document.querySelectorAll('.nav-dot');
+
+dots.forEach(dot => {
+  dot.addEventListener('click', () => {
+    const idx = parseInt(dot.dataset.section);
+    sections[idx].scrollIntoView({ behavior: 'smooth' });
+  });
+});
+
+const sectionObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const idx = entry.target.dataset.section;
+      dots.forEach(d => d.classList.remove('active'));
+      document.querySelector(`.nav-dot[data-section="${idx}"]`)?.classList.add('active');
+    }
+  });
+}, { threshold: 0.3 });
+
+sections.forEach(s => sectionObserver.observe(s));
+
+/* ══════════════════════════════════════════════════
+   REVEAL ANIMATIONS (Intersection Observer)
+══════════════════════════════════════════════════ */
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      revealObserver.unobserve(entry.target);
+      // Trigger chart animations
+      entry.target.querySelectorAll('.metro-fill').forEach(el => {
+        el.style.width = el.dataset.width + '%';
+      });
+      entry.target.querySelectorAll('.age-bar').forEach(el => {
+        el.style.height = el.dataset.height + 'px';
+      });
+      entry.target.querySelectorAll('.dest-fill').forEach(el => {
+        el.style.width = el.dataset.width + '%';
+      });
+      entry.target.querySelectorAll('.animated-height').forEach(el => {
+        el.style.height = el.dataset.height + '%';
+      });
+      // Trigger countup for any in this element
+      entry.target.querySelectorAll('[data-countup]').forEach(triggerCountUp);
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+/* ══════════════════════════════════════════════════
+   COUNT UP ANIMATION
+══════════════════════════════════════════════════ */
+function triggerCountUp(el) {
+  if (el._counted) return;
+  el._counted = true;
+
+  const target = parseFloat(el.dataset.countup);
+  const prefix = el.dataset.prefix || '';
+  const suffix = el.dataset.suffix || '';
+  const divisor = parseFloat(el.dataset.divisor) || 1;
+  const decimals = parseInt(el.dataset.decimals) || 0;
+  const duration = 1800;
+  const start = performance.now();
+
+  function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
+
+  function update(now) {
+    const elapsed = now - start;
+    const progress = Math.min(elapsed / duration, 1);
+    const value = easeOut(progress) * (target / divisor);
+    el.textContent = prefix + value.toFixed(decimals) + suffix;
+    if (progress < 1) requestAnimationFrame(update);
+  }
+  requestAnimationFrame(update);
+}
+
+// Trigger on any countup that's already visible (hero)
+setTimeout(() => {
+  document.querySelectorAll('[data-countup]').forEach(el => {
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight) {
+      triggerCountUp(el);
+    }
+  });
+}, 100);
+
+/* ══════════════════════════════════════════════════
+   SECTION 2: SLIDER
+══════════════════════════════════════════════════ */
+const slider = document.getElementById('cut-slider');
+const jobsDisplay = document.getElementById('jobs-lost-display');
+const pctDisplay = document.getElementById('pct-display');
+const pctCompany = document.getElementById('pct-company');
+const faangTotal = document.getElementById('faang-total');
+const histScenarioVal = document.getElementById('hist-scenario-val');
+const histMult = document.getElementById('hist-mult');
+
+// Build job grid (100 dots)
+const jobGrid = document.getElementById('job-grid');
+const TOTAL_DOTS = 100;
+const dots100 = [];
+for (let i = 0; i < TOTAL_DOTS; i++) {
+  const dot = document.createElement('div');
+  dot.className = 'job-dot';
+  jobGrid.appendChild(dot);
+  dots100.push(dot);
+}
+
+const companybases = {
+  amazon: 300000,
+  msft: 228000,
+  google: 182000,
+  meta: 87000,
+  salesforce: 73000
+};
+
+function fmtJobs(n) {
+  if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
+  if (n >= 1000) return (n / 1000).toFixed(0) + 'K';
+  return n.toString();
+}
+
+function updateSlider(pct) {
+  const totalWorkers = 6500000;
+  const jobsLost = Math.round(totalWorkers * pct / 100);
+
+  // Update displays
+  jobsDisplay.textContent = jobsLost.toLocaleString();
+  pctDisplay.textContent = pct;
+  pctCompany.textContent = pct;
+
+  // Update dots
+  const dotsRed = Math.round(TOTAL_DOTS * pct / 100);
+  dots100.forEach((dot, i) => {
+    dot.classList.toggle('displaced', i < dotsRed);
+  });
+
+  // Update company bars
+  Object.entries(companybases).forEach(([key, base]) => {
+    const cuts = Math.round(base * pct / 100);
+    const fill = document.getElementById('cf-' + key);
+    const val = document.getElementById('cv-' + key);
+    if (fill && val) {
+      // Max = amazon cuts at 60%
+      const maxCuts = 300000 * 60 / 100;
+      fill.style.width = Math.min((cuts / maxCuts) * 100, 100) + '%';
+      val.textContent = fmtJobs(cuts);
+    }
+  });
+
+  // FAANG total
+  const faang = Math.round((300000 + 228000 + 182000 + 87000 + 73000) * pct / 100);
+  faangTotal.textContent = '~' + fmtJobs(faang) + ' cuts';
+
+  // Historical bar
+  const mult = pct === 0 ? 0 : Math.round(jobsLost / 260000);
+  histMult.textContent = mult + '×';
+  histScenarioVal.textContent = fmtJobs(jobsLost);
+
+  // Track color
+  const pctPos = pct / 60;
+  const r = slider;
+  const color = `linear-gradient(90deg, var(--accent) 0%, var(--red) ${pctPos * 100}%, var(--surface2) ${pctPos * 100}%)`;
+  r.style.background = `linear-gradient(90deg, #2997ff 0%, #ff3b30 ${pctPos * 100}%, var(--surface2) ${pctPos * 100}%)`;
+}
+
+slider.addEventListener('input', () => updateSlider(parseInt(slider.value)));
+// Initialize
+setTimeout(() => updateSlider(40), 200);
+
+// Animate company bars when section 2 comes into view
+const s2 = document.getElementById('s2');
+const s2observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      // Trigger company fills animation
+      document.querySelectorAll('.company-fill').forEach(el => {
+        // Width is set by slider update
+      });
+      updateSlider(40);
+      s2observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1 });
+s2observer.observe(s2);
+
+// Historical bars animation
+const histBars = document.querySelectorAll('.hist-bar');
+const histObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      histBars.forEach(bar => {
+        const maxH = parseFloat(bar.dataset.maxheight || 160);
+        const pctH = parseFloat(bar.dataset.heightPct || 50);
+        bar.style.height = (maxH * pctH / 100) + 'px';
+      });
+      histObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.2 });
+const histChart = document.getElementById('hist-chart');
+if (histChart) histObserver.observe(histChart);
+
+/* ══════════════════════════════════════════════════
+   SECTION 3: DONUT CHART
+══════════════════════════════════════════════════ */
+function drawDonut() {
+  const canvas = document.getElementById('donut-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const isDark = html.getAttribute('data-theme') === 'dark';
+
+  const W = canvas.width;
+  const H = canvas.height;
+  ctx.clearRect(0, 0, W, H);
+
+  const cx = W / 2, cy = H / 2;
+  const r = 90, ir = 55;
+
+  const data = [
+    { value: 237, color: '#0071e3', label: '$237B' },
+    { value: 99,  color: '#ff9500', label: '$99B' },
+    { value: 34,  color: '#5856d6', label: '$34B' },
+    // housing is separate visualization; add for chart balance
+  ];
+  const total = data.reduce((s, d) => s + d.value, 0);
+
+  let angle = -Math.PI / 2;
+  data.forEach(seg => {
+    const sweep = (seg.value / total) * Math.PI * 2;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, r, angle, angle + sweep);
+    ctx.closePath();
+    ctx.fillStyle = seg.color;
+    ctx.fill();
+
+    // Label
+    const midAngle = angle + sweep / 2;
+    const lx = cx + (r * 0.7) * Math.cos(midAngle);
+    const ly = cy + (r * 0.7) * Math.sin(midAngle);
+    ctx.fillStyle = 'white';
+    ctx.font = 'bold 11px Inter, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(seg.label, lx, ly);
+
+    angle += sweep;
+  });
+
+  // Donut hole
+  ctx.beginPath();
+  ctx.arc(cx, cy, ir, 0, Math.PI * 2);
+  ctx.fillStyle = isDark ? '#1c1c1e' : '#ffffff';
+  ctx.fill();
+
+  // Center text
+  ctx.fillStyle = isDark ? '#f5f5f7' : '#1d1d1f';
+  ctx.font = 'bold 18px Inter, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('$340B', cx, cy - 8);
+  ctx.font = '11px Inter, sans-serif';
+  ctx.fillStyle = isDark ? '#98989d' : '#6e6e73';
+  ctx.fillText('impact', cx, cy + 12);
+}
+
+const donutObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      drawDonut();
+      donutObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1 });
+
+const donutCanvas = document.getElementById('donut-canvas');
+if (donutCanvas) donutObserver.observe(donutCanvas);
+
+/* ══════════════════════════════════════════════════
+   DESTINATION BARS — Section 4 (animated on scroll)
+══════════════════════════════════════════════════ */
+const s4 = document.getElementById('s4');
+const destObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.querySelectorAll('.dest-fill').forEach(el => {
+        el.style.width = el.dataset.width + '%';
+      });
+      entry.target.querySelectorAll('.animated-height').forEach(el => {
+        el.style.height = el.dataset.height + '%';
+      });
+      entry.target.querySelectorAll('[data-countup]').forEach(triggerCountUp);
+      destObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.05 });
+
+if (s4) destObserver.observe(s4);
+
+/* ══════════════════════════════════════════════════
+   SALARY MARKER TICKS
+══════════════════════════════════════════════════ */
+// Percentage positions on the gradient bar
+const tickPositions = [0, 37, 75, 100]; // approximate positions
+
+/* ══════════════════════════════════════════════════
+   INITIAL ANIMATION CHECK (elements already in view)
+══════════════════════════════════════════════════ */
+window.addEventListener('load', () => {
+  document.querySelectorAll('.reveal').forEach(el => {
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight * 0.95) {
+      el.classList.add('visible');
+      el.querySelectorAll('.metro-fill').forEach(f => f.style.width = f.dataset.width + '%');
+      el.querySelectorAll('.age-bar').forEach(b => b.style.height = b.dataset.height + 'px');
+    }
+  });
+  drawDonut();
+  updateSlider(40);
 });
 </script>
-
 </body>
 </html>
