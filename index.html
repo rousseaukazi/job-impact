@@ -881,14 +881,10 @@ footer {
   font-size: 10px;
 }
 
-/* ── Scroll Animations — opacity only (no transform = no repaint mid-scroll) ── */
-.reveal {
-  opacity: 0;
-  transition: opacity 0.5s ease;
-}
-.reveal.visible {
-  opacity: 1;
-}
+/* Scroll animations removed — any transition mid-scroll drops frames.
+   Loading screen handles the initial reveal. Content visible immediately. */
+.reveal { opacity: 1; }
+.reveal.visible { opacity: 1; }
 
 /* No forced GPU promotion — too many layers hurts more than it helps */
 
@@ -930,8 +926,7 @@ footer {
   border-radius: 3px;
   transition: width 0.15s ease;
 }
-/* Delays removed — simultaneous multi-element transitions cause GPU thrash */
-.reveal-delay-1, .reveal-delay-2, .reveal-delay-3, .reveal-delay-4 { transition-delay: 0s; }
+.reveal-delay-1, .reveal-delay-2, .reveal-delay-3, .reveal-delay-4 {}
 
 /* ── Responsive ── */
 @media (max-width: 768px) {
@@ -1681,28 +1676,8 @@ const sectionObserver = new IntersectionObserver((entries) => {
 
 sections.forEach(s => sectionObserver.observe(s));
 
-/* ══════════════════════════════════════════════════
-   REVEAL ANIMATIONS (Intersection Observer)
-══════════════════════════════════════════════════ */
-const revealObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      const target = entry.target;
-      revealObserver.unobserve(target);
-      // Batch all DOM writes in one rAF to avoid mid-scroll layout
-      requestAnimationFrame(() => {
-        target.classList.add('visible');
-        target.querySelectorAll('.metro-fill').forEach(el => { el.style.width = el.dataset.width + '%'; });
-        target.querySelectorAll('.age-bar').forEach(el => { el.style.height = el.dataset.height + 'px'; });
-        target.querySelectorAll('.dest-fill').forEach(el => { el.style.width = el.dataset.width + '%'; });
-        target.querySelectorAll('.animated-height').forEach(el => { el.style.height = el.dataset.height + '%'; });
-        target.querySelectorAll('[data-countup]').forEach(triggerCountUp);
-      });
-    }
-  });
-}, { threshold: 0.1 });
-
-document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+/* Reveal observer removed — all content visible immediately after loader.
+   Chart animations triggered by section-entry observer below instead. */
 
 /* ══════════════════════════════════════════════════
    COUNT UP ANIMATION
@@ -1834,37 +1809,7 @@ slider.addEventListener('input', () => updateSlider(parseInt(slider.value)), { p
 setTimeout(() => updateSlider(40), 200);
 
 // Animate company bars when section 2 comes into view
-const s2 = document.getElementById('s2');
-const s2observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      // Trigger company fills animation
-      document.querySelectorAll('.company-fill').forEach(el => {
-        // Width is set by slider update
-      });
-      updateSlider(40);
-      s2observer.unobserve(entry.target);
-    }
-  });
-}, { threshold: 0.1 });
-s2observer.observe(s2);
-
-// Historical bars animation
-const histBars = document.querySelectorAll('.hist-bar');
-const histObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      histBars.forEach(bar => {
-        const maxH = parseFloat(bar.dataset.maxheight || 160);
-        const pctH = parseFloat(bar.dataset.heightPct || 50);
-        bar.style.height = (maxH * pctH / 100) + 'px';
-      });
-      histObserver.unobserve(entry.target);
-    }
-  });
-}, { threshold: 0.2 });
-const histChart = document.getElementById('hist-chart');
-if (histChart) histObserver.observe(histChart);
+// Collapsed into one section-level observer — fewer callbacks, less scroll overhead
 
 /* ══════════════════════════════════════════════════
    SECTION 3: DONUT CHART
@@ -1930,44 +1875,41 @@ function drawDonut() {
   ctx.fillText('impact', cx, cy + 12);
 }
 
-const donutObserver = new IntersectionObserver((entries) => {
+// Single section observer handles all chart animations — fires once per section, not once per card
+const sectionDone = new Set();
+const sectionChartObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      drawDonut();
-      donutObserver.unobserve(entry.target);
-    }
+    if (!entry.isIntersecting) return;
+    const id = entry.target.id;
+    if (sectionDone.has(id)) return;
+    sectionDone.add(id);
+    sectionChartObserver.unobserve(entry.target);
+    requestAnimationFrame(() => {
+      if (id === 's2') {
+        updateSlider(40);
+        document.querySelectorAll('.hist-bar').forEach(bar => {
+          const maxH = parseFloat(bar.dataset.maxheight || 160);
+          const pctH = parseFloat(bar.dataset.heightPct || 50);
+          bar.style.height = (maxH * pctH / 100) + 'px';
+        });
+      }
+      if (id === 's3') {
+        drawDonut();
+        entry.target.querySelectorAll('[data-countup]').forEach(triggerCountUp);
+      }
+      if (id === 's4') {
+        entry.target.querySelectorAll('.dest-fill').forEach(el => { el.style.width = el.dataset.width + '%'; });
+        entry.target.querySelectorAll('.animated-height').forEach(el => { el.style.height = el.dataset.height + '%'; });
+        entry.target.querySelectorAll('[data-countup]').forEach(triggerCountUp);
+      }
+    });
   });
-}, { threshold: 0.1 });
+}, { threshold: 0.05, rootMargin: '0px 0px -50px 0px' });
 
-const donutCanvas = document.getElementById('donut-canvas');
-if (donutCanvas) donutObserver.observe(donutCanvas);
-
-/* ══════════════════════════════════════════════════
-   DESTINATION BARS — Section 4 (animated on scroll)
-══════════════════════════════════════════════════ */
-const s4 = document.getElementById('s4');
-const destObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.querySelectorAll('.dest-fill').forEach(el => {
-        el.style.width = el.dataset.width + '%';
-      });
-      entry.target.querySelectorAll('.animated-height').forEach(el => {
-        el.style.height = el.dataset.height + '%';
-      });
-      entry.target.querySelectorAll('[data-countup]').forEach(triggerCountUp);
-      destObserver.unobserve(entry.target);
-    }
-  });
-}, { threshold: 0.05 });
-
-if (s4) destObserver.observe(s4);
-
-/* ══════════════════════════════════════════════════
-   SALARY MARKER TICKS
-══════════════════════════════════════════════════ */
-// Percentage positions on the gradient bar
-const tickPositions = [0, 37, 75, 100]; // approximate positions
+['s1','s2','s3','s4'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) sectionChartObserver.observe(el);
+});
 
 /* ══════════════════════════════════════════════════
    LOADING SCREEN + INIT
