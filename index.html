@@ -249,44 +249,13 @@ section:nth-child(even) { background: var(--surface2); }
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 36px 36px 52px;
-  position: relative;
+  padding: 36px;
 }
 .card-sm {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
-  padding: 24px 24px 44px;
-  position: relative;
-}
-/* Big stat hero cards also need relative + padding for info btn */
-.big-stat-hero {
-  position: relative;
-  padding-bottom: 52px !important;
-}
-/* Quote + slider cards */
-.quote-card, .slider-section {
-  position: relative;
-  padding-bottom: 52px;
-}
-/* Info button: bottom-right, hidden by default, visible on hover */
-.card > .info-btn,
-.card-sm > .info-btn,
-.big-stat-hero > .info-btn,
-.quote-card > .info-btn,
-.slider-section > .info-btn {
-  position: absolute;
-  bottom: 14px;
-  right: 14px;
-  opacity: 0;
-  transition: opacity 0.18s ease, border-color 0.18s, color 0.18s;
-}
-.card:hover > .info-btn,
-.card-sm:hover > .info-btn,
-.big-stat-hero:hover > .info-btn,
-.quote-card:hover > .info-btn,
-.slider-section:hover > .info-btn {
-  opacity: 1;
+  padding: 24px;
 }
 
 /* ── Grid Layouts ── */
@@ -1033,52 +1002,62 @@ footer {
   .roles-comparison { flex-direction: column; }
 }
 
-/* ── Source Info Buttons ── */
-.info-btn {
-  width: 26px; height: 26px;
+/* ── Sources FAB ── */
+#sources-fab {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 900;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
-  border: 1.5px solid var(--border);
-  background: var(--surface2);
-  color: var(--text2);
-  font-size: 13px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  font-size: 20px;
   cursor: pointer;
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
-  transition: border-color 0.2s, color 0.2s, background 0.2s;
+  box-shadow: 0 4px 20px rgba(0,113,227,0.45);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
   line-height: 1;
 }
-.info-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--surface); }
+#sources-fab:hover {
+  transform: scale(1.08);
+  box-shadow: 0 8px 28px rgba(0,113,227,0.55);
+}
 
-/* ── Source Modal ── */
+/* ── Sources Modal ── */
 #source-modal-overlay {
   display: none;
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.3);
   z-index: 10000;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-end;
+  justify-content: flex-end;
   padding: 24px;
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(6px);
 }
 #source-modal-overlay.open { display: flex; }
 #source-modal {
   background: var(--surface);
-  /* slightly brighter in dark mode via box-shadow */
   border-radius: var(--radius);
   border: 1px solid var(--border);
-  padding: 28px;
-  max-width: 480px;
+  padding: 32px;
   width: 100%;
+  max-width: 520px;
+  max-height: 80vh;
+  overflow-y: auto;
   position: relative;
-  box-shadow: 0 24px 64px rgba(0,0,0,0.2), 0 0 0 1px rgba(255,255,255,0.08);
+  box-shadow: 0 32px 80px rgba(0,0,0,0.25), 0 0 0 1px rgba(255,255,255,0.06);
 }
 #source-modal-close {
-  position: absolute;
-  top: 16px; right: 16px;
-  width: 28px; height: 28px;
+  position: sticky;
+  top: 0;
+  float: right;
+  width: 30px; height: 30px;
   border-radius: 50%;
   border: none;
   background: var(--surface2);
@@ -1086,23 +1065,44 @@ footer {
   font-size: 16px;
   cursor: pointer;
   display: flex; align-items: center; justify-content: center;
+  margin-left: 12px;
+  flex-shrink: 0;
+  z-index: 1;
 }
 #source-modal-title {
-  font-size: 14px;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  margin-bottom: 6px;
+  padding-right: 40px;
+}
+#source-modal-subtitle {
+  font-size: 13px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+.source-group {
+  margin-bottom: 28px;
+}
+.source-group:last-child { margin-bottom: 0; }
+.source-group-title {
+  font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--text2);
-  margin-bottom: 16px;
-}
-.source-item {
-  padding: 12px 0;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  margin-bottom: 12px;
+  padding-bottom: 8px;
   border-bottom: 1px solid var(--border);
 }
-.source-item:last-child { border-bottom: none; padding-bottom: 0; }
-.source-item-name { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
-.source-item-url { font-size: 12px; color: var(--accent); word-break: break-all; }
-.source-item-url a { color: var(--accent); text-decoration: none; }
+.source-item {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+.source-item:last-child { border-bottom: none; }
+.source-item-name { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+.source-item-url a { font-size: 12px; color: var(--accent); text-decoration: none; word-break: break-all; }
 .source-item-url a:hover { text-decoration: underline; }
 </style>
 </head>
@@ -1115,11 +1115,15 @@ footer {
 </div>
 
 
-<!-- Source Modal -->
+<!-- Sources FAB -->
+<button id="sources-fab" aria-label="View all sources">ⓘ</button>
+
+<!-- Sources Modal -->
 <div id="source-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="source-modal-title">
   <div id="source-modal">
     <button id="source-modal-close" aria-label="Close">✕</button>
-    <div id="source-modal-title">Data Sources</div>
+    <div id="source-modal-title">Sources & References</div>
+    <div id="source-modal-subtitle">All data used in this report, organized by section.</div>
     <div id="source-modal-body"></div>
   </div>
 </div>
@@ -1159,7 +1163,6 @@ footer {
       <div class="big-stat-hero">
         <div class="big-stat-num" data-countup="845" data-prefix="$" data-suffix="B">$845B</div>
         <div class="big-stat-desc">In Annual Wages Across the Sector</div>
-        <button class="info-btn" data-modal="workforce-sources" aria-label="Data sources">ⓘ</button>
       </div>
     </div>
 
@@ -1171,12 +1174,10 @@ footer {
       <div class="card-sm">
         <div class="hero-stat-num" data-countup="130000" data-prefix="$" data-suffix="K" data-divisor="1000">$130K</div>
         <div class="hero-stat-label">Median SWE Salary (BLS 2024)</div>
-        <button class="info-btn" data-modal="salary-sources" aria-label="Data sources">ⓘ</button>
       </div>
       <div class="card-sm">
         <div class="hero-stat-num" data-countup="100000" data-prefix="" data-suffix="K" data-divisor="1000">100K</div>
         <div class="hero-stat-label">CS/CE Grads Entering Each Year</div>
-        <button class="info-btn" data-modal="grads-sources" aria-label="Data sources">ⓘ</button>
       </div>
     </div>
 
@@ -1206,7 +1207,6 @@ footer {
             <div class="metro-track"><div class="metro-fill" data-width="29"><span>100K</span></div></div>
           </div>
         </div>
-      <button class="info-btn" data-modal="metro-sources" aria-label="Data sources">ⓘ</button>
       </div>
 
       <div class="card">
@@ -1234,7 +1234,6 @@ footer {
           </div>
         </div>
         <div class="mt-24" style="font-size:13px; color:var(--text2);">The tech workforce skews young — 73% under 45.</div>
-        <button class="info-btn" data-modal="age-sources" aria-label="Data sources">ⓘ</button>
       </div>
     </div>
 
@@ -1290,7 +1289,6 @@ footer {
         <div style="font-size:13px; color:var(--text2);">+25% industry growth from 2018–2023. The sector expanded nearly every year for a decade.</div>
         <div style="background: var(--surface2); border-radius: 8px; padding: 8px 16px; font-size: 13px; font-weight: 700; color: var(--green);">+25% ↑ 2018–2023</div>
       </div>
-      <button class="info-btn" data-modal="salary-sources" aria-label="Data sources">ⓘ</button>
     </div>
 
   </div>
@@ -1313,7 +1311,6 @@ footer {
     <div class="quote-card reveal reveal-delay-1">
       <div class="quote-text">"Within the next year, I believe the majority of companies will reach the same conclusion."</div>
       <div class="quote-attr">— Jack Dorsey, CEO of Block Inc., April 2025 · Following announcement of significant AI-driven headcount reduction</div>
-      <button class="info-btn" data-modal="dorsey-sources" aria-label="Data sources">ⓘ</button>
     </div>
 
     <!-- Slider -->
@@ -1333,7 +1330,6 @@ footer {
         <span style="display:inline-block; width:10px; height:10px; border-radius:50%; background:var(--accent); margin-right:6px;"></span>Employed
         <span style="display:inline-block; width:10px; height:10px; border-radius:50%; background:var(--red); margin-right:6px; margin-left:16px;"></span>Displaced
       </div>
-      <button class="info-btn" data-modal="workforce-sources" aria-label="Data sources">ⓘ</button>
     </div>
 
     <!-- Company impacts + Historical comparison -->
@@ -1363,7 +1359,6 @@ footer {
           </div>
         </div>
         <div style="margin-top:20px; font-size:13px; color:var(--text2);">FAANG+ combined: <strong style="color:var(--text)" id="faang-total">~450K cuts</strong> at 40%</div>
-        <button class="info-btn" data-modal="company-sources" aria-label="Data sources">ⓘ</button>
       </div>
 
       <div class="card">
@@ -1386,7 +1381,6 @@ footer {
           </div>
         </div>
         <div style="margin-top:16px; font-size:13px; color:var(--red); font-weight:600;">This would be the largest white-collar displacement in American history — <span id="hist-mult">10×</span> larger than 2022–23 layoffs.</div>
-        <button class="info-btn" data-modal="layoffs-sources" aria-label="Data sources">ⓘ</button>
       </div>
     </div>
 
@@ -1410,7 +1404,6 @@ footer {
     <div class="big-stat-hero reveal reveal-delay-1" style="margin-bottom:32px;">
       <div class="big-stat-num" data-countup="340" data-prefix="$" data-suffix="B">$340B</div>
       <div class="big-stat-desc">Estimated total economic impact from 2.6M displaced tech workers</div>
-      <button class="info-btn" data-modal="economic-sources" aria-label="Data sources">ⓘ</button>
     </div>
 
     <!-- Donut + breakdown -->
@@ -1462,7 +1455,6 @@ footer {
           <div class="legend-item"><div class="legend-dot" style="background:#ff9500;"></div>Tax Revenue Loss $99B</div>
           <div class="legend-item"><div class="legend-dot" style="background:#ff3b30;"></div>Housing Impact $180B</div>
           <div class="legend-item"><div class="legend-dot" style="background:#5856d6;"></div>UI Payouts $34B</div>
-        <button class="info-btn" data-modal="economic-sources" aria-label="Data sources">ⓘ</button>
       </div>
 
       <div class="card">
@@ -1492,7 +1484,6 @@ footer {
             <div style="font-size:13px; color:var(--text2);">$500/wk × 26 weeks for 2.6M claimants. US system designed for ~5M total. This arrives in 6–12 months.</div>
           </div>
         </div>
-        <button class="info-btn" data-modal="economic-sources" aria-label="Data sources">ⓘ</button>
       </div>
     </div>
 
@@ -1531,7 +1522,6 @@ footer {
           <div class="city-label">Housing/mortgage<br>market: −$180B</div>
         </div>
       </div>
-      <button class="info-btn" data-modal="housing-sources" aria-label="Data sources">ⓘ</button>
     </div>
 
     <!-- Unemployment rate card -->
@@ -1628,7 +1618,6 @@ footer {
           <div class="timeline-desc">State budgets in CA, WA, TX face $20–40B shortfalls. Federal income tax gap materializes: −$50B/yr. City services in tech hubs — schools, transit, public health — begin budget cuts. Housing correction deepens. Total addressable damage: −$340B across the full economic system.</div>
         </div>
       </div>
-      <button class="info-btn" data-modal="economic-sources" aria-label="Data sources">ⓘ</button>
     </div>
 
   </div>
@@ -1682,7 +1671,6 @@ footer {
           <div class="dest-pct">10%</div>
         </div>
       </div>
-      <button class="info-btn" data-modal="displacement-sources" aria-label="Data sources">ⓘ</button>
     </div>
 
     <!-- New roles vs displaced -->
@@ -1712,7 +1700,6 @@ footer {
         <div style="margin-top:16px; font-size:13px; color:var(--text2);">
           Emerging roles: AI trainers (200K), Human-AI workflow designers (100K), AI safety & alignment (50K)
         </div>
-        <button class="info-btn" data-modal="newroles-sources" aria-label="Data sources">ⓘ</button>
       </div>
 
       <div class="card">
@@ -1725,7 +1712,6 @@ footer {
           CHIPS Act allocated $200M for tech retraining. Divided by 2.6M displaced workers = <strong style="color:var(--red);">$77 per person</strong>.<br><br>
           Average retraining program costs $5K–$40K and takes 6–18 months. Only ~55% lead to comparable salary.
         </div>
-        <button class="info-btn" data-modal="retraining-sources" aria-label="Data sources">ⓘ</button>
       </div>
     </div>
 
@@ -1767,7 +1753,6 @@ footer {
           </div>
         </div>
       </div>
-      <button class="info-btn" data-modal="precedents-sources" aria-label="Data sources">ⓘ</button>
     </div>
 
   </div>
@@ -2124,144 +2109,74 @@ window.addEventListener('load', () => {
 });
 
 /* ══════════════════════════════════════════════════
-   SOURCE MODAL
+   SOURCES FAB + CONSOLIDATED MODAL
 ══════════════════════════════════════════════════ */
-const sourceData = {
-  'metro-sources': {
-    title: 'Top Tech Metro Areas',
-    sources: [
-      { name: 'CompTIA State of the Tech Workforce 2024', url: 'https://www.comptia.org/content/research/state-of-the-tech-workforce' },
-      { name: 'Bureau of Labor Statistics — Occupational Employment Statistics', url: 'https://www.bls.gov/oes/current/oes_nat.htm' },
-      { name: 'CBRE Tech Talent Report 2024', url: 'https://www.cbre.com/insights/reports/scoring-tech-talent' },
-    ]
-  },
-  'age-sources': {
-    title: 'Age Distribution of Tech Workers',
-    sources: [
-      { name: 'Bureau of Labor Statistics — Current Population Survey (CPS)', url: 'https://www.bls.gov/cps/cpsaat11.htm' },
-      { name: 'CompTIA State of the Tech Workforce 2024', url: 'https://www.comptia.org/content/research/state-of-the-tech-workforce' },
-    ]
-  },
-  'salary-sources': {
-    title: 'Salary Distribution — US Software Engineers',
-    sources: [
+const allSources = [
+  {
+    group: 'Section 1 — The Industry Today',
+    items: [
       { name: 'BLS Occupational Employment & Wage Statistics — Software Developers (SOC 15-1252)', url: 'https://www.bls.gov/oes/current/oes151252.htm' },
-      { name: 'Levels.fyi 2024 Salary Report', url: 'https://www.levels.fyi/2024/' },
-      { name: 'Glassdoor Software Engineer Salary Data', url: 'https://www.glassdoor.com/Salaries/software-engineer-salary-SRCH_KO0,17.htm' },
+      { name: 'BLS — All Computer & IT Occupations (SOC 15-0000)', url: 'https://www.bls.gov/oes/current/oes_nat.htm#15-0000' },
+      { name: 'CompTIA State of the Tech Workforce 2024', url: 'https://www.comptia.org/content/research/state-of-the-tech-workforce' },
+      { name: 'CBRE Tech Talent Report 2024 — Metro Rankings', url: 'https://www.cbre.com/insights/reports/scoring-tech-talent' },
+      { name: 'BLS Current Population Survey — Worker Age Distribution', url: 'https://www.bls.gov/cps/cpsaat11.htm' },
+      { name: 'Levels.fyi 2024 Compensation Report', url: 'https://www.levels.fyi/2024/' },
+      { name: 'NCES Digest of Education Statistics — CS Bachelor’s Degrees Conferred', url: 'https://nces.ed.gov/programs/digest/d23/tables/dt23_325.35.asp' },
+      { name: 'Computing Research Association — Taulbee Survey (CS enrollment & degrees)', url: 'https://cra.org/resources/taulbee-survey/' },
     ]
   },
-  'economic-sources': {
-    title: 'Economic Impact Breakdown',
-    sources: [
-      { name: 'Bureau of Economic Analysis — Personal Consumption Expenditures', url: 'https://www.bea.gov/data/consumer-spending/main' },
-      { name: 'IRS Statistics of Income — Individual Income Tax Returns', url: 'https://www.irs.gov/statistics/soi-tax-stats-individual-statistical-tables-by-size-of-adjusted-gross-income' },
-      { name: 'Urban Institute — Economic Multiplier Effects of Job Loss', url: 'https://www.urban.org' },
-      { name: 'Federal Reserve — Unemployment Insurance Claims Data (FRED)', url: 'https://fred.stlouisfed.org/series/ICSA' },
-    ]
-  },
-  'unemployment-sources': {
-    title: 'Unemployment Rate Data',
-    sources: [
-      { name: 'Bureau of Labor Statistics — Monthly Unemployment Rate (U-3)', url: 'https://www.bls.gov/charts/employment-situation/civilian-unemployment-rate.htm' },
-      { name: 'Federal Reserve Economic Data (FRED) — UNRATE', url: 'https://fred.stlouisfed.org/series/UNRATE' },
-      { name: 'BLS Historical Unemployment Data — Great Recession & Dot-com', url: 'https://www.bls.gov/cps/prev_yrs.htm' },
-      { name: 'BLS — COVID-19 Peak Unemployment (April 2020)', url: 'https://www.bls.gov/opub/mlr/2020/article/labor-market-activity-before-and-after-the-end-of-the-great-recession.htm' },
-    ]
-  },
-  'company-sources': {
-    title: 'Major Tech Company Headcount',
-    sources: [
-      { name: 'SEC Annual Filings (10-K) — employee headcount disclosures', url: 'https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&type=10-K' },
-      { name: 'Macrotrends — Google / Amazon / Microsoft / Meta employee count history', url: 'https://www.macrotrends.net/stocks/charts/GOOG/alphabet/number-of-employees' },
-      { name: 'Layoffs.fyi — 2022–2025 layoff tracker', url: 'https://layoffs.fyi' },
-    ]
-  },
-  'layoffs-sources': {
-    title: 'Historical Tech Layoffs',
-    sources: [
-      { name: 'Layoffs.fyi — comprehensive tech layoff tracker', url: 'https://layoffs.fyi' },
+  {
+    group: 'Section 2 — The Block Effect',
+    items: [
+      { name: 'Jack Dorsey on X — AI headcount reduction announcement, April 2025', url: 'https://x.com/jack/status/1909660839386624028' },
+      { name: 'Reuters — Block cuts 40% of staff citing AI productivity', url: 'https://www.reuters.com/technology/jack-dorsey-says-block-cutting-more-employees-2025-04-08/' },
+      { name: 'SEC 10-K Filings — Employee headcount (Google, Microsoft, Meta, Amazon, Salesforce)', url: 'https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&type=10-K' },
+      { name: 'Layoffs.fyi — 2022–2025 Tech Layoff Tracker', url: 'https://layoffs.fyi' },
       { name: 'TechCrunch Layoff Tracker 2022–2023', url: 'https://techcrunch.com/2023/01/05/tech-layoffs-soar-in-2022/' },
-      { name: 'BLS — Mass Layoffs Statistics', url: 'https://www.bls.gov/mls/' },
     ]
   },
-  'housing-sources': {
-    title: 'Housing Market Impact Data',
-    sources: [
+  {
+    group: 'Section 3 — The Economic Aftershock',
+    items: [
+      { name: 'BEA Personal Consumption Expenditures — Consumer spending data', url: 'https://www.bea.gov/data/consumer-spending/main' },
+      { name: 'IRS Statistics of Income — Tax burden by income level', url: 'https://www.irs.gov/statistics/soi-tax-stats-individual-statistical-tables-by-size-of-adjusted-gross-income' },
+      { name: 'BLS Monthly Unemployment Rate (U-3) — Current & historical', url: 'https://www.bls.gov/charts/employment-situation/civilian-unemployment-rate.htm' },
+      { name: 'FRED — UNRATE (Federal Reserve unemployment time series)', url: 'https://fred.stlouisfed.org/series/UNRATE' },
+      { name: 'BLS — Dot-com & Great Recession historical unemployment', url: 'https://www.bls.gov/cps/prev_yrs.htm' },
       { name: 'Zillow Research — Metro Home Value Index', url: 'https://www.zillow.com/research/data/' },
-      { name: 'NAR — Existing Home Sales & Metro Data', url: 'https://www.nar.realtor/research-and-statistics/housing-statistics/metropolitan-median-area-prices-and-affordability' },
-      { name: 'Federal Reserve — Financial Stability Report (housing correlation)', url: 'https://www.federalreserve.gov/publications/financial-stability-report.htm' },
+      { name: 'NAR — Metropolitan Median Home Prices', url: 'https://www.nar.realtor/research-and-statistics/housing-statistics/metropolitan-median-area-prices-and-affordability' },
+      { name: 'FRED — Unemployment Insurance Weekly Claims', url: 'https://fred.stlouisfed.org/series/ICSA' },
     ]
   },
-  'displacement-sources': {
-    title: 'Worker Displacement Outcomes',
-    sources: [
-      { name: 'BLS — Displaced Workers Survey', url: 'https://www.bls.gov/cps/displaced.htm' },
-      { name: 'Urban Institute — Job Displacement & Re-employment Research', url: 'https://www.urban.org/policy-centers/income-and-benefits-policy-center/projects/low-income-working-families' },
-      { name: 'Pew Research — State of American Jobs', url: 'https://www.pewresearch.org/social-trends/2016/10/06/the-state-of-american-jobs/' },
-    ]
-  },
-  'newroles-sources': {
-    title: 'Emerging AI Roles Projections',
-    sources: [
+  {
+    group: 'Section 4 — Where Do They Go?',
+    items: [
+      { name: 'BLS Displaced Workers Survey — Re-employment outcomes', url: 'https://www.bls.gov/cps/displaced.htm' },
       { name: 'World Economic Forum — Future of Jobs Report 2025', url: 'https://www.weforum.org/reports/the-future-of-jobs-report-2025/' },
       { name: 'McKinsey Global Institute — The Future of Work After COVID-19', url: 'https://www.mckinsey.com/featured-insights/future-of-work/the-future-of-work-after-covid-19' },
-      { name: 'LinkedIn Economic Graph — Emerging Jobs Report', url: 'https://economicgraph.linkedin.com/research/future-of-work' },
-    ]
-  },
-  'workforce-sources': {
-    title: 'US Tech Workforce Size & Wages',
-    sources: [
-      { name: 'BLS Occupational Employment Statistics — All Computer Occupations', url: 'https://www.bls.gov/oes/current/oes_nat.htm#15-0000' },
-      { name: 'CompTIA State of the Tech Workforce 2024', url: 'https://www.comptia.org/content/research/state-of-the-tech-workforce' },
-      { name: 'BLS — Quarterly Census of Employment & Wages (QCEW)', url: 'https://www.bls.gov/cew/' },
-    ]
-  },
-  'grads-sources': {
-    title: 'CS/CE Graduate Pipeline',
-    sources: [
-      { name: 'NCES Digest of Education Statistics — CS Bachelor\u2019s Degrees', url: 'https://nces.ed.gov/programs/digest/d23/tables/dt23_325.35.asp' },
-      { name: 'Computing Research Association — Taulbee Survey', url: 'https://cra.org/resources/taulbee-survey/' },
-      { name: 'NSF — Science & Engineering Degrees: 1966–2020', url: 'https://ncses.nsf.gov/pubs/nsf22321/' },
-    ]
-  },
-  'dorsey-sources': {
-    title: 'Jack Dorsey / Block AI Displacement Quote',
-    sources: [
-      { name: 'Block Inc. — Dorsey announcement on AI-driven headcount reduction', url: 'https://x.com/jack/status/1909660839386624028' },
-      { name: 'Reuters — Block cuts 40% of staff citing AI productivity gains', url: 'https://www.reuters.com/technology/jack-dorsey-says-block-cutting-more-employees-2025-04-08/' },
-    ]
-  },
-  'retraining-sources': {
-    title: 'Workforce Retraining Data',
-    sources: [
-      { name: 'CHIPS and Science Act — Workforce Development Provisions', url: 'https://www.nist.gov/system/files/documents/2022/08/09/CHIPS-Science-Act-Summary.pdf' },
-      { name: 'National Skills Coalition — Workforce Training Program Outcomes', url: 'https://nationalskillscoalition.org/resource/publications/' },
-      { name: 'Georgetown CEW — Returns on Investment in Training Programs', url: 'https://cew.georgetown.edu/cew-reports/roi/' },
-    ]
-  },
-  'precedents-sources': {
-    title: 'Historical Workforce Precedents',
-    sources: [
-      { name: 'BLS — Dot-com Recession Employment Data (2001–2003)', url: 'https://www.bls.gov/opub/mlr/2004/01/art1full.pdf' },
+      { name: 'CHIPS and Science Act — Workforce Development Provisions ($200M)', url: 'https://www.nist.gov/system/files/documents/2022/08/09/CHIPS-Science-Act-Summary.pdf' },
+      { name: 'Georgetown CEW — Returns on Investment in Workforce Training', url: 'https://cew.georgetown.edu/cew-reports/roi/' },
+      { name: 'BLS — Dot-com Recession Employment Recovery (2001–2003)', url: 'https://www.bls.gov/opub/mlr/2004/01/art1full.pdf' },
       { name: 'Economic Policy Institute — Manufacturing Job Loss & Rust Belt', url: 'https://www.epi.org/publication/manufacturing-job-loss/' },
-      { name: 'Federal Reserve — Long-run Employment Effects of Import Competition', url: 'https://www.federalreserve.gov/pubs/feds/2016/201676/201676pap.pdf' },
     ]
   },
-};
+];
 
 const modalOverlay = document.getElementById('source-modal-overlay');
 const modalBody = document.getElementById('source-modal-body');
-const modalTitle = document.getElementById('source-modal-title');
 const modalClose = document.getElementById('source-modal-close');
+const fab = document.getElementById('sources-fab');
 
-function openModal(key) {
-  const data = sourceData[key];
-  if (!data) return;
-  modalTitle.textContent = data.sources.length + ' Source' + (data.sources.length > 1 ? 's' : '') + ' — ' + data.title;
-  modalBody.innerHTML = data.sources.map(s =>
-    `<div class="source-item">
-      <div class="source-item-name">${s.name}</div>
-      <div class="source-item-url"><a href="${s.url}" target="_blank" rel="noopener">${s.url}</a></div>
+function openSourcesModal() {
+  modalBody.innerHTML = allSources.map(section =>
+    `<div class="source-group">
+      <div class="source-group-title">${section.group}</div>
+      ${section.items.map(s =>
+        `<div class="source-item">
+          <div class="source-item-name">${s.name}</div>
+          <div class="source-item-url"><a href="${s.url}" target="_blank" rel="noopener">${s.url}</a></div>
+        </div>`
+      ).join('')}
     </div>`
   ).join('');
   modalOverlay.classList.add('open');
@@ -2273,12 +2188,7 @@ function closeModal() {
   document.body.style.overflow = '';
 }
 
-document.querySelectorAll('.info-btn').forEach(btn => {
-  btn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    openModal(btn.dataset.modal);
-  });
-});
+fab.addEventListener('click', openSourcesModal);
 modalClose.addEventListener('click', closeModal);
 modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) closeModal(); });
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
