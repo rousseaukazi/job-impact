@@ -41,8 +41,7 @@
 }
 
 /* ── Base ── */
-html, body { overflow-x: hidden; }
-html { scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
+html { scroll-behavior: smooth; overflow-x: clip; max-width: 100%; }
 body {
   font-family: var(--font);
   background: var(--bg);
@@ -50,7 +49,11 @@ body {
   -webkit-font-smoothing: antialiased;
   line-height: 1.5;
   overflow-x: hidden;
+  max-width: 100vw;
+  -webkit-overflow-scrolling: touch;
 }
+/* Prevent any element from causing horizontal overflow */
+section, footer { overflow-x: hidden; max-width: 100%; }
 /* Theme transition only when explicitly toggling (avoids repaints on scroll) */
 html.theme-transitioning body,
 html.theme-transitioning .card,
@@ -937,7 +940,7 @@ footer {
 
 /* ── Responsive ── */
 @media (max-width: 768px) {
-  .container { padding: 0 20px; }
+  .container { padding: 0 16px; }
   section { padding: 80px 0; }
   .grid-2, .grid-3 { grid-template-columns: 1fr; }
   .slider-section { padding: 28px; }
@@ -1276,7 +1279,7 @@ footer {
             </div>
           </div>
           <!-- Pin 4: $350K+ at 100% -->
-          <div style="position:absolute; left:100%; transform:translateX(-50%);">
+          <div style="position:absolute; left:calc(100% - 4px); transform:translateX(-50%); max-width:80px; text-align:center;">
             <div style="width:2px; height:20px; background:#ff2d55; margin:0 auto;"></div>
             <div style="width:10px; height:10px; background:#ff2d55; border-radius:50%; margin:-5px auto 4px; transform:translateY(-4px);"></div>
             <div style="text-align:center; margin-top:4px;">
