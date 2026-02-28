@@ -249,14 +249,21 @@ section:nth-child(even) { background: var(--surface2); }
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 36px;
-  transition: background var(--transition), border-color var(--transition);
+  padding: 36px 36px 52px;
+  position: relative;
 }
 .card-sm {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
-  padding: 24px;
+  padding: 24px 24px 44px;
+  position: relative;
+}
+/* Info button: always bottom-right of its card */
+.card > .info-btn, .card-sm > .info-btn {
+  position: absolute;
+  bottom: 14px;
+  right: 14px;
 }
 
 /* ── Grid Layouts ── */
@@ -1026,7 +1033,7 @@ footer {
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0,0,0,0.3);
   z-index: 10000;
   align-items: center;
   justify-content: center;
@@ -1036,13 +1043,14 @@ footer {
 #source-modal-overlay.open { display: flex; }
 #source-modal {
   background: var(--surface);
+  /* slightly brighter in dark mode via box-shadow */
   border-radius: var(--radius);
   border: 1px solid var(--border);
   padding: 28px;
   max-width: 480px;
   width: 100%;
   position: relative;
-  box-shadow: 0 24px 64px rgba(0,0,0,0.3);
+  box-shadow: 0 24px 64px rgba(0,0,0,0.2), 0 0 0 1px rgba(255,255,255,0.08);
 }
 #source-modal-close {
   position: absolute;
@@ -1149,7 +1157,7 @@ footer {
     <!-- Metro Chart + Salary -->
     <div class="grid-2 reveal reveal-delay-2" style="margin-bottom:32px;">
       <div class="card">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;"><div class="chart-title" style="margin-bottom:0;">Top Tech Metro Areas</div><button class="info-btn" data-modal="metro-sources" aria-label="Data sources">ⓘ</button></div>
+        <div class="chart-title">Top Tech Metro Areas</div>
         <div id="metro-chart">
           <div class="metro-bar">
             <div class="metro-name">SF Bay Area</div>
@@ -1172,10 +1180,11 @@ footer {
             <div class="metro-track"><div class="metro-fill" data-width="29"><span>100K</span></div></div>
           </div>
         </div>
+      <button class="info-btn" data-modal="metro-sources" aria-label="Data sources">ⓘ</button>
       </div>
 
       <div class="card">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;"><div class="chart-title" style="margin-bottom:0;">Age Distribution of Tech Workers</div><button class="info-btn" data-modal="age-sources" aria-label="Data sources">ⓘ</button></div>
+        <div class="chart-title">Age Distribution of Tech Workers</div>
         <div class="age-bars" id="age-chart">
           <div class="age-bar-wrap">
             <div class="age-val">42%</div>
@@ -1199,15 +1208,13 @@ footer {
           </div>
         </div>
         <div class="mt-24" style="font-size:13px; color:var(--text2);">The tech workforce skews young — 73% under 45.</div>
+        <button class="info-btn" data-modal="age-sources" aria-label="Data sources">ⓘ</button>
       </div>
     </div>
 
     <!-- Salary bar -->
     <div class="card reveal reveal-delay-3">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-        <div class="chart-title" style="margin-bottom:0;">Salary Distribution — US Software Engineers</div>
-        <button class="info-btn" data-modal="salary-sources" aria-label="Data sources">ⓘ</button>
-      </div>
+      <div class="chart-title">Salary Distribution — US Software Engineers</div>
       <!-- Pinned marker chart: gradient bar with diamond pins + drop lines -->
       <div style="position:relative; padding: 0 0 72px; margin-top:8px;">
         <!-- Gradient bar -->
@@ -1257,6 +1264,7 @@ footer {
         <div style="font-size:13px; color:var(--text2);">+25% industry growth from 2018–2023. The sector expanded nearly every year for a decade.</div>
         <div style="background: var(--surface2); border-radius: 8px; padding: 8px 16px; font-size: 13px; font-weight: 700; color: var(--green);">+25% ↑ 2018–2023</div>
       </div>
+      <button class="info-btn" data-modal="salary-sources" aria-label="Data sources">ⓘ</button>
     </div>
 
   </div>
@@ -1327,6 +1335,7 @@ footer {
           </div>
         </div>
         <div style="margin-top:20px; font-size:13px; color:var(--text2);">FAANG+ combined: <strong style="color:var(--text)" id="faang-total">~450K cuts</strong> at 40%</div>
+        <button class="info-btn" data-modal="company-sources" aria-label="Data sources">ⓘ</button>
       </div>
 
       <div class="card">
@@ -1349,6 +1358,7 @@ footer {
           </div>
         </div>
         <div style="margin-top:16px; font-size:13px; color:var(--red); font-weight:600;">This would be the largest white-collar displacement in American history — <span id="hist-mult">10×</span> larger than 2022–23 layoffs.</div>
+        <button class="info-btn" data-modal="layoffs-sources" aria-label="Data sources">ⓘ</button>
       </div>
     </div>
 
@@ -1377,7 +1387,7 @@ footer {
     <!-- Donut + breakdown -->
     <div class="grid-2 reveal reveal-delay-2" style="margin-bottom:32px;">
       <div class="card" style="display:flex; flex-direction:column; align-items:center;">
-        <div style="display:flex;justify-content:space-between;align-items:center;width:100%;margin-bottom:16px;"><div class="chart-title" style="margin-bottom:0;">Economic Impact Breakdown</div><button class="info-btn" data-modal="economic-sources" aria-label="Data sources">ⓘ</button></div>
+        <div class="chart-title">Economic Impact Breakdown</div>
         <svg id="donut-svg" viewBox="0 0 240 240" width="240" height="240" style="display:block;margin:0 auto;overflow:visible;">
   <defs>
     <style>
@@ -1423,7 +1433,7 @@ footer {
           <div class="legend-item"><div class="legend-dot" style="background:#ff9500;"></div>Tax Revenue Loss $99B</div>
           <div class="legend-item"><div class="legend-dot" style="background:#ff3b30;"></div>Housing Impact $180B</div>
           <div class="legend-item"><div class="legend-dot" style="background:#5856d6;"></div>UI Payouts $34B</div>
-        </div>
+        <button class="info-btn" data-modal="economic-sources" aria-label="Data sources">ⓘ</button>
       </div>
 
       <div class="card">
@@ -1453,6 +1463,7 @@ footer {
             <div style="font-size:13px; color:var(--text2);">$500/wk × 26 weeks for 2.6M claimants. US system designed for ~5M total. This arrives in 6–12 months.</div>
           </div>
         </div>
+        <button class="info-btn" data-modal="economic-sources" aria-label="Data sources">ⓘ</button>
       </div>
     </div>
 
@@ -1491,11 +1502,12 @@ footer {
           <div class="city-label">Housing/mortgage<br>market: −$180B</div>
         </div>
       </div>
+      <button class="info-btn" data-modal="housing-sources" aria-label="Data sources">ⓘ</button>
     </div>
 
     <!-- Unemployment rate card -->
     <div class="card reveal reveal-delay-3" style="margin-bottom:32px;">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;"><div class="chart-title" style="margin-bottom:0;">Unemployment Rate — Before &amp; After</div><button class="info-btn" data-modal="unemployment-sources" aria-label="Data sources">ⓘ</button></div>
+      <div class="chart-title">Unemployment Rate — Before &amp; After</div>
       <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:24px; margin:24px 0 28px;">
         <div style="text-align:center; padding:24px 16px; background:var(--surface2); border-radius:var(--radius-sm); border:1px solid var(--border);">
           <div style="font-size:13px; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:var(--text2); margin-bottom:12px;">Today</div>
@@ -1587,6 +1599,7 @@ footer {
           <div class="timeline-desc">State budgets in CA, WA, TX face $20–40B shortfalls. Federal income tax gap materializes: −$50B/yr. City services in tech hubs — schools, transit, public health — begin budget cuts. Housing correction deepens. Total addressable damage: −$340B across the full economic system.</div>
         </div>
       </div>
+      <button class="info-btn" data-modal="economic-sources" aria-label="Data sources">ⓘ</button>
     </div>
 
   </div>
@@ -1640,6 +1653,7 @@ footer {
           <div class="dest-pct">10%</div>
         </div>
       </div>
+      <button class="info-btn" data-modal="displacement-sources" aria-label="Data sources">ⓘ</button>
     </div>
 
     <!-- New roles vs displaced -->
@@ -1669,6 +1683,7 @@ footer {
         <div style="margin-top:16px; font-size:13px; color:var(--text2);">
           Emerging roles: AI trainers (200K), Human-AI workflow designers (100K), AI safety & alignment (50K)
         </div>
+        <button class="info-btn" data-modal="newroles-sources" aria-label="Data sources">ⓘ</button>
       </div>
 
       <div class="card">
@@ -1681,6 +1696,7 @@ footer {
           CHIPS Act allocated $200M for tech retraining. Divided by 2.6M displaced workers = <strong style="color:var(--red);">$77 per person</strong>.<br><br>
           Average retraining program costs $5K–$40K and takes 6–18 months. Only ~55% lead to comparable salary.
         </div>
+        <button class="info-btn" data-modal="retraining-sources" aria-label="Data sources">ⓘ</button>
       </div>
     </div>
 
@@ -1722,6 +1738,7 @@ footer {
           </div>
         </div>
       </div>
+      <button class="info-btn" data-modal="precedents-sources" aria-label="Data sources">ⓘ</button>
     </div>
 
   </div>
@@ -2120,6 +2137,62 @@ const sourceData = {
       { name: 'Federal Reserve Economic Data (FRED) — UNRATE', url: 'https://fred.stlouisfed.org/series/UNRATE' },
       { name: 'BLS Historical Unemployment Data — Great Recession & Dot-com', url: 'https://www.bls.gov/cps/prev_yrs.htm' },
       { name: 'BLS — COVID-19 Peak Unemployment (April 2020)', url: 'https://www.bls.gov/opub/mlr/2020/article/labor-market-activity-before-and-after-the-end-of-the-great-recession.htm' },
+    ]
+  },
+  'company-sources': {
+    title: 'Major Tech Company Headcount',
+    sources: [
+      { name: 'SEC Annual Filings (10-K) — employee headcount disclosures', url: 'https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&type=10-K' },
+      { name: 'Macrotrends — Google / Amazon / Microsoft / Meta employee count history', url: 'https://www.macrotrends.net/stocks/charts/GOOG/alphabet/number-of-employees' },
+      { name: 'Layoffs.fyi — 2022–2025 layoff tracker', url: 'https://layoffs.fyi' },
+    ]
+  },
+  'layoffs-sources': {
+    title: 'Historical Tech Layoffs',
+    sources: [
+      { name: 'Layoffs.fyi — comprehensive tech layoff tracker', url: 'https://layoffs.fyi' },
+      { name: 'TechCrunch Layoff Tracker 2022–2023', url: 'https://techcrunch.com/2023/01/05/tech-layoffs-soar-in-2022/' },
+      { name: 'BLS — Mass Layoffs Statistics', url: 'https://www.bls.gov/mls/' },
+    ]
+  },
+  'housing-sources': {
+    title: 'Housing Market Impact Data',
+    sources: [
+      { name: 'Zillow Research — Metro Home Value Index', url: 'https://www.zillow.com/research/data/' },
+      { name: 'NAR — Existing Home Sales & Metro Data', url: 'https://www.nar.realtor/research-and-statistics/housing-statistics/metropolitan-median-area-prices-and-affordability' },
+      { name: 'Federal Reserve — Financial Stability Report (housing correlation)', url: 'https://www.federalreserve.gov/publications/financial-stability-report.htm' },
+    ]
+  },
+  'displacement-sources': {
+    title: 'Worker Displacement Outcomes',
+    sources: [
+      { name: 'BLS — Displaced Workers Survey', url: 'https://www.bls.gov/cps/displaced.htm' },
+      { name: 'Urban Institute — Job Displacement & Re-employment Research', url: 'https://www.urban.org/policy-centers/income-and-benefits-policy-center/projects/low-income-working-families' },
+      { name: 'Pew Research — State of American Jobs', url: 'https://www.pewresearch.org/social-trends/2016/10/06/the-state-of-american-jobs/' },
+    ]
+  },
+  'newroles-sources': {
+    title: 'Emerging AI Roles Projections',
+    sources: [
+      { name: 'World Economic Forum — Future of Jobs Report 2025', url: 'https://www.weforum.org/reports/the-future-of-jobs-report-2025/' },
+      { name: 'McKinsey Global Institute — The Future of Work After COVID-19', url: 'https://www.mckinsey.com/featured-insights/future-of-work/the-future-of-work-after-covid-19' },
+      { name: 'LinkedIn Economic Graph — Emerging Jobs Report', url: 'https://economicgraph.linkedin.com/research/future-of-work' },
+    ]
+  },
+  'retraining-sources': {
+    title: 'Workforce Retraining Data',
+    sources: [
+      { name: 'CHIPS and Science Act — Workforce Development Provisions', url: 'https://www.nist.gov/system/files/documents/2022/08/09/CHIPS-Science-Act-Summary.pdf' },
+      { name: 'National Skills Coalition — Workforce Training Program Outcomes', url: 'https://nationalskillscoalition.org/resource/publications/' },
+      { name: 'Georgetown CEW — Returns on Investment in Training Programs', url: 'https://cew.georgetown.edu/cew-reports/roi/' },
+    ]
+  },
+  'precedents-sources': {
+    title: 'Historical Workforce Precedents',
+    sources: [
+      { name: 'BLS — Dot-com Recession Employment Data (2001–2003)', url: 'https://www.bls.gov/opub/mlr/2004/01/art1full.pdf' },
+      { name: 'Economic Policy Institute — Manufacturing Job Loss & Rust Belt', url: 'https://www.epi.org/publication/manufacturing-job-loss/' },
+      { name: 'Federal Reserve — Long-run Employment Effects of Import Competition', url: 'https://www.federalreserve.gov/pubs/feds/2016/201676/201676pap.pdf' },
     ]
   },
 };
