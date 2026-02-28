@@ -369,12 +369,12 @@ section:nth-child(even) { background: var(--surface2); }
 }
 .age-bar {
   width: 100%;
-  background: var(--accent);
   border-radius: 6px 6px 0 0;
   margin-top: auto;
-  opacity: 0.85;
+  opacity: 0.9;
   transform: scaleY(0);
   transform-origin: bottom center;
+  /* height set via inline style from data-height attribute */
 }
 
 .age-label {
@@ -1002,6 +1002,77 @@ footer {
 @media (max-width: 600px) {
   .roles-comparison { flex-direction: column; }
 }
+
+/* ── Source Info Buttons ── */
+.info-btn {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  background: var(--surface2);
+  color: var(--text2);
+  font-size: 13px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+  line-height: 1;
+}
+.info-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--surface); }
+
+/* ── Source Modal ── */
+#source-modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 10000;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  backdrop-filter: blur(4px);
+}
+#source-modal-overlay.open { display: flex; }
+#source-modal {
+  background: var(--surface);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  padding: 28px;
+  max-width: 480px;
+  width: 100%;
+  position: relative;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.3);
+}
+#source-modal-close {
+  position: absolute;
+  top: 16px; right: 16px;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: var(--surface2);
+  color: var(--text2);
+  font-size: 16px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+#source-modal-title {
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text2);
+  margin-bottom: 16px;
+}
+.source-item {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+.source-item:last-child { border-bottom: none; padding-bottom: 0; }
+.source-item-name { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+.source-item-url { font-size: 12px; color: var(--accent); word-break: break-all; }
+.source-item-url a { color: var(--accent); text-decoration: none; }
+.source-item-url a:hover { text-decoration: underline; }
 </style>
 </head>
 <body>
@@ -1010,6 +1081,16 @@ footer {
 <div id="loader">
   <div class="loader-logo">AI Displacement Report</div>
   <div class="loader-bar-track"><div class="loader-bar-fill" id="loader-fill"></div></div>
+</div>
+
+
+<!-- Source Modal -->
+<div id="source-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="source-modal-title">
+  <div id="source-modal">
+    <button id="source-modal-close" aria-label="Close">✕</button>
+    <div id="source-modal-title">Data Sources</div>
+    <div id="source-modal-body"></div>
+  </div>
 </div>
 
 <!-- Progress bar -->
@@ -1068,7 +1149,7 @@ footer {
     <!-- Metro Chart + Salary -->
     <div class="grid-2 reveal reveal-delay-2" style="margin-bottom:32px;">
       <div class="card">
-        <div class="chart-title">Top Tech Metro Areas</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;"><div class="chart-title" style="margin-bottom:0;">Top Tech Metro Areas</div><button class="info-btn" data-modal="metro-sources" aria-label="Data sources">ⓘ</button></div>
         <div id="metro-chart">
           <div class="metro-bar">
             <div class="metro-name">SF Bay Area</div>
@@ -1094,26 +1175,26 @@ footer {
       </div>
 
       <div class="card">
-        <div class="chart-title">Age Distribution of Tech Workers</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;"><div class="chart-title" style="margin-bottom:0;">Age Distribution of Tech Workers</div><button class="info-btn" data-modal="age-sources" aria-label="Data sources">ⓘ</button></div>
         <div class="age-bars" id="age-chart">
           <div class="age-bar-wrap">
             <div class="age-val">42%</div>
-            <div class="age-bar" data-height="85" style="background: var(--accent);"></div>
+            <div class="age-bar" data-height="85" style="height:85px; background: var(--accent);"></div>
             <div class="age-label">25–34</div>
           </div>
           <div class="age-bar-wrap">
             <div class="age-val">31%</div>
-            <div class="age-bar" data-height="63" style="background: #5ac8fa;"></div>
+            <div class="age-bar" data-height="63" style="height:63px; background: #5ac8fa;"></div>
             <div class="age-label">35–44</div>
           </div>
           <div class="age-bar-wrap">
             <div class="age-val">18%</div>
-            <div class="age-bar" data-height="37" style="background: #5856d6;"></div>
+            <div class="age-bar" data-height="37" style="height:37px; background: #5856d6;"></div>
             <div class="age-label">45–54</div>
           </div>
           <div class="age-bar-wrap">
             <div class="age-val">9%</div>
-            <div class="age-bar" data-height="18" style="background: #af52de;"></div>
+            <div class="age-bar" data-height="18" style="height:18px; background: #af52de;"></div>
             <div class="age-label">55+</div>
           </div>
         </div>
@@ -1123,29 +1204,56 @@ footer {
 
     <!-- Salary bar -->
     <div class="card reveal reveal-delay-3">
-      <div class="chart-title">Salary Distribution — US Software Engineers</div>
-      <div style="position:relative; margin-top:40px;">
-        <div class="salary-track"></div>
-        <div class="salary-markers">
-          <div class="salary-marker">
-            <div class="salary-marker-val">$85K</div>
-            <div class="salary-marker-lbl">25th Pct.</div>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+        <div class="chart-title" style="margin-bottom:0;">Salary Distribution — US Software Engineers</div>
+        <button class="info-btn" data-modal="salary-sources" aria-label="Data sources">ⓘ</button>
+      </div>
+      <!-- Pinned marker chart: gradient bar with diamond pins + drop lines -->
+      <div style="position:relative; padding: 0 0 72px; margin-top:8px;">
+        <!-- Gradient bar -->
+        <div style="height:20px; border-radius:10px; background:linear-gradient(90deg,#34c759 0%,#0071e3 37%,#5856d6 72%,#ff2d55 100%); position:relative; z-index:1;"></div>
+        <!-- Pins: positioned at % along bar -->
+        <!-- $85K = 0%, $130K = 37%, $212K = 72%, $350K = 100% -->
+        <div style="position:relative; height:72px;">
+          <!-- Pin 1: $85K at 0% -->
+          <div style="position:absolute; left:0%; transform:translateX(-50%);">
+            <div style="width:2px; height:20px; background:#34c759; margin:0 auto;"></div>
+            <div style="width:10px; height:10px; background:#34c759; border-radius:50%; margin:-5px auto 4px; transform:translateY(-4px);"></div>
+            <div style="text-align:center; margin-top:4px;">
+              <div style="font-size:16px; font-weight:900; color:var(--text); letter-spacing:-0.02em;">$85K</div>
+              <div style="font-size:11px; color:var(--text2); margin-top:2px;">25th pct.</div>
+            </div>
           </div>
-          <div class="salary-marker">
-            <div class="salary-marker-val">$130K</div>
-            <div class="salary-marker-lbl">Median</div>
+          <!-- Pin 2: $130K at 37% -->
+          <div style="position:absolute; left:37%; transform:translateX(-50%);">
+            <div style="width:2px; height:20px; background:#0071e3; margin:0 auto;"></div>
+            <div style="width:10px; height:10px; background:#0071e3; border-radius:50%; margin:-5px auto 4px; transform:translateY(-4px);"></div>
+            <div style="text-align:center; margin-top:4px;">
+              <div style="font-size:16px; font-weight:900; color:var(--text); letter-spacing:-0.02em;">$130K</div>
+              <div style="font-size:11px; color:var(--text2); margin-top:2px;">Median</div>
+            </div>
           </div>
-          <div class="salary-marker">
-            <div class="salary-marker-val">$212K</div>
-            <div class="salary-marker-lbl">FAANG Avg</div>
+          <!-- Pin 3: $212K at 72% -->
+          <div style="position:absolute; left:72%; transform:translateX(-50%);">
+            <div style="width:2px; height:20px; background:#5856d6; margin:0 auto;"></div>
+            <div style="width:10px; height:10px; background:#5856d6; border-radius:50%; margin:-5px auto 4px; transform:translateY(-4px);"></div>
+            <div style="text-align:center; margin-top:4px;">
+              <div style="font-size:16px; font-weight:900; color:var(--text); letter-spacing:-0.02em;">$212K</div>
+              <div style="font-size:11px; color:var(--text2); margin-top:2px;">FAANG avg</div>
+            </div>
           </div>
-          <div class="salary-marker">
-            <div class="salary-marker-val">$350K+</div>
-            <div class="salary-marker-lbl">Top 10%</div>
+          <!-- Pin 4: $350K+ at 100% -->
+          <div style="position:absolute; left:100%; transform:translateX(-50%);">
+            <div style="width:2px; height:20px; background:#ff2d55; margin:0 auto;"></div>
+            <div style="width:10px; height:10px; background:#ff2d55; border-radius:50%; margin:-5px auto 4px; transform:translateY(-4px);"></div>
+            <div style="text-align:center; margin-top:4px;">
+              <div style="font-size:16px; font-weight:900; color:var(--text); letter-spacing:-0.02em;">$350K+</div>
+              <div style="font-size:11px; color:var(--text2); margin-top:2px;">Top 10%</div>
+            </div>
           </div>
         </div>
       </div>
-      <div class="mt-16" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-top:8px;">
         <div style="font-size:13px; color:var(--text2);">+25% industry growth from 2018–2023. The sector expanded nearly every year for a decade.</div>
         <div style="background: var(--surface2); border-radius: 8px; padding: 8px 16px; font-size: 13px; font-weight: 700; color: var(--green);">+25% ↑ 2018–2023</div>
       </div>
@@ -1269,7 +1377,7 @@ footer {
     <!-- Donut + breakdown -->
     <div class="grid-2 reveal reveal-delay-2" style="margin-bottom:32px;">
       <div class="card" style="display:flex; flex-direction:column; align-items:center;">
-        <div class="chart-title" style="align-self:flex-start;">Economic Impact Breakdown</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;width:100%;margin-bottom:16px;"><div class="chart-title" style="margin-bottom:0;">Economic Impact Breakdown</div><button class="info-btn" data-modal="economic-sources" aria-label="Data sources">ⓘ</button></div>
         <svg id="donut-svg" viewBox="0 0 240 240" width="240" height="240" style="display:block;margin:0 auto;overflow:visible;">
   <defs>
     <style>
@@ -1387,7 +1495,7 @@ footer {
 
     <!-- Unemployment rate card -->
     <div class="card reveal reveal-delay-3" style="margin-bottom:32px;">
-      <div class="chart-title">Unemployment Rate — Before &amp; After</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;"><div class="chart-title" style="margin-bottom:0;">Unemployment Rate — Before &amp; After</div><button class="info-btn" data-modal="unemployment-sources" aria-label="Data sources">ⓘ</button></div>
       <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:24px; margin:24px 0 28px;">
         <div style="text-align:center; padding:24px 16px; background:var(--surface2); border-radius:var(--radius-sm); border:1px solid var(--border);">
           <div style="font-size:13px; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:var(--text2); margin-bottom:12px;">Today</div>
@@ -1968,6 +2076,87 @@ window.addEventListener('load', () => {
     setTimeout(dismissLoader, 180);
   }, 120);
 });
+
+/* ══════════════════════════════════════════════════
+   SOURCE MODAL
+══════════════════════════════════════════════════ */
+const sourceData = {
+  'metro-sources': {
+    title: 'Top Tech Metro Areas',
+    sources: [
+      { name: 'CompTIA State of the Tech Workforce 2024', url: 'https://www.comptia.org/content/research/state-of-the-tech-workforce' },
+      { name: 'Bureau of Labor Statistics — Occupational Employment Statistics', url: 'https://www.bls.gov/oes/current/oes_nat.htm' },
+      { name: 'CBRE Tech Talent Report 2024', url: 'https://www.cbre.com/insights/reports/scoring-tech-talent' },
+    ]
+  },
+  'age-sources': {
+    title: 'Age Distribution of Tech Workers',
+    sources: [
+      { name: 'Bureau of Labor Statistics — Current Population Survey (CPS)', url: 'https://www.bls.gov/cps/cpsaat11.htm' },
+      { name: 'CompTIA State of the Tech Workforce 2024', url: 'https://www.comptia.org/content/research/state-of-the-tech-workforce' },
+    ]
+  },
+  'salary-sources': {
+    title: 'Salary Distribution — US Software Engineers',
+    sources: [
+      { name: 'BLS Occupational Employment & Wage Statistics — Software Developers (SOC 15-1252)', url: 'https://www.bls.gov/oes/current/oes151252.htm' },
+      { name: 'Levels.fyi 2024 Salary Report', url: 'https://www.levels.fyi/2024/' },
+      { name: 'Glassdoor Software Engineer Salary Data', url: 'https://www.glassdoor.com/Salaries/software-engineer-salary-SRCH_KO0,17.htm' },
+    ]
+  },
+  'economic-sources': {
+    title: 'Economic Impact Breakdown',
+    sources: [
+      { name: 'Bureau of Economic Analysis — Personal Consumption Expenditures', url: 'https://www.bea.gov/data/consumer-spending/main' },
+      { name: 'IRS Statistics of Income — Individual Income Tax Returns', url: 'https://www.irs.gov/statistics/soi-tax-stats-individual-statistical-tables-by-size-of-adjusted-gross-income' },
+      { name: 'Urban Institute — Economic Multiplier Effects of Job Loss', url: 'https://www.urban.org' },
+      { name: 'Federal Reserve — Unemployment Insurance Claims Data (FRED)', url: 'https://fred.stlouisfed.org/series/ICSA' },
+    ]
+  },
+  'unemployment-sources': {
+    title: 'Unemployment Rate Data',
+    sources: [
+      { name: 'Bureau of Labor Statistics — Monthly Unemployment Rate (U-3)', url: 'https://www.bls.gov/charts/employment-situation/civilian-unemployment-rate.htm' },
+      { name: 'Federal Reserve Economic Data (FRED) — UNRATE', url: 'https://fred.stlouisfed.org/series/UNRATE' },
+      { name: 'BLS Historical Unemployment Data — Great Recession & Dot-com', url: 'https://www.bls.gov/cps/prev_yrs.htm' },
+      { name: 'BLS — COVID-19 Peak Unemployment (April 2020)', url: 'https://www.bls.gov/opub/mlr/2020/article/labor-market-activity-before-and-after-the-end-of-the-great-recession.htm' },
+    ]
+  },
+};
+
+const modalOverlay = document.getElementById('source-modal-overlay');
+const modalBody = document.getElementById('source-modal-body');
+const modalTitle = document.getElementById('source-modal-title');
+const modalClose = document.getElementById('source-modal-close');
+
+function openModal(key) {
+  const data = sourceData[key];
+  if (!data) return;
+  modalTitle.textContent = data.sources.length + ' Source' + (data.sources.length > 1 ? 's' : '') + ' — ' + data.title;
+  modalBody.innerHTML = data.sources.map(s =>
+    `<div class="source-item">
+      <div class="source-item-name">${s.name}</div>
+      <div class="source-item-url"><a href="${s.url}" target="_blank" rel="noopener">${s.url}</a></div>
+    </div>`
+  ).join('');
+  modalOverlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  modalOverlay.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.querySelectorAll('.info-btn').forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    openModal(btn.dataset.modal);
+  });
+});
+modalClose.addEventListener('click', closeModal);
+modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) closeModal(); });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
 </script>
 </body>
 </html>
