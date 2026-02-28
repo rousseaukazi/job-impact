@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The AI Displacement — America's Tech Workforce</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400&display=swap" rel="stylesheet">
 <style>
 /* ── Reset ── */
@@ -42,10 +44,24 @@ body {
   font-family: var(--font);
   background: var(--bg);
   color: var(--text);
-  transition: background var(--transition), color var(--transition);
   -webkit-font-smoothing: antialiased;
   line-height: 1.5;
   overflow-x: hidden;
+}
+/* Theme transition only when explicitly toggling (avoids repaints on scroll) */
+html.theme-transitioning body,
+html.theme-transitioning .card,
+html.theme-transitioning .card-sm,
+html.theme-transitioning section,
+html.theme-transitioning footer,
+html.theme-transitioning #theme-toggle,
+html.theme-transitioning .quote-card,
+html.theme-transitioning .slider-section,
+html.theme-transitioning .big-stat-hero,
+html.theme-transitioning .retraining-gap,
+html.theme-transitioning .city-card,
+html.theme-transitioning .prec-item {
+  transition: background 0.35s ease, color 0.35s ease, border-color 0.35s ease;
 }
 
 /* ── Theme Toggle ── */
@@ -868,12 +884,19 @@ footer {
 /* ── Scroll Animations ── */
 .reveal {
   opacity: 0;
-  transform: translateY(40px);
-  transition: opacity 0.8s ease, transform 0.8s ease;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  will-change: transform, opacity;
 }
 .reveal.visible {
   opacity: 1;
   transform: translateY(0);
+  will-change: auto;
+}
+/* Off-screen sections skipped by rendering engine */
+#s2, #s3, #s4 {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 900px;
 }
 .reveal-delay-1 { transition-delay: 0.1s; }
 .reveal-delay-2 { transition-delay: 0.2s; }
@@ -1285,6 +1308,77 @@ footer {
       </div>
     </div>
 
+    <!-- Unemployment rate card -->
+    <div class="card reveal reveal-delay-3" style="margin-bottom:32px;">
+      <div class="chart-title">Unemployment Rate — Before &amp; After</div>
+      <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:24px; margin:24px 0 28px;">
+        <div style="text-align:center; padding:24px 16px; background:var(--surface2); border-radius:var(--radius-sm); border:1px solid var(--border);">
+          <div style="font-size:13px; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:var(--text2); margin-bottom:12px;">Today</div>
+          <div style="font-size:52px; font-weight:900; letter-spacing:-0.03em; color:var(--green); line-height:1;">4.1%</div>
+          <div style="font-size:13px; color:var(--text2); margin-top:8px;">6.8M unemployed<br>of 168M labor force</div>
+        </div>
+        <div style="text-align:center; padding:24px 16px; background:rgba(255,59,48,0.06); border-radius:var(--radius-sm); border:1px solid rgba(255,59,48,0.2);">
+          <div style="font-size:13px; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:var(--text2); margin-bottom:12px;">After 40% Cuts</div>
+          <div style="font-size:52px; font-weight:900; letter-spacing:-0.03em; color:var(--red); line-height:1;">5.6%</div>
+          <div style="font-size:13px; color:var(--text2); margin-top:8px;">9.4M unemployed<br>+2.6M in 12–24 months</div>
+        </div>
+        <div style="text-align:center; padding:24px 16px; background:var(--surface2); border-radius:var(--radius-sm); border:1px solid var(--border);">
+          <div style="font-size:13px; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:var(--text2); margin-bottom:12px;">Rate Increase</div>
+          <div style="font-size:52px; font-weight:900; letter-spacing:-0.03em; color:var(--orange); line-height:1;">+37%</div>
+          <div style="font-size:13px; color:var(--text2); margin-top:8px;">+1.5pp jump<br>fastest spike since 2008</div>
+        </div>
+      </div>
+      <!-- Unemployment comparison bars -->
+      <div style="margin-top:8px;">
+        <div style="font-size:13px; font-weight:700; color:var(--text2); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:16px;">Historical Peak Unemployment Comparisons</div>
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <div style="display:flex; align-items:center; gap:14px;">
+            <div style="font-size:13px; font-weight:600; color:var(--text); min-width:170px;">Today (2025)</div>
+            <div style="flex:1; height:28px; background:var(--surface2); border-radius:6px; overflow:hidden;">
+              <div style="height:100%; width:27.9%; background:var(--green); border-radius:6px; display:flex; align-items:center; padding-left:10px;">
+                <span style="font-size:12px; font-weight:700; color:white;">4.1%</span>
+              </div>
+            </div>
+          </div>
+          <div style="display:flex; align-items:center; gap:14px;">
+            <div style="font-size:13px; font-weight:600; color:var(--text); min-width:170px;">This Scenario</div>
+            <div style="flex:1; height:28px; background:var(--surface2); border-radius:6px; overflow:hidden;">
+              <div style="height:100%; width:38.1%; background:var(--red); border-radius:6px; display:flex; align-items:center; padding-left:10px;">
+                <span style="font-size:12px; font-weight:700; color:white;">5.6%</span>
+              </div>
+            </div>
+          </div>
+          <div style="display:flex; align-items:center; gap:14px;">
+            <div style="font-size:13px; font-weight:600; color:var(--text); min-width:170px;">Dot-com bust peak</div>
+            <div style="flex:1; height:28px; background:var(--surface2); border-radius:6px; overflow:hidden;">
+              <div style="height:100%; width:42.9%; background:var(--orange); border-radius:6px; display:flex; align-items:center; padding-left:10px;">
+                <span style="font-size:12px; font-weight:700; color:white;">6.3%</span>
+              </div>
+            </div>
+          </div>
+          <div style="display:flex; align-items:center; gap:14px;">
+            <div style="font-size:13px; font-weight:600; color:var(--text); min-width:170px;">2008 recession peak</div>
+            <div style="flex:1; height:28px; background:var(--surface2); border-radius:6px; overflow:hidden;">
+              <div style="height:100%; width:68.1%; background:#5856d6; border-radius:6px; display:flex; align-items:center; padding-left:10px;">
+                <span style="font-size:12px; font-weight:700; color:white;">10.0%</span>
+              </div>
+            </div>
+          </div>
+          <div style="display:flex; align-items:center; gap:14px;">
+            <div style="font-size:13px; font-weight:600; color:var(--text); min-width:170px;">COVID-19 peak</div>
+            <div style="flex:1; height:28px; background:var(--surface2); border-radius:6px; overflow:hidden;">
+              <div style="height:100%; width:100%; background:#af52de; border-radius:6px; display:flex; align-items:center; padding-left:10px;">
+                <span style="font-size:12px; font-weight:700; color:white;">14.7%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:20px; padding:14px 18px; background:rgba(255,149,0,0.08); border-radius:10px; border-left:3px solid var(--orange); font-size:13px; color:var(--text2); line-height:1.6;">
+        <strong style="color:var(--text);">Key distinction:</strong> The 2008 recession took 2 years to peak at 10%. This scenario could add 2.6M unemployed in as little as 12–18 months — concentrated in a single sector, in a handful of cities — creating a localized shock that's worse than the national numbers suggest. Tech metros like SF and Seattle could see local unemployment rates of 8–12%.
+      </div>
+    </div>
+
     <!-- Multiplier timeline -->
     <div class="card reveal reveal-delay-4">
       <div class="chart-title">Multiplier Effect — How It Cascades</div>
@@ -1485,16 +1579,24 @@ function getTheme() {
 }
 
 function setTheme(theme) {
+  // Enable transitions only during manual toggle (not on initial load)
+  html.classList.add('theme-transitioning');
   html.setAttribute('data-theme', theme);
   toggleBtn.textContent = theme === 'dark' ? '☀️' : '🌙';
   localStorage.setItem('theme', theme);
-  // Redraw canvas charts when theme changes
   setTimeout(() => {
+    html.classList.remove('theme-transitioning');
     drawDonut();
-  }, 50);
+  }, 400);
 }
 
-setTheme(getTheme());
+// Apply theme immediately on load without transition class
+(function() {
+  const stored = localStorage.getItem('theme');
+  const t = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  html.setAttribute('data-theme', t);
+  toggleBtn.textContent = t === 'dark' ? '☀️' : '🌙';
+})();
 
 toggleBtn.addEventListener('click', () => {
   const current = html.getAttribute('data-theme');
@@ -1502,15 +1604,21 @@ toggleBtn.addEventListener('click', () => {
 });
 
 /* ══════════════════════════════════════════════════
-   PROGRESS BAR
+   PROGRESS BAR — throttled with rAF + passive
 ══════════════════════════════════════════════════ */
 const progressBar = document.getElementById('progress');
+let scrollTicking = false;
 window.addEventListener('scroll', () => {
-  const scrollTop = document.documentElement.scrollTop;
-  const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-  const pct = (scrollTop / scrollHeight) * 100;
-  progressBar.style.width = pct + '%';
-});
+  if (!scrollTicking) {
+    requestAnimationFrame(() => {
+      const scrollTop = document.documentElement.scrollTop;
+      const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      progressBar.style.width = ((scrollTop / scrollHeight) * 100) + '%';
+      scrollTicking = false;
+    });
+    scrollTicking = true;
+  }
+}, { passive: true });
 
 /* ══════════════════════════════════════════════════
    SECTION NAV DOTS
@@ -1639,51 +1747,59 @@ function fmtJobs(n) {
   return n.toString();
 }
 
-function updateSlider(pct) {
+// Fast path: numbers & bars only (runs on every slider event)
+function updateSliderFast(pct) {
   const totalWorkers = 6500000;
   const jobsLost = Math.round(totalWorkers * pct / 100);
 
-  // Update displays
   jobsDisplay.textContent = jobsLost.toLocaleString();
   pctDisplay.textContent = pct;
   pctCompany.textContent = pct;
 
-  // Update dots
-  const dotsRed = Math.round(TOTAL_DOTS * pct / 100);
-  dots100.forEach((dot, i) => {
-    dot.classList.toggle('displaced', i < dotsRed);
-  });
-
-  // Update company bars
   Object.entries(companybases).forEach(([key, base]) => {
     const cuts = Math.round(base * pct / 100);
     const fill = document.getElementById('cf-' + key);
     const val = document.getElementById('cv-' + key);
     if (fill && val) {
-      // Max = amazon cuts at 60%
       const maxCuts = 300000 * 60 / 100;
       fill.style.width = Math.min((cuts / maxCuts) * 100, 100) + '%';
       val.textContent = fmtJobs(cuts);
     }
   });
 
-  // FAANG total
   const faang = Math.round((300000 + 228000 + 182000 + 87000 + 73000) * pct / 100);
   faangTotal.textContent = '~' + fmtJobs(faang) + ' cuts';
 
-  // Historical bar
   const mult = pct === 0 ? 0 : Math.round(jobsLost / 260000);
   histMult.textContent = mult + '×';
   histScenarioVal.textContent = fmtJobs(jobsLost);
 
-  // Track color
   const pctPos = pct / 60;
-  const r = slider;
-  const color = `linear-gradient(90deg, var(--accent) 0%, var(--red) ${pctPos * 100}%, var(--surface2) ${pctPos * 100}%)`;
-  r.style.background = `linear-gradient(90deg, #2997ff 0%, #ff3b30 ${pctPos * 100}%, var(--surface2) ${pctPos * 100}%)`;
+  slider.style.background = `linear-gradient(90deg, #2997ff 0%, #ff3b30 ${pctPos * 100}%, var(--surface2) ${pctPos * 100}%)`;
 }
 
-slider.addEventListener('input', () => updateSlider(parseInt(slider.value)));
+// Slow path: 100-dot grid (debounced, only runs after user stops dragging)
+let dotTimer = null;
+function updateDots(pct) {
+  const dotsRed = Math.round(TOTAL_DOTS * pct / 100);
+  // Batch DOM writes in a single rAF
+  requestAnimationFrame(() => {
+    dots100.forEach((dot, i) => {
+      const shouldBeRed = i < dotsRed;
+      if (dot.classList.contains('displaced') !== shouldBeRed) {
+        dot.classList.toggle('displaced', shouldBeRed);
+      }
+    });
+  });
+}
+
+function updateSlider(pct) {
+  updateSliderFast(pct);
+  clearTimeout(dotTimer);
+  dotTimer = setTimeout(() => updateDots(pct), 60);
+}
+
+slider.addEventListener('input', () => updateSlider(parseInt(slider.value)), { passive: true });
 // Initialize
 setTimeout(() => updateSlider(40), 200);
 
