@@ -881,24 +881,16 @@ footer {
   font-size: 10px;
 }
 
-/* ── Scroll Animations ── */
+/* ── Scroll Animations — opacity only (no transform = no repaint mid-scroll) ── */
 .reveal {
   opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
-  will-change: transform, opacity;
+  transition: opacity 0.5s ease;
 }
 .reveal.visible {
   opacity: 1;
-  transform: translateY(0);
-  will-change: auto;
 }
 
-/* GPU-composite each section so scroll is handled on compositor thread */
-section, footer {
-  transform: translateZ(0);
-  backface-visibility: hidden;
-}
+/* No forced GPU promotion — too many layers hurts more than it helps */
 
 /* ── Loading Screen ── */
 #loader {
@@ -938,10 +930,8 @@ section, footer {
   border-radius: 3px;
   transition: width 0.15s ease;
 }
-.reveal-delay-1 { transition-delay: 0.1s; }
-.reveal-delay-2 { transition-delay: 0.2s; }
-.reveal-delay-3 { transition-delay: 0.3s; }
-.reveal-delay-4 { transition-delay: 0.4s; }
+/* Delays removed — simultaneous multi-element transitions cause GPU thrash */
+.reveal-delay-1, .reveal-delay-2, .reveal-delay-3, .reveal-delay-4 { transition-delay: 0s; }
 
 /* ── Responsive ── */
 @media (max-width: 768px) {
@@ -1697,23 +1687,17 @@ sections.forEach(s => sectionObserver.observe(s));
 const revealObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-      revealObserver.unobserve(entry.target);
-      // Trigger chart animations
-      entry.target.querySelectorAll('.metro-fill').forEach(el => {
-        el.style.width = el.dataset.width + '%';
+      const target = entry.target;
+      revealObserver.unobserve(target);
+      // Batch all DOM writes in one rAF to avoid mid-scroll layout
+      requestAnimationFrame(() => {
+        target.classList.add('visible');
+        target.querySelectorAll('.metro-fill').forEach(el => { el.style.width = el.dataset.width + '%'; });
+        target.querySelectorAll('.age-bar').forEach(el => { el.style.height = el.dataset.height + 'px'; });
+        target.querySelectorAll('.dest-fill').forEach(el => { el.style.width = el.dataset.width + '%'; });
+        target.querySelectorAll('.animated-height').forEach(el => { el.style.height = el.dataset.height + '%'; });
+        target.querySelectorAll('[data-countup]').forEach(triggerCountUp);
       });
-      entry.target.querySelectorAll('.age-bar').forEach(el => {
-        el.style.height = el.dataset.height + 'px';
-      });
-      entry.target.querySelectorAll('.dest-fill').forEach(el => {
-        el.style.width = el.dataset.width + '%';
-      });
-      entry.target.querySelectorAll('.animated-height').forEach(el => {
-        el.style.height = el.dataset.height + '%';
-      });
-      // Trigger countup for any in this element
-      entry.target.querySelectorAll('[data-countup]').forEach(triggerCountUp);
     }
   });
 }, { threshold: 0.1 });
