@@ -2627,7 +2627,8 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal
       if (patches && patches.length > 0) {
         pendingPatches = patches;
         pendingMemory  = memory || null;
-        cpActions.classList.remove('cp-hidden');
+        // Preview immediately — apply to DOM, restore chat on reload
+        await previewChange();
       }
     } catch (err) {
       removeTyping(tid);
@@ -2639,22 +2640,15 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal
 
   /* ── keep ── */
   cpKeep.addEventListener('click', async () => {
-    if (!pendingPatches) return;
     cpActions.classList.add('cp-hidden');
-    setStatus('Fetching current file…', true);
+    setStatus('Pushing to GitHub…', true);
+    const newHtml = sessionStorage.getItem('_aic_preview_html');
+    const prevHtml = sessionStorage.getItem('_aic_prev_html');
 
     try {
-      const { content: curHtml, sha } = await ghGet('index.html');
-      previousContent = curHtml;
+      const { sha } = await ghGet('index.html');
+      previousContent = prevHtml;
 
-      // Apply patches
-      let newHtml = curHtml;
-      for (const p of pendingPatches) {
-        if (!newHtml.includes(p.find)) throw new Error(`Patch target not found:\n"${p.find.substring(0, 80)}…"`);
-        newHtml = newHtml.split(p.find).join(p.replace);
-      }
-
-      setStatus('Pushing to GitHub…', true);
       const msg = `agent: ${pendingMemory || 'update via chat'}`;
       await ghPut('index.html', newHtml, sha, msg);
 
@@ -2671,8 +2665,10 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal
 
       pendingPatches = null;
       pendingMemory  = null;
-      setStatus('Pushed ✓ — live in ~60s', false);
-      addMsg('agent', 'Done! The change is live on GitHub. Pages rebuilds in ~60 seconds — just refresh to see it. Hit Revert if you change your mind.');
+      sessionStorage.removeItem('_aic_preview_html');
+      sessionStorage.removeItem('_aic_prev_html');
+      setStatus('Pushed ✓ — saved', false);
+      addMsg('agent', 'Kept! This is now the live version. GitHub Pages is syncing in the background (~60s) — but what you see right now is what everyone will see.');
     } catch (err) {
       clearStatus();
       cpActions.classList.remove('cp-hidden');
@@ -2681,20 +2677,12 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal
   });
 
   /* ── revert ── */
-  cpRevert.addEventListener('click', async () => {
+  cpRevert.addEventListener('click', () => {
     cpActions.classList.add('cp-hidden');
-    if (!previousContent) { addMsg('agent', 'Nothing to revert — no previous version stored.'); return; }
-    setStatus('Reverting…', true);
-    try {
-      const { sha } = await ghGet('index.html');
-      await ghPut('index.html', previousContent, sha, 'agent: revert');
-      previousContent = null;
-      setStatus('Reverted ✓ — live in ~60s', false);
-      addMsg('agent', 'Reverted. The previous version is pushing now.');
-    } catch (err) {
-      clearStatus();
-      addMsg('agent', `Revert failed: ${err.message}`);
-    }
+    sessionStorage.removeItem('_aic_preview_html');
+    sessionStorage.removeItem('_aic_prev_html');
+    // Just reload — fetches the real GitHub version, discarding the preview
+    location.reload();
   });
 
   /* ── refine ── */
@@ -2703,6 +2691,52 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal
     cpInput.placeholder = 'What would you like to adjust?';
     cpInput.focus();
   });
+
+  /* ── preview: apply patches to DOM immediately ── */
+  async function previewChange() {
+    try {
+      const { content: curHtml } = await ghGet('index.html');
+      let newHtml = curHtml;
+      for (const p of pendingPatches) {
+        if (!newHtml.includes(p.find)) {
+          addMsg('agent', `⚠ Couldn't find the patch target. The page wasn't changed.`);
+          cpActions.classList.remove('cp-hidden');
+          return;
+        }
+        newHtml = newHtml.split(p.find).join(p.replace);
+      }
+      // Save state before blowing up the DOM
+      sessionStorage.setItem('_aic_preview_html', newHtml);
+      sessionStorage.setItem('_aic_prev_html', curHtml);
+      sessionStorage.setItem('_aic_messages', JSON.stringify(chatMessages));
+      sessionStorage.setItem('_aic_pending_memory', pendingMemory || '');
+      sessionStorage.setItem('_aic_show_actions', '1');
+      // Re-render with patched HTML
+      document.open();
+      document.write(newHtml);
+      document.close();
+    } catch (err) {
+      addMsg('agent', `Preview failed: ${err.message}`);
+      cpActions.classList.remove('cp-hidden');
+    }
+  }
+
+  /* ── restore state after preview re-render ── */
+  function restorePreviewState() {
+    const previewHtml = sessionStorage.getItem('_aic_preview_html');
+    if (!previewHtml) return;
+    const savedMsgs = sessionStorage.getItem('_aic_messages');
+    if (savedMsgs) chatMessages = JSON.parse(savedMsgs);
+    pendingMemory = sessionStorage.getItem('_aic_pending_memory') || null;
+    // Restore chat DOM
+    chatMessages.forEach(m => {
+      if (m.role === 'user') addMsg('user', typeof m.content === 'string' ? m.content : '(image)');
+      else if (m.role === 'assistant') addMsg('agent', m.content);
+    });
+    openPanel();
+    cpActions.classList.remove('cp-hidden');
+    addMsg('agent', '⬆ You're seeing the change live. Keep it, revert, or ask for refinements.');
+  }
 
   /* ── GitHub helpers ── */
   async function ghGet(path) {
@@ -2828,6 +2862,8 @@ RULES:
       .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
       .replace(/"/g,'&quot;').replace(/\n/g,'<br>');
   }
+  // Restore if this load is a preview re-render
+  restorePreviewState();
 })();
 </script>
 </body>
