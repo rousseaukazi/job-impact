@@ -1588,27 +1588,35 @@ footer {
         <div class="chart-title">Major Tech Company Impact at <span id="pct-company">40</span>%</div>
         <div id="company-chart">
           <div class="company-row">
-            <div class="company-name">Amazon Tech</div>
-            <div class="company-track"><div class="company-fill" data-base="300000" id="cf-amazon"><span id="cv-amazon">120K</span></div></div>
+            <div class="company-name">Apple</div>
+            <div class="company-track"><div class="company-fill" data-base="55000" id="cf-apple"><span id="cv-apple">22K</span></div></div>
           </div>
           <div class="company-row">
             <div class="company-name">Microsoft</div>
             <div class="company-track"><div class="company-fill" data-base="228000" id="cf-msft"><span id="cv-msft">91.2K</span></div></div>
           </div>
           <div class="company-row">
-            <div class="company-name">Google</div>
+            <div class="company-name">Alphabet</div>
             <div class="company-track"><div class="company-fill" data-base="182000" id="cf-google"><span id="cv-google">72.8K</span></div></div>
+          </div>
+          <div class="company-row">
+            <div class="company-name">Amazon</div>
+            <div class="company-track"><div class="company-fill" data-base="300000" id="cf-amazon"><span id="cv-amazon">120K</span></div></div>
           </div>
           <div class="company-row">
             <div class="company-name">Meta</div>
             <div class="company-track"><div class="company-fill" data-base="87000" id="cf-meta"><span id="cv-meta">34.8K</span></div></div>
           </div>
           <div class="company-row">
-            <div class="company-name">Salesforce</div>
-            <div class="company-track"><div class="company-fill" data-base="73000" id="cf-salesforce"><span id="cv-salesforce">29.2K</span></div></div>
+            <div class="company-name">Nvidia</div>
+            <div class="company-track"><div class="company-fill" data-base="30000" id="cf-nvidia"><span id="cv-nvidia">12K</span></div></div>
+          </div>
+          <div class="company-row">
+            <div class="company-name">Tesla</div>
+            <div class="company-track"><div class="company-fill" data-base="48000" id="cf-tesla"><span id="cv-tesla">19.2K</span></div></div>
           </div>
         </div>
-        <div style="margin-top:20px; font-size:13px; color:var(--text2);">FAANG+ combined: <strong style="color:var(--text)" id="faang-total">~450K cuts</strong> at 40%</div>
+        <div style="margin-top:20px; font-size:13px; color:var(--text2);">Mag 7 combined: <strong style="color:var(--text)" id="faang-total">~372K cuts</strong> at 40%</div>
       </div>
 
       <div class="card">
@@ -2169,7 +2177,7 @@ for (let i = 0; i < TOTAL_DOTS; i++) {
   dots100.push(dot);
 }
 
-const companybases = { amazon:300000, msft:228000, google:182000, meta:87000, salesforce:73000 };
+const companybases = { apple:55000, msft:228000, google:182000, amazon:300000, meta:87000, nvidia:30000, tesla:48000 };
 
 function fmtJobs(n) {
   if (n >= 1000000) return (n/1000000).toFixed(1)+'M';
