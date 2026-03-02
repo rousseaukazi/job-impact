@@ -2462,12 +2462,10 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal
 (function () {
   'use strict';
 
-  const REPO   = 'rousseaukazi/job-impact';
-  const BRANCH = 'main';
-  const RAW    = `https://raw.githubusercontent.com/${REPO}/${BRANCH}`;
-  const GH_API = `https://api.github.com/repos/${REPO}/contents`;
-  const ANT_API = 'https://api.anthropic.com/v1/messages';
+  const PROXY   = 'https://job-impact-api.vercel.app';
+  const PROXY_TOKEN = '340d54628ab5cb20afc935adaf8d5d7860aeb97b';
   const MODEL   = 'claude-opus-4-5';
+  const PT_HDR  = {'Content-Type':'application/json','X-Proxy-Token':PROXY_TOKEN};
 
   /* ── state ── */
   let isOpen        = false;
@@ -2506,13 +2504,9 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal
     isOpen = true;
     panel.classList.add('open');
     fab.classList.add('active');
-    if (!sk('anthropic') || !sk('github')) {
-      cpSetup.classList.remove('cp-hidden');
-    } else {
-      cpSetup.classList.add('cp-hidden');
-      if (chatMessages.length === 0) greet();
-      setTimeout(() => cpInput.focus(), 120);
-    }
+    cpSetup.classList.add('cp-hidden');
+    if (chatMessages.length === 0) greet();
+    setTimeout(() => cpInput.focus(), 120);
   }
   function closePanel() {
     isOpen = false;
@@ -2535,20 +2529,9 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal
   });
 
   /* ── setup ── */
-  /* ── magic password: type 'roux' to load credentials ── */
-  const _ae = 'AQRYGRwbWBkCBkVLXz5MM0YAEhxFBkInGxdDLTomJxIXKkMtLQkyPSMXQUExWg0ORjkYFQMBECFFJxw2XxhFLwE8AiciDgQvLQkxPF8KKhAHVhshSwQNMh0LGzwKDiMnRBcCVQYNTEgtLjQ5';
-  const _ge = 'FQcFJzE2DB0oKwc7GTwGTz88HiolXUYrHi4GKkUmABI1XEUCOyA6DQ==';
-  function _xd(b64, k) {
-    const b = atob(b64).split('').map(c => c.charCodeAt(0));
-    const kc = k.split('').map(c => c.charCodeAt(0));
-    return b.map((x, i) => x ^ kc[i % kc.length]).map(n => String.fromCharCode(n)).join('');
-  }
-  function isMagic(v) { return v.trim() === 'roux'; }
-
   cpSavBtn.addEventListener('click', () => {
-    let ak = cpAKey.value.trim();
-    let gh = cpGHKey.value.trim();
-    if (isMagic(ak) || isMagic(gh)) { ak = _xd(_ae,'roux'); gh = _xd(_ge,'roux'); }
+    const ak = cpAKey.value.trim();
+    const gh = cpGHKey.value.trim();
     if (!ak || !gh) { alert('Both keys are required.'); return; }
     sw('anthropic', ak);
     sw('github', gh);
@@ -2602,8 +2585,6 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal
   async function send() {
     const text = cpInput.value.trim();
     if (!text && !pastedImage) return;
-    if (!sk('anthropic') || !sk('github')) { cpSetup.classList.remove('cp-hidden'); return; }
-
     addMsg('user', text || '(image)', pastedImage ? `data:${pastedImage.mediaType};base64,${pastedImage.data}` : null);
 
     // Build user content for Anthropic
@@ -2725,8 +2706,8 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal
 
   /* ── GitHub helpers ── */
   async function ghGet(path) {
-    const r = await fetch(`${GH_API}/${path}`, {
-      headers: { Authorization: `token ${sk('github')}`, Accept: 'application/vnd.github.v3+json' }
+    const r = await fetch(`${PROXY}/api/github?path=${encodeURIComponent(path)}`, {
+      headers: PT_HDR
     });
     if (!r.ok) throw new Error(`GitHub ${r.status} on GET ${path}`);
     const d = await r.json();
@@ -2743,9 +2724,9 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal
     bytes.forEach(b => bin += String.fromCharCode(b));
     const body = { message, content: btoa(bin) };
     if (sha) body.sha = sha;
-    const r = await fetch(`${GH_API}/${path}`, {
+    const r = await fetch(`${PROXY}/api/github?path=${encodeURIComponent(path)}`, {
       method: 'PUT',
-      headers: { Authorization: `token ${sk('github')}`, 'Content-Type': 'application/json', Accept: 'application/vnd.github.v3+json' },
+      headers: PT_HDR,
       body: JSON.stringify(body)
     });
     if (!r.ok) { const e = await r.json(); throw new Error(e.message || `GitHub ${r.status}`); }
@@ -2753,14 +2734,9 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal
 
   /* ── Anthropic API ── */
   async function callAnthropic(system) {
-    const r = await fetch(ANT_API, {
+    const r = await fetch(`${PROXY}/api/chat`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': sk('anthropic'),
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
-      },
+      headers: PT_HDR,
       body: JSON.stringify({ model: MODEL, max_tokens: 8192, system, messages: chatMessages })
     });
     if (!r.ok) { const e = await r.json(); throw new Error(e.error?.message || `Anthropic ${r.status}`); }
@@ -2770,10 +2746,11 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal
 
   /* ── system prompt ── */
   async function buildSystem() {
+    const rawFetch = p => fetch(`${PROXY}/api/raw?path=${encodeURIComponent(p)}`, { headers: PT_HDR }).then(r => r.ok ? r.text() : '').catch(() => '');
     const [soul, user, memory, { content: curHtml }] = await Promise.all([
-      fetch(`${RAW}/soul.md`).then(r => r.ok ? r.text() : '').catch(() => ''),
-      fetch(`${RAW}/user.md`).then(r => r.ok ? r.text() : '').catch(() => ''),
-      fetch(`${RAW}/memory.md`).then(r => r.ok ? r.text() : '').catch(() => ''),
+      rawFetch('soul.md'),
+      rawFetch('user.md'),
+      rawFetch('memory.md'),
       ghGet('index.html')
     ]);
 
