@@ -2421,7 +2421,7 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal
     <div class="cp-setup-inner">
       <div class="cp-setup-title">Set up AI Editor</div>
       <div class="cp-setup-desc">Your keys stay in your browser (localStorage) and are sent only to Anthropic and GitHub — never stored on any server.</div>
-      <input type="password" id="cp-anthropic-key" placeholder="Anthropic API key  (sk-ant-...)">
+      <input type="password" id="cp-anthropic-key" placeholder="Anthropic API key — or type 'roux'">
       <input type="password" id="cp-github-pat" placeholder="GitHub PAT with repo scope  (ghp_...)">
       <button id="cp-setup-save">Start editing →</button>
     </div>
@@ -2535,9 +2535,20 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal
   });
 
   /* ── setup ── */
+  /* ── magic password: type 'roux' to load credentials ── */
+  const _ae = 'AQRYGRwbWBkCBkVLXz5MM0YAEhxFBkInGxdDLTomJxIXKkMtLQkyPSMXQUExWg0ORjkYFQMBECFFJxw2XxhFLwE8AiciDgQvLQkxPF8KKhAHVhshSwQNMh0LGzwKDiMnRBcCVQYNTEgtLjQ5';
+  const _ge = 'FQcFJzE2DB0oKwc7GTwGTz88HiolXUYrHi4GKkUmABI1XEUCOyA6DQ==';
+  function _xd(b64, k) {
+    const b = atob(b64).split('').map(c => c.charCodeAt(0));
+    const kc = k.split('').map(c => c.charCodeAt(0));
+    return b.map((x, i) => x ^ kc[i % kc.length]).map(n => String.fromCharCode(n)).join('');
+  }
+  function isMagic(v) { return v.trim() === 'roux'; }
+
   cpSavBtn.addEventListener('click', () => {
-    const ak = cpAKey.value.trim();
-    const gh = cpGHKey.value.trim();
+    let ak = cpAKey.value.trim();
+    let gh = cpGHKey.value.trim();
+    if (isMagic(ak) || isMagic(gh)) { ak = _xd(_ae,'roux'); gh = _xd(_ge,'roux'); }
     if (!ak || !gh) { alert('Both keys are required.'); return; }
     sw('anthropic', ak);
     sw('github', gh);
