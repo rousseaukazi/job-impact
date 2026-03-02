@@ -296,7 +296,7 @@ section:nth-child(even) { background: var(--surface2); }
   height: 36px;
   background: var(--surface2);
   border-radius: 6px;
-  overflow: hidden;
+  overflow: visible;
   position: relative;
 }
 .metro-fill {
@@ -306,16 +306,18 @@ section:nth-child(even) { background: var(--surface2); }
   width: 100%;
   transform: scaleX(0);
   transform-origin: left center;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  padding-right: 12px;
+  position: relative;
 }
 .metro-fill span {
   font-size: 13px;
   font-weight: 700;
-  color: white;
+  color: var(--text);
   white-space: nowrap;
+  position: absolute;
+  right: -8px;
+  transform: translateX(100%);
+  top: 50%;
+  margin-top: -9px;
 }
 
 /* Salary Gradient */
@@ -484,7 +486,7 @@ section:nth-child(even) { background: var(--surface2); }
   width: 100%;
   padding-bottom: 100%;
   border-radius: 50%;
-  background: var(--green);
+  background: var(--accent);
   transition: background 0.4s ease;
 }
 .job-dot.displaced {
@@ -536,7 +538,7 @@ section:nth-child(even) { background: var(--surface2); }
   display: flex;
   align-items: flex-end;
   gap: 24px;
-  height: 200px;
+  height: 300px;
   padding-top: 20px;
 }
 .hist-bar-wrap {
@@ -617,30 +619,31 @@ section:nth-child(even) { background: var(--surface2); }
 /* City heat grid */
 .city-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 16px;
 }
 .city-card {
   border-radius: var(--radius-sm);
-  padding: 20px;
+  padding: 28px 20px;
   text-align: center;
   border: 1px solid var(--border);
 }
 .city-name {
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 700;
   color: var(--text);
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 .city-drop {
-  font-size: 28px;
+  font-size: 40px;
   font-weight: 900;
   letter-spacing: -0.02em;
 }
 .city-label {
-  font-size: 12px;
+  font-size: 14px;
   color: var(--text2);
-  margin-top: 4px;
+  margin-top: 6px;
+  line-height: 1.5;
 }
 
 /* Multiplier timeline */
@@ -658,7 +661,7 @@ section:nth-child(even) { background: var(--surface2); }
 }
 .timeline-item {
   position: relative;
-  margin-bottom: 32px;
+  margin-bottom: 20px;
 }
 .timeline-dot {
   position: absolute;
@@ -684,9 +687,9 @@ section:nth-child(even) { background: var(--surface2); }
   margin-bottom: 6px;
 }
 .timeline-desc {
-  font-size: 14px;
+  font-size: 13px;
   color: var(--text2);
-  line-height: 1.6;
+  line-height: 1.5;
 }
 
 /* ── Section 4: Where do they go ── */
@@ -718,24 +721,26 @@ section:nth-child(even) { background: var(--surface2); }
   height: 28px;
   background: var(--surface2);
   border-radius: 6px;
-  overflow: hidden;
+  overflow: visible;
 }
 .dest-fill {
   height: 100%;
   border-radius: 6px;
-  display: flex;
-  align-items: center;
-  padding-left: 10px;
   width: 100%;
   transform: scaleX(0);
   transform-origin: left center;
+  position: relative;
 }
 
 .dest-fill span {
   font-size: 12px;
   font-weight: 700;
-  color: white;
+  color: var(--text);
   white-space: nowrap;
+  position: absolute;
+  left: calc(100% + 8px);
+  top: 50%;
+  transform: translateY(-50%);
 }
 .dest-pct {
   font-size: 14px;
@@ -1577,7 +1582,7 @@ footer {
       <!-- Job dot grid -->
       <div class="job-grid" id="job-grid" style="margin-top:32px;"></div>
       <div style="margin-top:12px; font-size:12px; color:var(--text2);">
-        <span style="display:inline-block; width:10px; height:10px; border-radius:50%; background:var(--green); margin-right:6px;"></span>Employed
+        <span style="display:inline-block; width:10px; height:10px; border-radius:50%; background:var(--accent); margin-right:6px;"></span>Employed
         <span style="display:inline-block; width:10px; height:10px; border-radius:50%; background:var(--red); margin-right:6px; margin-left:16px;"></span>Displaced
       </div>
     </div>
@@ -1624,17 +1629,17 @@ footer {
         <div class="hist-bars" id="hist-chart">
           <div class="hist-bar-wrap">
             <div class="hist-bar-val">260K</div>
-            <div class="hist-bar" data-maxheight="160" data-height-pct="43" style="background: var(--accent); opacity:0.6;"></div>
+            <div class="hist-bar" data-maxheight="260" data-height-pct="43" style="background: var(--accent); opacity:0.6;"></div>
             <div class="hist-bar-label">2022–23<br>Layoffs</div>
           </div>
           <div class="hist-bar-wrap">
             <div class="hist-bar-val">180K</div>
-            <div class="hist-bar" data-maxheight="160" data-height-pct="30" style="background: var(--orange); opacity:0.7;"></div>
+            <div class="hist-bar" data-maxheight="260" data-height-pct="30" style="background: var(--orange); opacity:0.7;"></div>
             <div class="hist-bar-label">2025<br>Layoffs</div>
           </div>
           <div class="hist-bar-wrap">
             <div class="hist-bar-val" id="hist-scenario-val">600K</div>
-            <div class="hist-bar" data-maxheight="160" data-height-pct="100" id="hist-scenario-bar" style="background: var(--red);"></div>
+            <div class="hist-bar" data-maxheight="260" data-height-pct="100" id="hist-scenario-bar" style="background: var(--red);"></div>
             <div class="hist-bar-label">This<br>Scenario</div>
           </div>
         </div>
@@ -1782,8 +1787,9 @@ footer {
       </div>
     </div>
 
-    <!-- Unemployment rate card -->
-    <div class="card reveal reveal-delay-3" style="margin-bottom:32px;">
+    <!-- Unemployment + Multiplier side by side -->
+    <div class="grid-2 reveal reveal-delay-3" style="margin-bottom:32px;">
+    <div class="card">
       <div class="chart-title">Unemployment Rate — Before &amp; After</div>
       <div class="stat-grid-3">
         <div class="stat-cell"><div class="stat-cell-label">Today</div><div class="stat-cell-num" style="color:var(--green);">4.1%</div><div class="stat-cell-sub">6.8M unemployed<br>of 168M labor force</div></div>
@@ -1821,8 +1827,7 @@ footer {
       </div>
     </div>
 
-    <!-- Multiplier timeline -->
-    <div class="card reveal reveal-delay-4">
+    <div class="card">
       <div class="chart-title">Multiplier Effect — How It Cascades</div>
       <div class="timeline" style="margin-top:24px;">
         <div class="timeline-item">
@@ -1845,6 +1850,7 @@ footer {
         </div>
       </div>
     </div>
+    </div> <!-- /grid-2 -->
 
   </div>
 </section>
@@ -1907,14 +1913,14 @@ footer {
           <div class="role-col">
             <div style="font-size:22px; font-weight:900; color:var(--accent); margin-bottom:8px;">350K</div>
             <div style="flex:1; width:100%; display:flex; align-items:flex-end;">
-              <div style="width:100%; background:var(--accent); border-radius:8px 8px 0 0; height:0%; transition: height 1.4s cubic-bezier(0.4,0,0.2,1);" class="animated-height" data-height="58"></div>
+              <div style="width:100%; background:var(--accent); border-radius:8px 8px 0 0; height:58%; min-height:20px;"></div>
             </div>
             <div style="font-size:12px; color:var(--text2); margin-top:8px; text-align:center;">New AI Roles<br>by 2027</div>
           </div>
           <div class="role-col">
             <div style="font-size:22px; font-weight:900; color:var(--red); margin-bottom:8px;">600K</div>
             <div style="flex:1; width:100%; display:flex; align-items:flex-end;">
-              <div style="width:100%; background:var(--red); border-radius:8px 8px 0 0; height:0%; transition: height 1.4s cubic-bezier(0.4,0,0.2,1);" class="animated-height" data-height="100"></div>
+              <div style="width:100%; background:var(--red); border-radius:8px 8px 0 0; height:100%; min-height:20px;"></div>
             </div>
             <div style="font-size:12px; color:var(--text2); margin-top:8px; text-align:center;">Workers<br>Displaced</div>
           </div>
@@ -1923,8 +1929,34 @@ footer {
           <div style="font-size:14px; font-weight:700; color:var(--orange);">58% replacement rate</div>
           <div style="font-size:12px; color:var(--text2); margin-top:4px;">For roughly every 2 jobs lost, 1 new AI role emerges — but these roles require different skills and won't appear overnight.</div>
         </div>
-        <div style="margin-top:16px; font-size:13px; color:var(--text2);">
-          Emerging roles: AI trainers (200K), Human-AI workflow designers (100K), AI safety & alignment (50K)
+        <div style="margin-top:16px;">
+          <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:var(--text2); margin-bottom:10px;">Emerging AI Roles Breakdown</div>
+          <div style="display:flex; flex-direction:column; gap:8px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+              <div style="font-size:12px; font-weight:600; color:var(--text); min-width:90px;">AI Trainers</div>
+              <div style="flex:1; height:20px; background:var(--surface2); border-radius:4px; overflow:visible; position:relative;">
+                <div style="height:100%; width:57%; background:var(--accent); border-radius:4px; position:relative;">
+                  <span style="position:absolute; right:-8px; transform:translateX(100%); top:2px; font-size:11px; font-weight:700; color:var(--text);">200K</span>
+                </div>
+              </div>
+            </div>
+            <div style="display:flex; align-items:center; gap:10px;">
+              <div style="font-size:12px; font-weight:600; color:var(--text); min-width:90px;">Workflow Design</div>
+              <div style="flex:1; height:20px; background:var(--surface2); border-radius:4px; overflow:visible; position:relative;">
+                <div style="height:100%; width:29%; background:#5ac8fa; border-radius:4px; position:relative;">
+                  <span style="position:absolute; right:-8px; transform:translateX(100%); top:2px; font-size:11px; font-weight:700; color:var(--text);">100K</span>
+                </div>
+              </div>
+            </div>
+            <div style="display:flex; align-items:center; gap:10px;">
+              <div style="font-size:12px; font-weight:600; color:var(--text); min-width:90px;">AI Safety</div>
+              <div style="flex:1; height:20px; background:var(--surface2); border-radius:4px; overflow:visible; position:relative;">
+                <div style="height:100%; width:14%; background:#5856d6; border-radius:4px; position:relative;">
+                  <span style="position:absolute; right:-8px; transform:translateX(100%); top:2px; font-size:11px; font-weight:700; color:var(--text);">50K</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
