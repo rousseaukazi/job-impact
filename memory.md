@@ -2,3 +2,4 @@
 
 <!-- Each entry added automatically after a confirmed change -->
 <!-- Format: YYYY-MM-DD: [what changed and why] -->
+- 2026-03-02: Increased age distribution bar heights from 120px container to 200px, bars scaled ~1.9x taller to fill whitespace
