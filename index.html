@@ -306,18 +306,15 @@ section:nth-child(even) { background: var(--surface2); }
   width: 100%;
   transform: scaleX(0);
   transform-origin: left center;
-  position: relative;
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
 }
 .metro-fill span {
   font-size: 13px;
   font-weight: 700;
-  color: var(--text);
+  color: white;
   white-space: nowrap;
-  position: absolute;
-  right: -8px;
-  transform: translateX(100%);
-  top: 50%;
-  margin-top: -9px;
 }
 
 /* Salary Gradient */
@@ -511,7 +508,7 @@ section:nth-child(even) { background: var(--surface2); }
   height: 32px;
   background: var(--surface2);
   border-radius: 6px;
-  overflow: hidden;
+  overflow: visible;
   position: relative;
 }
 .company-fill {
@@ -523,8 +520,7 @@ section:nth-child(even) { background: var(--surface2); }
   transform-origin: left center;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  padding-right: 10px;
+  padding-left: 10px;
 }
 .company-fill span {
   font-size: 12px;
@@ -728,18 +724,16 @@ section:nth-child(even) { background: var(--surface2); }
   width: 100%;
   transform: scaleX(0);
   transform-origin: left center;
-  position: relative;
+  display: flex;
+  align-items: center;
+  padding-left: 8px;
 }
 
 .dest-fill span {
   font-size: 12px;
   font-weight: 700;
-  color: var(--text);
+  color: white;
   white-space: nowrap;
-  position: absolute;
-  left: calc(100% + 8px);
-  top: 50%;
-  transform: translateY(-50%);
 }
 .dest-pct {
   font-size: 14px;
