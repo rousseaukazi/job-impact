@@ -303,9 +303,7 @@ section:nth-child(even) { background: var(--surface2); }
   height: 100%;
   background: linear-gradient(90deg, var(--accent), #5ac8fa);
   border-radius: 6px;
-  width: 100%;
-  transform: scaleX(0);
-  transform-origin: left center;
+  width: 0%;
   display: flex;
   align-items: center;
   padding-left: 10px;
@@ -515,9 +513,7 @@ section:nth-child(even) { background: var(--surface2); }
   height: 100%;
   background: linear-gradient(90deg, var(--red), #ff6b6b);
   border-radius: 6px;
-  width: 100%;
-  transform: scaleX(0);
-  transform-origin: left center;
+  width: 0%;
   display: flex;
   align-items: center;
   padding-left: 10px;
@@ -721,9 +717,7 @@ section:nth-child(even) { background: var(--surface2); }
 .dest-fill {
   height: 100%;
   border-radius: 6px;
-  width: 100%;
-  transform: scaleX(0);
-  transform-origin: left center;
+  width: 0%;
   display: flex;
   align-items: center;
   padding-left: 8px;
@@ -2157,10 +2151,9 @@ gsap.utils.toArray('[data-countup]').forEach(el => {
    SECTION 1 CHART ANIMATIONS
 ══════════════════════════════════════════════════ */
 // Metro bars
-gsap.set('.metro-fill', { scaleX: 0, transformOrigin: 'left center' });
 gsap.utils.toArray('.metro-fill').forEach(el => {
   gsap.to(el, {
-    scaleX: parseFloat(el.dataset.width) / 100,
+    width: parseFloat(el.dataset.width) + '%',
     duration: 1.1,
     ease: 'power2.out',
     scrollTrigger: { trigger: '#s1', start: 'top 65%', once: true }
@@ -2219,7 +2212,7 @@ function updateSliderFast(pct) {
     const fill = document.getElementById('cf-' + key);
     const val = document.getElementById('cv-' + key);
     if (fill && val) {
-      gsap.set(fill, { scaleX: Math.min(cuts / 40000, 1) });
+      gsap.set(fill, { width: (Math.min(cuts / 40000, 1) * 100) + '%' });
       val.textContent = fmtJobs(cuts);
     }
   });
@@ -2300,7 +2293,6 @@ ScrollTrigger.create({
 /* ══════════════════════════════════════════════════
    SECTION 4: DESTINATION BARS + ANIMATED HEIGHTS
 ══════════════════════════════════════════════════ */
-gsap.set('.dest-fill', { scaleX: 0, transformOrigin: 'left center' });
 ScrollTrigger.create({
   trigger: '#s4',
   start: 'top 65%',
@@ -2308,7 +2300,7 @@ ScrollTrigger.create({
   onEnter: () => {
     gsap.utils.toArray('.dest-fill').forEach((el, i) => {
       gsap.to(el, {
-        scaleX: parseFloat(el.dataset.width) / 100,
+        width: parseFloat(el.dataset.width) + '%',
         duration: 1.0,
         delay: i * 0.07,
         ease: 'power2.out'
