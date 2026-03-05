@@ -590,9 +590,9 @@ section:nth-child(even) { background: var(--surface2); }
 .donut-legend {
   display: flex;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: 12px;
   justify-content: center;
-  margin-top: 24px;
+  margin-top: 16px;
 }
 .legend-item {
   display: flex;
@@ -1170,8 +1170,9 @@ footer {
 .impact-grid-2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 24px;
+  gap: 16px;
   margin-bottom: 32px;
+  align-items: start;
 }
 
 @media (max-width: 680px) {
@@ -1638,6 +1639,16 @@ footer {
           <div class="city-name">National Avg</div>
           <div class="city-drop" style="color:var(--text2);">−0.5%</div>
           <div class="city-label">Housing/mortgage<br>market: −$40B</div>
+        </div>
+        <div class="city-card" style="background: rgba(255,149,0,0.06); border-color: rgba(255,149,0,0.15);">
+          <div class="city-name">Denver</div>
+          <div class="city-drop" style="color:var(--orange);">−3%</div>
+          <div class="city-label">Median: $580K<br>→ <strong>$563K</strong></div>
+        </div>
+        <div class="city-card" style="background: rgba(255,149,0,0.06); border-color: rgba(255,149,0,0.15);">
+          <div class="city-name">San Jose</div>
+          <div class="city-drop" style="color:var(--red);">−6%</div>
+          <div class="city-label">Median: $1.5M<br>→ <strong>$1.41M</strong></div>
         </div>
       </div>
     </div>
